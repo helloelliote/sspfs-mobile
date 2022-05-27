@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<resources>
+    <string name="NAVER_CLIENT_ID">gr8gasi4t4</string>
+<!--    <string name="NAVER_CLIENT_SECRET">GZ5LSRZMoGGNogOHVWlZ6CU9GsNwFzvNvyUm4EI5</string>-->
+</resources>

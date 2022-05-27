@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<resources>
+    <!--BottomAppBar-->
+    <dimen name="bottomappbar_height">56dp</dimen>
+    <!--    <dimen name="bottom_app_bar_fab_cradle_corner_radius">32dp</dimen>-->
+    <!--    <dimen name="bottom_app_bar_fab_cradle_margin">8dp</dimen>-->
+
+    <!--Email previews (from Reply)-->
+    <dimen name="email_sender_profile_image_size">42dp</dimen>
+    <dimen name="email_recipient_card_popup_elevation">6dp</dimen>
+    <dimen name="email_recipient_card_popup_elevation_compat">3dp</dimen>
+
+    <dimen name="margin_xsmall">16dp</dimen>
+    <dimen name="margin_small">32dp</dimen>
+    <dimen name="margin_medium">48dp</dimen>
+    <dimen name="margin_large">64dp</dimen>
+    <dimen name="margin_xlarge">62dp</dimen>
+
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+
+    <dimen name="stroke_small">4dp</dimen>
+    <dimen name="stroke_medium">8dp</dimen>
+    <dimen name="stroke_large">12dp</dimen>
+
+    <dimen name="round_button_small">32dp</dimen>
+    <dimen name="round_button_medium">64dp</dimen>
+    <dimen name="round_button_large">92dp</dimen>
+
+    <dimen name="rect_button_margin">12dp</dimen>
+    <dimen name="rect_button_width">80dp</dimen>
+    <dimen name="rect_button_height">24dp</dimen>
+    <dimen name="shutter_button_margin">50dp</dimen>
+</resources>

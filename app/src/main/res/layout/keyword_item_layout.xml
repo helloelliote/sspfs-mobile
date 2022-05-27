@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute">
+
+    <data>
+
+        <variable
+            name="document"
+            type="kr.djgis.sspfs.data.kakao.search.Document" />
+
+        <variable
+            name="listener"
+            type="kr.djgis.sspfs.ui.search.KeywordAdapterListener" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_0_5"
+        android:layout_marginVertical="@dimen/grid_0_5">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="true"
+            android:elevation="@dimen/plane_00"
+            android:focusable="true"
+            android:onClick="@{(view) -> listener.onKeywordItemClicked(view, document)}"
+            app:cardPreventCornerOverlap="false"
+            app:strokeWidth="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/grid_0_5"
+                android:paddingBottom="@dimen/grid_0_5">
+
+                <TextView
+                    android:id="@+id/subject_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_0_5"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:maxLines="3"
+                    android:text="@{document.place_name}"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/sender_profile_image_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginEnd="@dimen/grid_1"
+                    tools:text="대진기술정보(주)" />
+
+                <TextView
+                    android:id="@+id/body_preview_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_0_5"
+                    android:layout_marginEnd="@dimen/grid_1"
+                    android:maxLines="2"
+                    android:text="@{document.addressFormat}"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subject_text_view"
+                    tools:text="대구 동구 국채보상로159길 41" />
+
+                <TextView
+                    android:id="@+id/body_preview_text_view2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_0_5"
+                    android:layout_marginEnd="@dimen/grid_1"
+                    android:maxLines="1"
+                    android:text="@{document.category_name}"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:textColor="@color/blue_A700"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/body_preview_text_view"
+                    tools:text="교통,수송 > 기차,철도 > 기차역 > KTX,SRT정차역" />
+
+                <TextView
+                    android:id="@+id/sender_profile_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/email_sender_profile_image_size"
+                    android:layout_marginStart="@dimen/grid_1"
+                    android:layout_marginTop="@dimen/grid_0_5"
+                    android:layout_marginEnd="@dimen/grid_2"
+                    android:text="@{document.distanceFormat}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

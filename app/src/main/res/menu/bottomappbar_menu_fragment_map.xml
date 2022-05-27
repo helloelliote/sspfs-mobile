@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_legend"
+            android:icon="@drawable/ic_outline_not_listed_location_24"
+            android:title=""
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/action_maptype"
+            android:icon="@drawable/ic_round_airplanemode_active_24"
+            android:title=""
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/action_layergroup"
+            android:icon="@drawable/ic_round_landscape_30"
+            android:title=""
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/action_search"
+            android:icon="@drawable/ic_round_search_28"
+            android:title=""
+            app:showAsAction="ifRoom|withText" />
+    </group>
+</menu>

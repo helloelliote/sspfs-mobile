@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/introFragment">
+
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="kr.djgis.sspfs.ui.IntroFragment"
+        android:label="@string/label_intro"
+        tools:layout="@layout/fragment_intro">
+        <action
+            android:id="@+id/action_to_naverMapFragment"
+            app:destination="@id/naverMapFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/introFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/naverMapFragment"
+        android:name="kr.djgis.sspfs.ui.map.NaverMapFragment"
+        android:label="@string/label_map"
+        tools:layout="@layout/fragment_map">
+        <argument
+            android:name="location"
+            android:defaultValue="@null"
+            app:argType="com.naver.maps.geometry.LatLng"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_to_placeSearchFragment"
+            app:destination="@+id/placeSearchFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="location"
+                android:defaultValue="@null"
+                app:argType="com.naver.maps.geometry.LatLng"
+                app:nullable="true" />
+        </action>
+        <action
+            android:id="@+id/action_to_featureFragment"
+            app:destination="@+id/featureFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="bitmap"
+                android:defaultValue="@null"
+                app:argType="android.graphics.Bitmap"
+                app:nullable="true" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeSearchFragment"
+        android:name="kr.djgis.sspfs.ui.search.PlaceSearchFragment"
+        android:label="@string/label_place_search"
+        tools:layout="@layout/fragment_place_search">
+        <argument
+            android:name="location"
+            android:defaultValue="@null"
+            app:argType="com.naver.maps.geometry.LatLng"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_to_naverMapFragment"
+            app:destination="@+id/naverMapFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="location"
+                android:defaultValue="@null"
+                app:argType="com.naver.maps.geometry.LatLng"
+                app:nullable="true" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/featureFragment"
+        android:name="kr.djgis.sspfs.ui.feature.FeatureFragment"
+        android:label="@string/label_feature"
+        tools:layout="@layout/fragment_feature">
+        <argument
+            android:name="bitmap"
+            android:defaultValue="@null"
+            app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_to_cameraFragment"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_to_cameraXFragment"
+            app:destination="@id/cameraXFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="kr.djgis.sspfs.camera.CameraFragment"
+        android:label="@string/label_camera" />
+
+    <fragment
+        android:id="@+id/cameraXFragment"
+        android:name="kr.djgis.sspfs.camera.CameraXFragment"
+        android:label="@string/label_camerax" />
+</navigation>

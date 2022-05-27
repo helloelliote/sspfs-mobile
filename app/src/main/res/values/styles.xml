@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright (c) 2019-2022 대진기술정보(주) All Rights Reserved
+  -->
+<resources>
+
+    <!--Components-->
+
+    <style name="Widget.Sspfs.NavigationView" parent="Widget.Material3.NavigationView">
+        <!--Remove any scrim insets applied by NavigationView for system bars-->
+        <item name="insetForeground">@android:color/transparent</item>
+        <!--Set the background color of NavigationView-->
+        <item name="android:background">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+        <item name="itemTextAppearance">?attr/textAppearanceBody2</item>
+    </style>
+
+    <style name="App.LinearLayout.Horizontal" parent="Theme.AppTheme">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <style name="App.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="helperTextEnabled">true</item>
+    </style>
+
+    <style name="App.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="maxLines">1</item>
+        <item name="singleLine">true</item>
+    </style>
+
+    <style name="App.TextInputLayout.Disabled" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="endIconMode">none</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="boxBackgroundColor">@color/grey_200</item>
+        <item name="helperText">@string/helper_text_autocomplete</item>
+    </style>
+
+    <style name="App.TextInputEditText.Disabled" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:focusable">false</item>
+    </style>
+
+    <style name="App.TextInputLayout.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="App.MaterialButton" parent="Widget.Material3.Button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+    </style>
+
+    <style name="App.TextView.Legend" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableRight">@drawable/ic_round_location_on_36</item>
+    </style>
+</resources>

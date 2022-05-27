@@ -1,0 +1,130 @@
+
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="kr.djgis.sspfs.ui.search.PlaceSearchFragment"
+    tools:ignore="ContentDescription">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:transitionGroup="true"
+        app:paddingTopSystemWindowInsets="@{true}">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/search_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:paddingLeft="@dimen/grid_1"
+            android:paddingRight="@dimen/grid_1"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@drawable/ic_round_arrow_back_30">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_query"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:imeOptions="flagNoExtractUi|actionSearch"
+                    android:inputType="textNoSuggestions"
+                    app:defaultQueryHint="@string/search_suggestion_hint"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@null"
+                    app:searchHintIcon="@null"
+                    app:searchIcon="@null"
+                    app:submitBackground="@null" />
+
+                <ImageButton
+                    android:id="@+id/search_speech_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/actionBarItemBackground"
+                    android:padding="@dimen/grid_2"
+                    app:srcCompat="@drawable/ic_round_mic_30"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:backgroundTint="@color/material_on_surface_stroke" />
+
+        <LinearLayout
+            android:id="@+id/view_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:paddingTopSystemWindowInsets="@{true}">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:drawablePadding="@dimen/grid_0_5"
+                android:text="@string/search_suggestion_title_result"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableStartCompat="@drawable/ic_round_manage_search_24" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/grid_1"
+                android:paddingBottom="@dimen/grid_1"
+                android:transitionGroup="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_recent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:paddingBottomSystemWindowInsets="@{true}">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:layout_marginEnd="@dimen/grid_2"
+                android:drawablePadding="@dimen/grid_0_5"
+                android:text="@string/search_suggestion_title_recent"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableStartCompat="@drawable/ic_round_history_24" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/grid_1"
+                android:paddingBottom="@dimen/grid_1"
+                android:transitionGroup="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

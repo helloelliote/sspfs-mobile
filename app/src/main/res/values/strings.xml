@@ -1,0 +1,81 @@
+<!--
+  Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+<resources>
+    <string name="app_name">sspfs</string>
+
+    <string name="type_a">소교량</string>
+    <string name="type_b">세천</string>
+    <string name="type_c">취입보</string>
+    <string name="type_d">낙차공</string>
+    <string name="type_e">농로</string>
+    <string name="type_f">마을진입로</string>
+
+    <string name="label_intro">IntroFragment</string>
+    <string name="label_permissions">PermissionsFragment</string>
+    <string name="label_map">MapFragment</string>
+    <string name="label_place_search">PlaceSearchFragment</string>
+    <string name="label_feature">FeatureFragment</string>
+    <string name="label_camera">CameraFragment</string>
+    <string name="label_camerax">CameraXFragment</string>
+    <string name="label_image_viewer">ImageViewerFragment</string>
+    <string name="label_gallery">ImageViewerFragment</string>
+
+    <!--NaverMapFragment-->
+    <string name="map_require_zoom">지도를 더 확대하여 공공시설물을 호출해주세요.</string>
+    <string name="map_feature_get_empty">현재 영역에는 소규모 공공시설물이 없습니다.</string>
+    <string name="map_legend_title">소규모 공공시설 범례</string>
+    <string name="map_legend_description">현재 영역에는 소규모 공공시설물이 없습니다.</string>
+
+    <!--PlaceSearchFragment-->
+    <string name="search_suggestion_hint">장소(지명)을 검색하세요</string>
+    <string name="search_suggestion_title_result">검색 결과</string>
+    <string name="search_suggestion_title_recent">최근 검색</string>
+
+    <!--FeatureFragment-->
+    <string name="helper_a5">조사자 변경을 위해서는 재로그인해주세요</string>
+    <string name="helper_a6">조사일자는 최종 편집일자로 갱신됩니다</string>
+
+    <string name="hint_id">관리번호</string>
+    <string name="hint_pk4">시설물 분류</string>
+    <string name="hint_a1">시설 명칭</string>
+    <string name="hint_a2">시설의 소유자•점유자 또는 관리인</string>
+    <string name="hint_d1">위치 (지점)</string>
+    <string name="hint_e1">제원 (연장)</string>
+    <string name="hint_e2">제원 (폭)</string>
+    <string name="hint_e3">제원</string>
+    <string name="hint_g1">그 밖의 사항 (조사자의견)</string>
+    <string name="hint_a5">현장조사자</string>
+    <string name="hint_a6">현장조사일자</string>
+    <string name="button_d1">위치 변경 (개발중)</string>
+    <string name="textview_attachment">현장사진</string>
+    <string name="textview_other">기타 시설현황</string>
+    <string name="hint_a3">관할기관 명칭</string>
+    <string name="hint_a4">관할기관 연락처</string>
+    <string name="hint_c1">수혜 구역 (건물)</string>
+    <string name="hint_c2">수혜 구역 (농경지)</string>
+
+    <string name="feature_require_fail">필수 정보를 모두 입력해주세요.</string>
+
+    <string name="dialog_title_a1">시설 명칭</string>
+    <string name="dialog_title_f1">시설부속물</string>
+    <string name="dialog_title_f2">그 밖의 사항</string>
+    <string name="dialog_supporting_text_a1">시설 명칭은 OO소교량, OO세천, OO취입보, OO낙차공, OO농로 및 OO마을진입로의 방식으로 그 지역 마을명이나 골짜기, 뜰 명칭 등을 이용하여 표기하되 기존의 법정하천 명칭과 중복되지 않도록 유의한다.\n\n※소규모 공공시설 안전관리 등에 관한 법률 시행규칙 [별지 제1호서식] 비고 1 참조</string>
+    <string name="dialog_supporting_text_f1">세천 내에 소교량, 취입보, 낙차공 등이 설치된 경우에는 "시설물부속물" 란에 적는다.\n\n※소규모 공공시설 안전관리 등에 관한 법률 시행규칙 [별지 제1호서식] 비고 4 참조</string>
+    <string name="dialog_supporting_text_f2">시설 유형별로 아래의 현황을 적는다.\n\n 가. 소교량: 날개벽\n 나. 세천: 자연제방, 돌망태, 석축, 호안블록 등\n 다. 취입보 및 낙차공: 어도\n 라. 농로 및 마을진입로: 정비를 위하여 매입이 필요한 토지 필지 수 및 면적\n\n※소규모 공공시설 안전관리 등에 관한 법률 시행규칙 [별지 제1호서식] 비고 3 참조</string>
+    <string name="dialog_close">닫기</string>
+
+    <string name="button_delete">삭제</string>
+    <string name="button_gallery">갤러리</string>
+    <string name="button_camera">카메라</string>
+
+    <string name="helper_text_autocomplete">사전입력된 정보입니다</string>
+
+    <!--GalleryFragment-->
+    <string name="delete_dialog">Delete current photo?</string>
+    <string name="delete_title">Confirm</string>
+    <string name="image_start">시점</string>
+    <string name="image_end">종점</string>
+    <string name="image_general">일반</string>
+    <string name="image_delete">삭제</string>
+</resources>
