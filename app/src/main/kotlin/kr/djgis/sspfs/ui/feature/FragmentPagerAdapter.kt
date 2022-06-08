@@ -33,7 +33,8 @@ class FragmentPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
         @DrawableRes val icon: Int,
     ) {
 //        EDIT(FeatureFragmentEdit(), "시설물 대장", R.drawable.ic_round_description_24),
-        EDIT2(FeatureFragmentEdit2(), "현장조사", R.drawable.ic_round_description_24),
+        EDIT2(FeatureFragmentEdit2(), "현장조사 A", R.drawable.ic_round_description_24),
+        EDIT3(FeatureFragmentEdit3(), "현장조사 B", R.drawable.ic_round_description_24),
         EVALUATE(FeatureFragmentEvaluate(), "후보지 평가", R.drawable.ic_round_push_pin_24),
         RISK(FeatureFragmentRisk(), "위험도 평가", R.drawable.ic_round_warning_24),
         CLASSIFY(FeatureFragmentClassify(), "시설 구분 평가", R.drawable.ic_round_thumb_up_24),

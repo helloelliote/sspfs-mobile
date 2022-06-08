@@ -43,7 +43,8 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:layout_weight="2"
+                        android:text="광덕리_세천_001" />
 
                     <TextView
                         style="@style/App.TableLayout.Label"
@@ -51,13 +52,14 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:layout_weight="2"
+                        android:text="광덕리 1278구" />
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         style="@style/App.TableLayout.Label"
@@ -65,7 +67,8 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:layout_weight="2"
+                        android:text="낙동강" />
 
                     <TextView
                         style="@style/App.TableLayout.Label"
@@ -129,17 +132,23 @@
                         android:layout_weight="2"
                         android:text="연장 부족 여부" />
 
-                    <TextView style="@style/App.TableLayout.TextView" />
-
-                    <TextView style="@style/App.TableLayout.TextView" />
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="50m 이상" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="2213" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="여" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
@@ -153,13 +162,21 @@
                         android:layout_weight="2"
                         android:text="폭 부족 여부" />
 
-                    <TextView style="@style/App.TableLayout.TextView" />
-
-                    <TextView style="@style/App.TableLayout.TextView" />
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="1m 이상" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="2.3" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="여" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="부" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
@@ -185,11 +202,13 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
@@ -209,11 +228,13 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
@@ -233,11 +254,13 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
@@ -259,11 +282,13 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
@@ -285,7 +310,11 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="부" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
@@ -309,17 +338,19 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="2" />
+                        android:text="여" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:text="선정제외" />
+                        android:text="부" />
+
+                    <TextView style="@style/App.TableLayout.TextView" />
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
