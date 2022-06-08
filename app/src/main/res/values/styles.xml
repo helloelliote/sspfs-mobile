@@ -99,8 +99,8 @@
     <style name="App.TableLayout.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingVertical">10dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingVertical">12dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
@@ -112,7 +112,8 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">17sp</item>
-        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:paddingHorizontal">2dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:text">""</item>
         <item name="android:background">@drawable/tablelayout_border_row</item>
@@ -122,8 +123,8 @@
     <style name="App.TableLayout.Label" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingVertical">10dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingVertical">12dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
