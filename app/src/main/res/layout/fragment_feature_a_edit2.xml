@@ -53,7 +53,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView"
                         android:layout_weight="1.5"
-                        android:text="낙동강" />
+                        android:text="" />
 
                     <TextView
                         style="@style/App.TableLayout.Label"
