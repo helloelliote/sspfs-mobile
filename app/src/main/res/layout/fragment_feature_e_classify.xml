@@ -76,7 +76,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:text="북위 북위 36º 30‘ 12“\n동경 동경 128º 47‘ 36“" />
+              android:text="북위 36º 30‘ 12“\n동경 128º 47‘ 36“" />
         </TableRow>
 
         <TableRow
@@ -99,7 +99,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:text="북위 북위 36º 30‘ 6“\n동경 동경 128º 47‘ 30“" />
+              android:text="북위 36º 30‘ 6“\n동경 128º 47‘ 30“" />
         </TableRow>
 
         <TableRow
