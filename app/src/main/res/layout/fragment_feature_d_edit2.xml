@@ -119,6 +119,26 @@
 
         <TableRow
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="조사항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="6"
+              android:text="현장조사 내용" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
           <TextView
@@ -260,6 +280,26 @@
 
         <TableRow
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="조사항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="6"
+              android:text="현장조사 내용" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
           <TextView
@@ -319,6 +359,26 @@
 
         <TableRow
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="조사항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="6"
+              android:text="현장조사 내용" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
           <TextView
@@ -344,6 +404,26 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
               android:text="침식·퇴적·취수영향" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="조사항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="6"
+              android:text="현장조사 내용" />
         </TableRow>
 
         <TableRow
@@ -402,6 +482,26 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
               android:text="어도 파손" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="조사항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="6"
+              android:text="현장조사 내용" />
         </TableRow>
 
         <TableRow
