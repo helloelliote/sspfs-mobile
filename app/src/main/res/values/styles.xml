@@ -95,4 +95,53 @@
         <item name="android:textStyle">bold</item>
         <item name="android:drawableRight">@drawable/ic_round_location_on_36</item>
     </style>
+
+    <style name="App.TableLayout.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:background">@drawable/tablelayout_border_row</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="App.TableLayout.TextView.Small" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:paddingHorizontal">2dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:background">@drawable/tablelayout_border_row</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="App.TableLayout.Label" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:background">@drawable/tablelayout_label</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="App.TableLayout.EditText" parent="Theme.AppTheme">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingHorizontal">5dp</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:background">@drawable/tablelayout_border_row</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 </resources>

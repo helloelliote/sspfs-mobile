@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="kr.djgis.sspfs.ui.feature.FeatureFragmentEvaluate"
+    tools:ignore="TooManyViews,HardcodedText">
+
+  <data>
+
+    <variable
+        name="viewModel"
+        type="kr.djgis.sspfs.model.FeatureViewModel" />
+  </data>
+
+  <androidx.core.widget.NestedScrollView
+      android:id="@+id/nested_scrollview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingHorizontal="10dp"
+      android:paddingVertical="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <TableLayout
+          android:id="@+id/table1"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="10dp"
+          android:background="@drawable/tablelayout_border"
+          android:stretchColumns="*"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="농로명" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="신석리_농로_001" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="주소" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="남선면 신석리 46-1도" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="연장" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="316.09 m" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="좌표-시점부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="북위 36º 30‘ 12“\n동경 128º 47‘ 36“" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="좌표-종점부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="북위 36º 30‘ 6“\n동경 128º 47‘ 30“" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="구분" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="3"
+              android:text="평가항목" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="기준" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="제원" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="후보지평가" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="선정여부" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="시설규모" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="1) 농로연장 부족 여부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="50m 이상" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="316m" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="2) 농로폭 부족 여부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="2.5m 이상" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="3.0m" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="선정제외" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="시설기능 및 형태" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="3) 법정도로와 중첩 여부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="4) (소)하천 제방도로" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="시설위치" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="5) 경지정리 구역내" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="6) 사유지내(분쟁 및 민원지역)" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="7) 타법에 의한 관리지역내\n(농업진흥, 도시, 계획지역)" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="3"
+              android:text="8) 제한지역내(군부대 등)" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="여" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="부" />
+
+          <TextView style="@style/App.TableLayout.TextView" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="선정여부" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="선정" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:background="@color/red_A100"
+              android:text="선정제외" />
+        </TableRow>
+      </TableLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.core.widget.NestedScrollView>
+</layout>

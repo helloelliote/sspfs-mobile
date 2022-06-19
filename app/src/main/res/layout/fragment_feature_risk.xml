@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="kr.djgis.sspfs.ui.feature.FeatureFragmentRisk"
+    tools:ignore="TooManyViews,HardcodedText">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="kr.djgis.sspfs.model.FeatureViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/table1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/tablelayout_border"
+                android:stretchColumns="*"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="세천명" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:layout_weight="2"
+                        android:text="광덕리_세천_002" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="연장" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2399.1" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="수계명" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="낙동강" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="주소" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:layout_weight="2"
+                        android:text="광덕리 산66-2임" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="3"
+                        android:text="점검항목" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="5"
+                        android:text="상태등급" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="4"
+                        android:text="상태등급" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="3" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="5"
+                        android:text="A:0~3, B:4~6, C:7~10" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="종점부" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="중앙부" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="시점부" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="점수" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="1.과거 인명피해 및\n재산피해 이력" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 재산피해(X) 인명피해(X)\nB 재산피해(O) 인명피해(X)\nC 재산피해(O) 인명피해(O)" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="2.제내지 상습침수피해 이력" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 상습피해\nB 침수피해 조치 후 피해없음\nC 상습침수피해 발생" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="3.제방단면 부족 및\n파손 여부" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 설계기준에 적합. 파손이 거의 없음\nB 제방단면 부족\nC 제방단면 부족. 파손이 심한 경우" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="4.호안 유무•노후화\n및 파손 상태" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 호안상태 양호 \nB 호안 노후화가 심함\nC 호안이 없거나 파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="5.기타시설\n(통관,문비)노후화" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 시설물 양호\nB 시설물 노후화가 심함\nC 시설물이 없거나 파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="6.하폭 부족\n또는 급축소" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 하폭 5.0m 이상\nB 하폭 2~5m로 하폭 급축소가 없음\nC 상하류에 비해 하폭이 매우 협소" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="7.하도 침식\n퇴적에 따른 위험성" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 양호\nB 일부 퇴적상태\nC 하도 퇴적이 매우 심함" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="8.유송잡물, 식생에\n따른 통수능 부족" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 양호\nB 하도내 식생\nC 교량의 유송잡물 등" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="9.입지여건(취락지 등)\n에 따른 위험성" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 산지 또는 나대지\nB 일부 농경지 및 취락지\nC 다수의 취락지, 야영장 등" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="3"
+                        android:text="10.인위적인 훼손(사람\n동물 등) 및 불법점용" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="5"
+                        android:text="A 훼손 및 불법점용 없음 \nB 일부 훼손 및 경작지 등\nC 훼손상태 심함. 세천 불법점용" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="3"
+                        android:text="평가점수 및 등급" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="4"
+                        android:gravity="center"
+                        android:text="양호:30 보통:31~70 불량:71" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="양호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:background="@color/amber_A100"
+                        android:text="보통" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="불량" />
+
+                    <TextView
+                        style="@style/App.TableLayout.Label"
+                        android:text="합계" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:text="51" />
+                </TableRow>
+            </TableLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
