@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="kr.djgis.sspfs.ui.feature.FeatureFragmentEdit2"
+    tools:context="kr.djgis.sspfs.ui.feature.tabs.FeatureFEdit1"
     tools:ignore="TooManyViews,HardcodedText">
 
   <data>
@@ -72,6 +72,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:text="신석리_마을진입로_001" />
+
           <TextView
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
@@ -220,9 +221,9 @@
               android:text="" />
 
           <TextView
-            style="@style/App.TableLayout.TextView"
-            android:layout_weight="2"
-            android:text="타법에 의한 관리지역\n(농업진흥, 도시, 계획지역)" />
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="타법에 의한 관리지역\n(농업진흥, 도시, 계획지역)" />
 
           <TextView
               style="@style/App.TableLayout.TextView"

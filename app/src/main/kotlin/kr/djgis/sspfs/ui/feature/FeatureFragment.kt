@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat.getDrawable
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
@@ -20,7 +20,7 @@ import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.ui.MainActivity
-import kr.djgis.sspfs.ui.feature.FragmentPagerAdapter.FeatureFragmentTabs
+import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.toggle
 
@@ -39,8 +39,6 @@ class FeatureFragment : Fragment(), View.OnClickListener {
         val displayMetrics = resources.displayMetrics
         return@lazy (displayMetrics.widthPixels / displayMetrics.density) > 600.0
     }
-
-    private val featureFragmentTabs = FeatureFragmentTabs.values()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
@@ -62,13 +60,52 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
         binding.run {
             viewPager.isUserInputEnabled = false
-            viewPager.adapter = FragmentPagerAdapter(this@FeatureFragment)
+            viewPager.adapter = when (viewModel!!.feature.value!!.pk4) {
+                "A" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureAEdit1(),
+                        FeatureAEdit2(),
+                    )
+                )
+                "B" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureBEdit1(),
+                        FeatureBEdit2(),
+                        FeatureBEdit3(),
+                    )
+                )
+                "C" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureCEdit1(),
+                        FeatureCEdit2(),
+                    )
+                )
+                "D" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureDEdit1(),
+                        FeatureDEdit2(),
+                    )
+                )
+                "E" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureEEdit1(),
+                        FeatureEEdit2(),
+                        FeatureEEdit3(),
+                    )
+                )
+                "F" -> FragmentPagerAdapter(
+                    this@FeatureFragment, listOf(
+                        FeatureFEdit1(),
+                        FeatureFEdit2(),
+                        FeatureFEdit3(),
+                    )
+                )
+                else -> FragmentPagerAdapter(this@FeatureFragment, listOf())
+            }
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
-                    with(featureFragmentTabs) {
-                        text = this[position].text
-                        icon = getDrawable(resources, this[position].icon, null)
-                    }
+                    text = "조사 $position"
+                    icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_description_24, null)
                 }
             }.attach()
 

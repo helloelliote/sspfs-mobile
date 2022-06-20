@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="kr.djgis.sspfs.ui.feature.FeatureFragmentEvaluate"
+    tools:context="kr.djgis.sspfs.ui.feature.tabs.FeatureBEdit1"
     tools:ignore="TooManyViews,HardcodedText">
 
   <data>
@@ -39,21 +39,24 @@
 
           <TextView
               style="@style/App.TableLayout.Label"
-              android:text="보명" />
+              android:layout_weight="2"
+              android:text="관리번호" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="성곡리_낙차공_015" />
+              android:layout_weight="3"
+              android:text="GC35022A0001" />
 
           <TextView
               style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
               android:text="주소" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="서후면 성곡리 1006구" />
+              android:layout_weight="3"
+              android:text="풍천면 광덕리 1278구" />
+
         </TableRow>
 
         <TableRow
@@ -62,92 +65,24 @@
 
           <TextView
               style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
               android:text="세천명" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="성곡리_세천_004" />
-
-          <TextView
-              style="@style/App.TableLayout.Label"
-              android:text="좌표" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="북위 36º 37‘ 57“\n동경 128º 38‘ 32“" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <TextView
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="" />
-
-          <TextView
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:text="북위 36º 37‘ 57“\n동경 128º 38‘ 32“" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <TextView
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <TextView
-              style="@style/App.TableLayout.Label"
               android:layout_weight="3"
-              android:text="평가항목" />
+              android:text="광덕리_세천_001" />
 
           <TextView
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
-              android:text="후보지평가" />
-
-          <TextView
-              style="@style/App.TableLayout.Label"
-              android:text="선정여부" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="시설기능 및\n형태" />
+              android:text="시점위치" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="1) 산지 소규모 시설" />
+              android:text="풍천면 광덕리 1278구" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="여" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
         <TableRow
@@ -155,47 +90,25 @@
             android:layout_height="match_parent">
 
           <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="" />
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="수계명" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="2) 관련계획상 철거 예정" />
+              android:text="낙동강" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="여" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="" />
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="종점위치" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="3) 취수기능 필요성 상실" />
+              android:text="풍천면 광덕리 1278구" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="여" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
         <TableRow
@@ -203,23 +116,99 @@
             android:layout_height="match_parent">
 
           <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="제원" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="연장" />
+
+          <TextView
               style="@style/App.TableLayout.TextView"
+              android:text="2213.0 m" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="평균폭" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="2.3 m" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="시설부속물" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:text="2" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:text="부속물유형" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="소교량0개소, 취입보0개소, 낙차공0개소" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="시설기능" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="해당없음" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="농수로" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="산지수로" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView"
+              android:layout_weight="2"
+              android:text="도시지역 우수관거" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+          <TextView
+              style="@style/App.TableLayout.Label"
               android:text="시설위치" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="3"
-              android:text="4) 선정제외 세천내" />
+              android:layout_weight="2"
+              android:text="해당없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="여" />
+              android:layout_weight="2"
+              android:text="사유지 (분쟁 및 민원지역)" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
         <TableRow
@@ -232,18 +221,14 @@
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="3"
-              android:text="5) 사유지 내 (분쟁 및 민원지역)" />
+              android:layout_weight="2"
+              android:text="타법에 의한 관리지역\n(농업진흥, 도시, 계획지역)" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="여" />
+              android:layout_weight="2"
+              android:text="제한지역 (군부대 등)" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
         <TableRow
@@ -251,23 +236,14 @@
             android:layout_height="match_parent">
 
           <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="" />
+              style="@style/App.TableLayout.Label"
+              android:text="조사자 의견" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:layout_weight="3"
-              android:text="6) 법정하천내" />
+              android:layout_weight="4"
+              android:text="자연제방, 돌망태, 석축, 호안블럭, U형수로 등" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="여" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
         <TableRow
@@ -275,43 +251,27 @@
             android:layout_height="match_parent">
 
           <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="" />
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="현장조사일" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="7) 타법에 의한 관리지역 내\n(농업진흥, 도시, 계획지역)" />
+              android:text="2022-00-00" />
+
+          <TextView
+              style="@style/App.TableLayout.Label"
+              android:layout_weight="2"
+              android:text="현장조사자" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="여" />
+              android:layout_weight="3"
+              android:text="000" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="부" />
-
-          <TextView style="@style/App.TableLayout.TextView" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="선정여부" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="선정" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:background="@color/red_A100"
-              android:text="선정제외" />
-        </TableRow>
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>

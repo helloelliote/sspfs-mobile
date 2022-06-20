@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="kr.djgis.sspfs.ui.feature.FeatureFragmentEdit2"
+    tools:context="kr.djgis.sspfs.ui.feature.tabs.FeatureEEdit2"
     tools:ignore="TooManyViews,HardcodedText">
 
   <data>
@@ -802,8 +802,6 @@
               android:layout_weight="2.5"
               android:text="소성변형·통행지장" />
         </TableRow>
-
-
 
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

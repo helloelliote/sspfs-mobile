@@ -2,30 +2,24 @@
  * Copyright (c) 2022 대진기술정보(주) All Rights Reserved
  */
 
-package kr.djgis.sspfs.ui.feature
+package kr.djgis.sspfs.ui.feature.tabs
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import kr.djgis.sspfs.databinding.FragmentFeatureEdit3Binding
-import kr.djgis.sspfs.model.FeatureVMFactory
-import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.databinding.FragmentFeatureDEdit1Binding
 
-class FeatureFragmentEdit3 : Fragment() {
-
-    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+class FeatureDEdit1 : FeatureTabs() {
 
     // This property is only valid between onCreateView and onDestroyView.
-    private var _binding: FragmentFeatureEdit3Binding? = null
+    private var _binding: FragmentFeatureDEdit1Binding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentFeatureEdit3Binding.inflate(inflater, container, false)
+        _binding = FragmentFeatureDEdit1Binding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,7 +28,15 @@ class FeatureFragmentEdit3 : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@FeatureFragmentEdit3.viewModel
+            viewModel = super.viewModel
+        }
+
+        binding.run {
+
+        }
+
+        viewModel.feature.observe(viewLifecycleOwner) {
+
         }
     }
 
