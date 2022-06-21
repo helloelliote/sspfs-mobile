@@ -95,7 +95,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
-              android:text="①도로폭·포장종류" />
+              android:text="①도로폭·포장" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -112,7 +112,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -151,7 +151,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -190,7 +190,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"

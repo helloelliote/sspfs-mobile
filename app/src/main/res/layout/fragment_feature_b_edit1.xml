@@ -125,7 +125,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="2213.0 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -133,7 +134,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="2.3 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
         </TableRow>
 
@@ -147,7 +149,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="2" />
+              android:hint="0m"
+              android:inputType="number" />
 
           <Button
               style="@style/App.TableLayout.Label"

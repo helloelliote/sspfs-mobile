@@ -95,7 +95,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
-              android:text="①도로폭·포장종류" />
+              android:text="①도로폭·포장" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -108,11 +108,12 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:hint="3.0 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -147,11 +148,12 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:hint="3.0 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -186,11 +188,12 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:hint="3.0 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="포장종류" />
+              android:text="포장" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"

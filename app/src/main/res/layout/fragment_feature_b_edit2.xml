@@ -113,7 +113,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -121,7 +123,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
@@ -144,7 +148,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -152,7 +158,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
@@ -173,7 +181,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -181,7 +191,9 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2" />
+              android:layout_weight="2"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
@@ -204,7 +216,10 @@
               style="@style/App.TableLayout.Label"
               android:text="좌안" />
 
-          <EditText style="@style/App.TableLayout.EditText" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -214,7 +229,10 @@
               style="@style/App.TableLayout.Label"
               android:text="우안" />
 
-          <EditText style="@style/App.TableLayout.EditText" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -241,7 +259,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="3.0" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView style="@style/App.TableLayout.TextView.Select" />
 
@@ -249,7 +268,10 @@
               style="@style/App.TableLayout.Label"
               android:text="우안" />
 
-          <EditText style="@style/App.TableLayout.EditText" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -274,7 +296,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="3.0" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView style="@style/App.TableLayout.TextView.Select" />
 
@@ -282,7 +305,10 @@
               style="@style/App.TableLayout.Label"
               android:text="우안" />
 
-          <EditText style="@style/App.TableLayout.EditText" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -314,7 +340,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="피해 이력" />
+              android:text="피해이력" />
 
           <Button
               style="@style/App.TableLayout.Label"

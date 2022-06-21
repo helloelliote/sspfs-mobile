@@ -136,7 +136,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="2" />
+              android:hint="0"
+              android:inputType="number" />
 
           <Button
               style="@style/App.TableLayout.Label"

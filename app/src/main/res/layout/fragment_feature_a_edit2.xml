@@ -104,7 +104,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="4 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -112,7 +113,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="3.5 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -120,7 +122,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="0.5 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
@@ -152,7 +155,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="3.5" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -160,7 +164,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="0.5" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -168,7 +173,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:text="" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -176,7 +182,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:text="" />
+              android:hint="0m"
+              android:inputType="number" />
         </TableRow>
 
         <TableRow
@@ -198,7 +205,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="3.5 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -208,7 +216,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="0.8"
-              android:hint="4 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -216,7 +225,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="5 m" />
+              android:hint="0m"
+              android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
