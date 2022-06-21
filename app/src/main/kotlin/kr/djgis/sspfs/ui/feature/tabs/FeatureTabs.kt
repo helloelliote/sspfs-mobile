@@ -6,48 +6,86 @@ package kr.djgis.sspfs.ui.feature.tabs
 
 import android.graphics.Typeface.BOLD
 import android.graphics.Typeface.NORMAL
+import android.os.Bundle
 import android.view.View
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.FeatureAttachment
 import kr.djgis.sspfs.model.FeatureVMFactory
+import kr.djgis.sspfs.model.FeatureVMFactory2
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
+import kr.djgis.sspfs.util.snackbar
 
 open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
 
     val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
     private val viewSelect by lazy { return@lazy R.drawable.tablelayout_border_row_select }
     private val viewDeselect by lazy { return@lazy R.drawable.tablelayout_border_row_deselect }
 
     var coroutineJob: Job? = null
     lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
 
+    private lateinit var fab: FloatingActionButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fab = requireActivity().findViewById(R.id.fab_main)
+    }
+
     fun setTableLayoutOnClickListener(table: TableLayout) {
         try {
+            val vm2 = viewModel2.value()
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i) as TableRow
                 val columnCount = row.childCount
-                val selectableColumns = mutableListOf<TextView>()
-                for (j: Int in 1..columnCount) {
-                    val column = row.getChildAt(j)
-                    if (column is TextView && column.isClickable) {
-                        // TODO: id 에 변수명 부여
-                        column.setOnClickListener {
-                            (it as TextView).run {
-                                isSelected = !isSelected
-                                setBackgroundResource(if (isSelected) viewSelect else viewDeselect)
-                                setTypeface(null, if (isSelected) BOLD else NORMAL)
+                if (columnCount < 3) continue
+                var key = ""
+                for (j: Int in 0..columnCount) {
+                    when (val column = row.getChildAt(j)) {
+                        is Button -> {
+                            if (column.tag != null) {
+                                key = column.tag.toString()
+                                println("Button TAG!: $key")
                             }
-                        }.also {
-                            selectableColumns.add(column)
+                        }
+                        is TextView -> {
+                            if (column.isClickable) {
+                                column.tag = (j - 1).toString()
+                                println(column.isSelected)
+                                column.setOnClickListener {
+                                    it as TextView
+                                    println("Text TAG!: " + column.tag)
+                                    it.isSelected = it.isSelected.not()
+                                    println("$key at ${column.tag}: ${it.isSelected}")
+                                    if (it.isSelected) {
+                                        if (vm2.getByKey(key) == null) {
+                                            it.setBackgroundResource(viewSelect)
+                                            it.setTypeface(null, BOLD)
+                                            vm2.setByKey(key, column.tag)
+                                        } else {
+                                            it.isSelected = it.isSelected.not()
+                                            snackbar(fab, "앞서 선택된 항목부터 선택 해제해 주세요").setAction("확인") {
+
+                                            }.show()
+                                        }
+                                    } else {
+                                        it.setBackgroundResource(viewDeselect)
+                                        it.setTypeface(null, NORMAL)
+                                        if (vm2.getByKey(key) == column.tag) {
+                                            vm2.setByKey(key, null)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

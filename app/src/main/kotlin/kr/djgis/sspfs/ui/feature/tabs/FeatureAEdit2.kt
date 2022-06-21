@@ -28,15 +28,17 @@ class FeatureAEdit2 : FeatureTabs() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = super.viewModel
+            viewModel2 = super.viewModel2
         }
 
         binding.run {
             setTableLayoutOnClickListener(table1)
         }
 
-        viewModel.feature.observe(viewLifecycleOwner) {
-
+        viewModel2.featureA.observe(viewLifecycleOwner) {
+            if (!it.fac_adm.isNullOrEmpty()) {
+                binding.facAdm.text = it.fac_adm
+            }
         }
     }
 

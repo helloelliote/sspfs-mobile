@@ -14,13 +14,17 @@ import kr.djgis.sspfs.network.RetrofitClient
 
 open class FeatureViewModel2 : ViewModel() {
 
-    val retrofit = RetrofitClient
+    private val retrofit = RetrofitClient
 
-    private val _featureA = MutableLiveData<FeatureBase>()
-    val featureA: LiveData<FeatureBase> = _featureA
+    private val _featureA = MutableLiveData<FeatureA>()
+    val featureA: LiveData<FeatureA> = _featureA
+
+    fun value(): FeatureA {
+        return featureA.value!!
+    }
 
     fun setFeatureA(featureA: FeatureBase) {
-        _featureA.value = featureA
+        _featureA.value = featureA as FeatureA
     }
 
     fun featuresA(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {

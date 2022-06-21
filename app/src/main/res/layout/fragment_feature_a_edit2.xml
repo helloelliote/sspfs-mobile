@@ -8,8 +8,8 @@
   <data>
 
     <variable
-        name="viewModel"
-        type="kr.djgis.sspfs.model.FeatureViewModel" />
+        name="viewModel2"
+        type="kr.djgis.sspfs.model.FeatureViewModel2" />
   </data>
 
   <androidx.core.widget.NestedScrollView
@@ -38,31 +38,37 @@
             android:layout_height="match_parent">
 
           <Button
+              android:tag="fac_nam"
               style="@style/App.TableLayout.Label"
               android:text="소교량명" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:hint="외하리_소교량_008" />
+              android:hint="외하리_소교량_008"
+              android:text="@={viewModel2.featureA.fac_nam}" />
 
           <Button
+              android:tag="pos_nam"
               style="@style/App.TableLayout.Label"
               android:text="세천명" />
 
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="1.5"
-              android:hint="낙동강" />
+              android:hint="" />
 
           <Button
+              android:tag="fac_adm"
               style="@style/App.TableLayout.Label"
               android:text="주소" />
 
           <TextView
+              android:id="@+id/fac_adm"
               style="@style/App.TableLayout.TextView.Small"
               android:layout_weight="2"
-              android:hint="남선면 외하리 732천" />
+              android:hint="자동생성"
+              android:text="@={viewModel2.featureA.fac_adm}" />
         </TableRow>
 
         <TableRow
@@ -72,7 +78,12 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="구분" />
+              android:text="1. 소교량 제원" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -91,10 +102,6 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="1.소교량\n제원" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="교량제원" />
 
@@ -105,7 +112,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.fac_len}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -114,7 +122,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.fac_wid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -123,16 +132,13 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.fac_hgt}" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -142,6 +148,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
+              android:tag="sec_flr"
               android:text="세월교" />
 
           <TextView
@@ -156,7 +163,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.sec_wid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -165,7 +173,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.sec_hgt}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -174,7 +183,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.sec_dia}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -182,17 +192,14 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="0m"
-              android:inputType="number" />
+              android:hint="0"
+              android:inputType="number"
+              android:text="@={viewModel2.featureA.sec_col}" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -206,7 +213,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.riv_upp}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -217,7 +225,8 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="0.8"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.riv_mid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -226,7 +235,8 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
-              android:inputType="numberDecimal" />
+              android:inputType="numberDecimal"
+              android:text="@={viewModel2.featureA.riv_low}" />
         </TableRow>
 
         <TableRow
@@ -236,7 +246,12 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="구분" />
+              android:text="2. 구조적 안정성" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -254,10 +269,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="2.구조적\n안정성" />
-
-          <Button
+              android:tag="str_dmg"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="① 슬라브·교대·교각\n파손·균열" />
@@ -283,10 +295,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="str_reb"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="② 철근노출·부식" />
@@ -312,10 +321,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="str_hol"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="③ 교대·교각 세굴" />
@@ -341,10 +347,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="str_old"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="④ 노후도·구조물 안전성" />
@@ -372,7 +375,12 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="구분" />
+              android:text="3. 홍수 위험성" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -390,10 +398,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="3.홍수\n위험성" />
-
-          <Button
+              android:tag="fld_dmg"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑤ 제방 접합부 침식" />
@@ -419,10 +424,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="fld_wal"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑤ 여유고 부족·월류" />
@@ -450,7 +452,13 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="구분" />
+              android:text="4. 기타" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -468,10 +476,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="4.기타" />
-
-          <Button
+              android:tag="etc_trf"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑨ 입지여건·통행량" />
@@ -497,10 +502,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="etc_trh"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑩ 통행위험성·세월교" />
@@ -528,7 +530,13 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="구분" />
+              android:text="5. 후보지 평가" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -546,10 +554,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="5.후보지\n평가" />
-
-          <Button
+              android:tag="eva_stt"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑪ 암거 현황 상태" />
@@ -575,10 +580,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="eva_sur"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑫ 주변현황" />
@@ -604,10 +606,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="eva_pxm"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑬ 주택·마을인접도" />
@@ -633,10 +632,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="eva_inf"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑭ 단절시 영향 정도" />
@@ -662,10 +658,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="eva_roa"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑮ 소교량에 연결된\n도로 등급" />
@@ -687,10 +680,7 @@
             android:layout_height="match_parent">
 
           <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
+              android:tag="eva_ope"
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="⑯ 주민·관계기관 의견" />
@@ -708,10 +698,19 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:hint="* 의견" />
+              android:hint="* 의견"
+              android:text="@={viewModel2.featureA.eva_opi}" />
         </TableRow>
 
       </TableLayout>
+
+      <LinearLayout
+          android:id="@+id/spacer_bottom"
+          android:layout_width="match_parent"
+          android:layout_height="150dp"
+          android:orientation="vertical"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/table1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>
 </layout>

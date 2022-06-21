@@ -8,9 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import kotlinx.coroutines.*
 import kr.djgis.sspfs.databinding.FragmentFeatureAEdit1Binding
 
+@DelicateCoroutinesApi
 class FeatureAEdit1 : FeatureTabs() {
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -29,15 +30,19 @@ class FeatureAEdit1 : FeatureTabs() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = super.viewModel
+            viewModel2 = super.viewModel2
         }
 
         binding.run {
             setTableLayoutOnClickListener(table1)
         }
 
-        viewModel.feature.observe(viewLifecycleOwner) {
-
+        viewModel2.featureA.observe(viewLifecycleOwner) {
+            if (it.fac_adm.isNullOrEmpty()) coroutineJob = GlobalScope.launch(Dispatchers.Main) {
+                val d1 = withContext(Dispatchers.Default) { viewModel2.fromLatLng(it) }
+                if (_binding != null) binding.facAdm.text = d1
+                it.fac_adm = d1
+           }
         }
     }
 

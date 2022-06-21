@@ -8,9 +8,9 @@
 
     <data>
 
-        <variable
+<!--        <variable
             name="viewModel"
-            type="kr.djgis.sspfs.model.FeatureViewModel" />
+            type="kr.djgis.sspfs.model.FeatureViewModel" />-->
 
         <variable
             name="ViewModel2"

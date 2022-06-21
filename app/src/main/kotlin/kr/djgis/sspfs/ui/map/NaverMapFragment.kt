@@ -47,11 +47,8 @@ import kr.djgis.sspfs.Config.LATLNG_GYEONGJU
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.FeatureA
 import kr.djgis.sspfs.data.FeatureBase
-import kr.djgis.sspfs.data.FeaturePK4.Companion.toColor
 import kr.djgis.sspfs.databinding.FragmentMapBinding
-import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureVMFactory2
-import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.NavDrawerFragment
 import kr.djgis.sspfs.util.observeOnce
@@ -65,7 +62,7 @@ import java.util.concurrent.Executors
 @DelicateCoroutinesApi
 class NaverMapFragment : Fragment(), OnMapReadyCallback {
 
-    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    //    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
     private val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
 
     private val args: NaverMapFragmentArgs by navArgs()
@@ -144,7 +141,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@NaverMapFragment.viewModel
+//            viewModel = this@NaverMapFragment.viewModel
             viewModel2 = this@NaverMapFragment.viewModel2
         }
         onCreateMap()
@@ -204,6 +201,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             .putFloat("longitude", naverMap.cameraPosition.target.longitude.toFloat()).apply()
     }
 
+/*
     private fun onFeatureGet(view: View) {
         clearOverlays()
         onFeatureGetResult(false)
@@ -247,7 +245,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
                 // (Archive) For "MultiLineString": MultipartPathOverlay
-                /*
+                */
+/*
                 val multiLineStrings = mutableListOf<MultipartPathOverlay>()
                 val pointMarkers = mutableListOf<Marker>()
                 it.features.forEach { feature ->
@@ -286,9 +285,11 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                         snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
                     }
                 }
-                */
+                *//*
+
                 // (Archive) For "Point"
-                /*
+                */
+/*
                 val pointMarkers = mutableListOf<Marker>()
                 it.features.forEach { feature ->
                     pointMarkers.add(Marker(feature.latLng).apply {
@@ -309,10 +310,12 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                         snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
                     }
                 }
-                */
+                *//*
+
             }
         }
     }
+*/
 
     private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: FeatureBase) =
         Marker(point, MarkerIcons.BLACK).apply {

@@ -107,6 +107,7 @@
         <item name="android:background">@drawable/tablelayout_border_row</item>
         <item name="android:layout_weight">1</item>
         <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="App.TableLayout.TextView.Small" parent="Widget.MaterialComponents.TextView">
@@ -116,10 +117,12 @@
         <item name="android:paddingVertical">18dp</item>
         <item name="android:paddingHorizontal">2dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
         <item name="android:text">""</item>
         <item name="android:background">@drawable/tablelayout_border_row</item>
         <item name="android:layout_weight">1</item>
         <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="App.TableLayout.TextView.Select" parent="Widget.MaterialComponents.TextView">

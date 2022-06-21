@@ -10,7 +10,13 @@ import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.ToJson
+import kr.djgis.sspfs.Config.DATETIME_FORMAT
+import kr.djgis.sspfs.Config.DATETIME_FORMAT_RECEIVE
+import kr.djgis.sspfs.Config.DATETIME_ZONE
 import java.io.Serializable
+import java.time.LocalDateTime
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.declaredMemberProperties
 
 @JsonClass(generateAdapter = true)
 data class FeatureAList(
@@ -72,7 +78,26 @@ data class FeatureA(
     var img_fac: Any?,
     var img_rep: Any?,
     var geom: FeatureGeom,
-) : FeatureBase()
+) : FeatureBase() {
+    val exm_ymd_date: String? = exm_ymd?.let(::parseDate)
+
+    private fun parseDate(string: String): String? {
+        return LocalDateTime.parse(string, DATETIME_FORMAT_RECEIVE).atZone(DATETIME_ZONE).format(DATETIME_FORMAT)
+    }
+
+    fun setByKey(key: String, value: Any?) {
+        for (property in this::class.declaredMemberProperties) {
+            if (property.name == key) (property as? KMutableProperty<*>)?.setter?.call(this, value)
+        }
+    }
+
+    fun getByKey(key: String): Any? {
+        for (property in this::class.declaredMemberProperties) {
+            if (property.name == key) return property.getter.call(this)
+        }
+        return null
+    }
+}
 
 @JsonClass(generateAdapter = true)
 data class FeatureAJson(
