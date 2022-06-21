@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="관리번호" />
@@ -45,9 +45,9 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="GC35022A0001" />
+              android:hint="GC35022A0001" />
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="주소" />
@@ -55,7 +55,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="서후면 성곡리 1006구" />
+              android:hint="서후면 성곡리 1006구" />
 
         </TableRow>
 
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="취입보명" />
@@ -71,9 +71,9 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="성곡리_낙차공_015" />
+              android:hint="성곡리_낙차공_015" />
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="시점위치" />
@@ -81,7 +81,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="서후면 성곡리 1006구" />
+              android:hint="서후면 성곡리 1006구" />
 
         </TableRow>
 
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="세천명" />
@@ -97,9 +97,9 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="성곡리_세천_004" />
+              android:hint="성곡리_세천_004" />
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="종점위치" />
@@ -107,7 +107,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="서후면 성곡리 1006구" />
+              android:hint="서후면 성곡리 1006구" />
 
         </TableRow>
 
@@ -115,14 +115,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:text="교량유형" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
+          <EditText
+              style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
-              android:text="자연형, 콘크리트형, 기타" />
+              android:hint="자연형, 콘크리트형, 기타" />
 
         </TableRow>
 
@@ -130,22 +130,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:text="시설부속물" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:text="2" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="2" />
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:text="부속물유형" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
+          <EditText
+              style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:text="날개벽, 교량 등" />
+              android:hint="날개벽, 교량 등" />
 
         </TableRow>
 
@@ -153,28 +153,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="기능 및 형태" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="해당없음" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="산지 소규모 시설" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="관련계획상 철거 예정" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="낙차기능 필요성 상실" />
 
@@ -184,23 +184,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="시설위치" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="해당없음" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="3"
               android:text="사유지 (분쟁 및 민원지역)" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="3"
               android:text="법정하천내" />
 
@@ -210,17 +210,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
+          <Button
+              style="@style/App.TableLayout.Label"
               android:text="" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="타법에 의한 관리지역\n(농업진흥, 도시, 계획지역)" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
               android:text="선정제외 세천내" />
 
@@ -230,14 +230,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:text="조사자 의견" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
+          <EditText
+              style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
-              android:text="콘크리트 탈락, 균열 및 철근 노출" />
+              android:hint="콘크리트 탈락, 균열 및 철근 노출" />
 
         </TableRow>
 
@@ -245,7 +245,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="현장조사일" />
@@ -253,9 +253,9 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="2022-00-00" />
+              android:hint="2022-00-00" />
 
-          <TextView
+          <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:text="현장조사자" />
@@ -263,7 +263,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:text="000" />
+              android:hint="000" />
 
         </TableRow>
 
