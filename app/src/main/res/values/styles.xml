@@ -153,8 +153,10 @@
     <style name="App.TableLayout.Label" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingVertical">18dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingVertical">16dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:paddingStart">1dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
@@ -166,6 +168,8 @@
         <item name="android:focusable">false</item>
         <item name="android:clickable">false</item>
         <item name="cornerRadius">0dp</item>
+        <item name="strokeColor">#d1d1d1</item>
+        <item name="strokeWidth">0.1dp</item>
     </style>
 
     <style name="App.TableLayout.EditText" parent="Theme.AppTheme">

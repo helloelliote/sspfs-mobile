@@ -122,7 +122,7 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
-              android:hint="자연형, 콘크리트형, 기타" />
+              android:hint="자연형,콘크리트형,기타" />
 
         </TableRow>
 
@@ -145,7 +145,7 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
-              android:hint="날개벽, 교량 등" />
+              android:hint="날개벽,교량 등" />
 
         </TableRow>
 
@@ -155,27 +155,18 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
               android:text="기능 및 형태" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:text="해당없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
               android:text="산지 소규모 시설" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
               android:text="관련계획상 철거 예정" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
               android:text="취수기능 필요성 상실" />
 
         </TableRow>
@@ -186,23 +177,23 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
               android:text="시설위치" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:text="해당없음" />
+              android:text="선정제외(1)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
-              android:text="사유지 (분쟁 및 민원지역)" />
+              android:text="사유지(2)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
               android:text="법정하천내" />
+
+          <TextView
+              style="@style/App.TableLayout.TextView.Select"
+              android:text="관리지역(3)" />
 
         </TableRow>
 
@@ -210,19 +201,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
           <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:text="타법에 의한 관리지역\n(농업진흥, 도시, 계획지역)" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:text="선정제외 세천내" />
+              style="@style/App.TableLayout.TextView"
+              android:text="(1)선정제외 세천내 (2)분쟁,민원지역 (3)농업진흥,도시,계획지역" />
 
         </TableRow>
 
@@ -237,7 +218,7 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
-              android:hint="콘크리트 탈락, 균열 및 철근 노출" />
+              android:hint="콘크리트 탈락,균열 및 철근 노출" />
 
         </TableRow>
 

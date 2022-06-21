@@ -29,8 +29,8 @@
           android:layout_height="match_parent"
           android:layout_margin="10dp"
           android:background="@drawable/tablelayout_border"
-          android:stretchColumns="*"
           android:shrinkColumns="0"
+          android:stretchColumns="*"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent">
 
@@ -144,19 +144,15 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="해당없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
               android:text="임시가설·간이소교량" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:text="산지부 소규모 배수암거" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:text="슬래브,라멘,암거,흄관" />
+          <EditText
+              style="@style/App.TableLayout.EditText"
+              android:hint="슬래브,라멘,암거,흄관" />
 
         </TableRow>
 
@@ -170,8 +166,8 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:inputType="number"
-              android:hint="0" />
+              android:hint="0"
+              android:inputType="number" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -190,22 +186,17 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
+              android:layout_weight="1"
               android:text="연결도로" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="해당없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
               android:text="개인사유지 연결 소교량" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
+              android:layout_weight="2"
               android:text="법정하천내 포함 소교량" />
 
         </TableRow>
@@ -216,28 +207,23 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="0.75"
               android:text="시설위치" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="해당없음" />
+              android:text="선정제외(1)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="사유지(1)" />
+              android:text="사유지(2)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="제한지역(군부대)" />
+              android:text="관리지역(3)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="관리지역(2)" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:text="선정제외(3)" />
+              android:text="제한지역(4)" />
 
         </TableRow>
 
@@ -247,7 +233,7 @@
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="(1).분쟁 및 민원지역 (2).타법에 의한 관리지역(농업진흥,도시,계획지역) (3).선정제외 소규모 시설내 소교량" />
+              android:text="(1)소규모 시설내 소교량 (2)분쟁,민원지역 (3)농업진흥,도시,계획지역 (4)군부대 등" />
 
         </TableRow>
 

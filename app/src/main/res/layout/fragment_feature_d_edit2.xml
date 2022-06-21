@@ -339,7 +339,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
-              android:text="⑦ 기계장치 파손\n(권양기, 기계실)" />
+              android:text="⑦ 기계장치 파손\n(권양기,기계실)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"

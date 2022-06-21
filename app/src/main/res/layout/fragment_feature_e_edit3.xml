@@ -108,7 +108,7 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="3"
-              android:text="일부파손, 안전지장 없음" />
+              android:text="일부파손,안전지장 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -140,7 +140,7 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="3"
-              android:text="일부파손, 안전지장 없음" />
+              android:text="일부파손,안전지장 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -172,7 +172,7 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="3"
-              android:text="일부파손, 안전지장 없음" />
+              android:text="일부파손,안전지장 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
