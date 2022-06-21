@@ -104,7 +104,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
             }
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
-                    text = "조사 $position"
+                    text = "현장조사 ${position+1}"
                     icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_description_24, null)
                 }
             }.attach()

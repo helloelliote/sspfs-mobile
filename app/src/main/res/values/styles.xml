@@ -98,50 +98,88 @@
 
     <style name="App.TableLayout.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:paddingVertical">12dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingVertical">18dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
         <item name="android:background">@drawable/tablelayout_border_row</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:focusable">false</item>
     </style>
 
     <style name="App.TableLayout.TextView.Small" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:paddingVertical">12dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingVertical">18dp</item>
         <item name="android:paddingHorizontal">2dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:text">""</item>
         <item name="android:background">@drawable/tablelayout_border_row</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:focusable">false</item>
     </style>
 
-    <style name="App.TableLayout.Label" parent="Widget.MaterialComponents.TextView">
+    <style name="App.TableLayout.TextView.Select" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:paddingVertical">12dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingVertical">18dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
-        <item name="android:background">@drawable/tablelayout_label</item>
+        <item name="android:background">@drawable/tablelayout_border_row_deselect</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="App.TableLayout.TextView.Small.Select" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingVertical">18dp</item>
+        <item name="android:paddingHorizontal">2dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:background">@drawable/tablelayout_border_row_deselect</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="App.TableLayout.Label" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingVertical">18dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">""</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:backgroundTint">#f1f1f1</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
+        <item name="cornerRadius">0dp</item>
     </style>
 
     <style name="App.TableLayout.EditText" parent="Theme.AppTheme">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">18sp</item>
         <item name="android:paddingHorizontal">5dp</item>
-        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingVertical">18dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:text">""</item>
-        <item name="android:background">@drawable/tablelayout_border_row</item>
+        <item name="android:background">@drawable/tablelayout_border_row_edittext</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 </resources>

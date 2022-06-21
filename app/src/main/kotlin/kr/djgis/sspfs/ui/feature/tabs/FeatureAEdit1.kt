@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import kr.djgis.sspfs.databinding.FragmentFeatureAEdit1Binding
 
 class FeatureAEdit1 : FeatureTabs() {
@@ -32,7 +33,7 @@ class FeatureAEdit1 : FeatureTabs() {
         }
 
         binding.run {
-
+            setTableLayoutOnClickListener(table1)
         }
 
         viewModel.feature.observe(viewLifecycleOwner) {

@@ -36,7 +36,7 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
 
-        <item name="android:fontFamily">@font/nanumsquareroundr</item>
+<!--        <item name="android:fontFamily">@font/nanumsquareroundr</item>-->
 
         <item name="contentDescription">@null</item>
         <item name="android:importantForAccessibility">no</item>
