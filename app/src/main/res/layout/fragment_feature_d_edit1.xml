@@ -182,11 +182,11 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="선정제외(1)" />
+              android:text="선정제외①" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="사유지(2)" />
+              android:text="사유지②" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -194,7 +194,7 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="관리지역(3)" />
+              android:text="관리지역③" />
 
         </TableRow>
 
@@ -204,7 +204,7 @@
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="(1)선정제외 세천내 (2)분쟁,민원지역 (3)농업진흥,도시,계획지역" />
+              android:text="①선정제외 세천내 ②분쟁,민원지역 ③농업진흥,도시,계획지역" />
 
         </TableRow>
 

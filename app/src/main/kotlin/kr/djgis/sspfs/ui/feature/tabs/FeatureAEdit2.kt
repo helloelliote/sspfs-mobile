@@ -32,7 +32,7 @@ class FeatureAEdit2 : FeatureTabs() {
         }
 
         binding.run {
-
+            setTableLayoutOnClickListener(table1)
         }
 
         viewModel.feature.observe(viewLifecycleOwner) {

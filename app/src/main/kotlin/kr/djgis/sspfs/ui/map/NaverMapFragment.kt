@@ -28,7 +28,8 @@ import com.naver.maps.map.*
 import com.naver.maps.map.CameraAnimation.Easing
 import com.naver.maps.map.CameraUpdate.scrollAndZoomTo
 import com.naver.maps.map.CameraUpdate.zoomTo
-import com.naver.maps.map.LocationTrackingMode.*
+import com.naver.maps.map.LocationTrackingMode.NoFollow
+import com.naver.maps.map.LocationTrackingMode.None
 import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
 import com.naver.maps.map.NaverMap.MapType.Satellite
@@ -44,11 +45,14 @@ import kotlinx.coroutines.launch
 import kr.djgis.sspfs.Config.EXTENT_GYEONGJU
 import kr.djgis.sspfs.Config.LATLNG_GYEONGJU
 import kr.djgis.sspfs.R
-import kr.djgis.sspfs.data.Feature
+import kr.djgis.sspfs.data.FeatureA
+import kr.djgis.sspfs.data.FeatureBase
 import kr.djgis.sspfs.data.FeaturePK4.Companion.toColor
 import kr.djgis.sspfs.databinding.FragmentMapBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
+import kr.djgis.sspfs.model.FeatureVMFactory2
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.NavDrawerFragment
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.screenSize
@@ -62,6 +66,7 @@ import java.util.concurrent.Executors
 class NaverMapFragment : Fragment(), OnMapReadyCallback {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    private val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
 
     private val args: NaverMapFragmentArgs by navArgs()
 
@@ -83,7 +88,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         return@lazy resources.getDimensionPixelOffset(R.dimen.bottomappbar_height) + (displayMetrics.heightPixels / 20)
     }
     private val overlayOnClickListener = Overlay.OnClickListener {
-        viewModel.setFeature((it as Marker).tag as Feature)
+        viewModel2.setFeatureA((it as Marker).tag as FeatureA)
         naverMap.apply {
 //            it.isVisible = false
             setContentPadding(0, 0, 0, 0)
@@ -96,6 +101,19 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         })
+/*        viewModel.setFeature((it as Marker).tag as Feature)
+        naverMap.apply {
+//            it.isVisible = false
+            setContentPadding(0, 0, 0, 0)
+            naverMap.mapType = Satellite
+        }.moveCamera(scrollAndZoomTo(it.position, 18.0).animate(Easing, 250).finishCallback {
+            GlobalScope.launch(Dispatchers.Main) {
+                naverMap.takeSnapshot(false) { bitmap ->
+                    val directions = NaverMapFragmentDirections.actionToFeatureFragment(bitmap)
+                    findNavController().navigate(directions)
+                }
+            }
+        })*/
         return@OnClickListener true
     }
     private val screenSize by lazy { screenSize() }
@@ -127,6 +145,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@NaverMapFragment.viewModel
+            viewModel2 = this@NaverMapFragment.viewModel2
         }
         onCreateMap()
     }
@@ -173,10 +192,10 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             if (this.naverMap.cameraPosition.zoom < 14.0) {
                 snackbar(fab, R.string.map_require_zoom).setAction("확대") {
                     this.naverMap.moveCamera(zoomTo(14.0).animate(Easing).finishCallback {
-                        this.onFeatureGet(it)
+                        this.onFeatureAGet(it)
                     })
                 }.show()
-            } else onFeatureGet(it)
+            } else onFeatureAGet(it)
         }
     }
 
@@ -295,7 +314,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
+    private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: FeatureBase) =
         Marker(point, MarkerIcons.BLACK).apply {
             height = 60
             width = 45
@@ -304,7 +323,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             captionHaloColor = if (tintColor == RED || tintColor == BLUE) WHITE else BLACK
             captionMinZoom = 18.0
             captionTextSize = 13.0f
-            captionText = feature.id.drop(2)
+//            captionText = feature.id.drop(2)
+//            captionText = feature.fac_uid?.drop(2) ?: ""
             isHideCollidedSymbols = true
             tag = feature
             onClickListener = overlayOnClickListener
@@ -324,6 +344,37 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 width = 5
             }
     */
+
+    private fun onFeatureAGet(view: View) {
+        clearOverlays()
+        onFeatureGetResult(false)
+        val latLngBounds = naverMap.coveringBounds
+        viewModel2.featuresA(
+            xmin = latLngBounds.westLongitude,
+            ymin = latLngBounds.southLatitude,
+            xmax = latLngBounds.eastLongitude,
+            ymax = latLngBounds.northLatitude,
+        ).observeOnce(this@NaverMapFragment) {
+            executor.execute {
+                val pointOverlays = mutableSetOf<Marker>()
+                val lineOverlays = mutableSetOf<Overlay>()
+                it.features.stream().forEach { featureA ->
+                    featureA as FeatureA
+                    val latLngs = featureA.geom.latLngs
+                    val color = RED
+                    pointOverlays.add(createMarker(point = latLngs[0][0], color, featureA))
+                }
+                handler.post {
+                    lineOverlays.stream().forEach { it.map = naverMap }
+                    pointOverlays.stream().forEach { it.map = naverMap }
+                    onFeatureGetResult(true, R.color.teal_A400)
+                    if (it.featureCount == 0) {
+                        snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
+                    }
+                }
+            }
+        }
+    }
 
     private fun onFeatureGetResult(
         isEnabled: Boolean, @ColorRes colorInt: Int? = null, @DrawableRes drawableInt: Int? = null,
@@ -363,8 +414,10 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 return true
             }
             R.id.action_layergroup -> {
-                naverMap.setLayerGroupEnabled(LAYER_GROUP_CADASTRAL,
-                    !naverMap.isLayerGroupEnabled(LAYER_GROUP_CADASTRAL))
+                naverMap.setLayerGroupEnabled(
+                    LAYER_GROUP_CADASTRAL,
+                    !naverMap.isLayerGroupEnabled(LAYER_GROUP_CADASTRAL)
+                )
                 return true
             }
             R.id.action_search -> {

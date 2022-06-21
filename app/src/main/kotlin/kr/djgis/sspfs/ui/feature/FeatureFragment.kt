@@ -18,7 +18,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
+import kr.djgis.sspfs.model.FeatureVMFactory2
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.glide
@@ -27,7 +29,8 @@ import kr.djgis.sspfs.util.toggle
 @DelicateCoroutinesApi
 class FeatureFragment : Fragment(), View.OnClickListener {
 
-    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+//    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    private val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
 
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureBinding? = null
@@ -52,7 +55,8 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@FeatureFragment.viewModel
+//            viewModel = this@FeatureFragment.viewModel
+            viewModel2 = this@FeatureFragment.viewModel2
             listOf(appbarLayout, collapsingToolbarLayout).forEach {
                 it.layoutParams.height = if (dpWidth) 800 else 800
             }
@@ -60,7 +64,13 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
         binding.run {
             viewPager.isUserInputEnabled = false
-            viewPager.adapter = when (viewModel!!.feature.value!!.pk4) {
+            viewPager.adapter = FragmentPagerAdapter(
+                this@FeatureFragment, listOf(
+                    FeatureAEdit1(),
+                    FeatureAEdit2(),
+                )
+            )
+/*            viewPager.adapter = when (viewModel2!!.feature.value!!.pk4) {
                 "A" -> FragmentPagerAdapter(
                     this@FeatureFragment, listOf(
                         FeatureAEdit1(),
@@ -101,7 +111,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                     )
                 )
                 else -> FragmentPagerAdapter(this@FeatureFragment, listOf())
-            }
+            }*/
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
                     text = "현장조사 ${position+1}"

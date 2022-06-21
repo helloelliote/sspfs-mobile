@@ -18,6 +18,14 @@ interface RetrofitWebService {
         @Query("ymax") ymax: Double,
     ): JsonObject
 
+    @GET("/api/features/a")
+    suspend fun featuresAGet(
+        @Query("xmin") xmin: Double,
+        @Query("ymin") ymin: Double,
+        @Query("xmax") xmax: Double,
+        @Query("ymax") ymax: Double,
+    ): JsonObject
+
     @GET("/api/feature")
     suspend fun featureGet(
         @Query("id") id: String,

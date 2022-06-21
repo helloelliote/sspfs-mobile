@@ -11,6 +11,10 @@
         <variable
             name="viewModel"
             type="kr.djgis.sspfs.model.FeatureViewModel" />
+
+        <variable
+            name="ViewModel2"
+            type="kr.djgis.sspfs.model.FeatureViewModel2" />
     </data>
 
     <FrameLayout

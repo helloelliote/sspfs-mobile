@@ -49,7 +49,7 @@ data class Feature(
     var g1: String?,
     var image: List<FeatureAttachment>?,
     var geom: FeatureGeom,
-) : Serializable {
+) : Serializable, FeatureBase() {
     val dateA6: String? = a6?.let(::parseDate)
     val dateB2: String? = b2?.let(::parseDate)
     val dateB3: String? = b3?.let(::parseDate)

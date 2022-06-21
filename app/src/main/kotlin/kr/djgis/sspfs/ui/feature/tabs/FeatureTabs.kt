@@ -35,7 +35,6 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i) as TableRow
                 val columnCount = row.childCount
-                row
                 val selectableColumns = mutableListOf<TextView>()
                 for (j: Int in 1..columnCount) {
                     val column = row.getChildAt(j)

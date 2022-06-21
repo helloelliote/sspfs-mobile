@@ -163,7 +163,7 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
-        <item name="android:backgroundTint">#f1f1f1</item>
+        <item name="android:backgroundTint">#f5f5f5</item>
         <item name="android:layout_weight">1</item>
         <item name="android:focusable">false</item>
         <item name="android:clickable">false</item>
