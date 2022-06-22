@@ -2,7 +2,7 @@
   Copyright (c) 2022 대진기술정보(주) All Rights Reserved
   -->
 <resources>
-    <string name="app_name">sspfs</string>
+    <string name="app_name">경주시소규모공공시설 현장조사</string>
 
     <string name="type_a">소교량</string>
     <string name="type_b">세천</string>

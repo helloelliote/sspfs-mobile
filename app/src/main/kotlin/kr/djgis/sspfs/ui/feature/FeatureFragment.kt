@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,19 +18,19 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
-import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureVMFactory2
-import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.MainActivity
-import kr.djgis.sspfs.ui.feature.tabs.*
+import kr.djgis.sspfs.ui.feature.tabs.FeatureAEdit1
+import kr.djgis.sspfs.ui.feature.tabs.FeatureAEdit2
 import kr.djgis.sspfs.util.glide
+import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.toggle
 
 @DelicateCoroutinesApi
 class FeatureFragment : Fragment(), View.OnClickListener {
 
-//    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    //    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
     private val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -41,6 +42,16 @@ class FeatureFragment : Fragment(), View.OnClickListener {
     private val dpWidth: Boolean by lazy {
         val displayMetrics = resources.displayMetrics
         return@lazy (displayMetrics.widthPixels / displayMetrics.density) > 600.0
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                isEnabled = false
+                activity?.onBackPressed()
+            }
+        })
     }
 
     override fun onCreateView(
@@ -114,7 +125,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
             }*/
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
-                    text = "현장조사 ${position+1}"
+                    text = "현장조사 ${position + 1}"
                     icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_description_24, null)
                 }
             }.attach()
@@ -127,7 +138,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         requireActivity().findViewById<FloatingActionButton>(R.id.fab_main)
-            .toggle(true, R.color.red_A200, R.drawable.ic_round_question_mark_30).setOnClickListener(this)
+            .toggle(true, R.color.light_green_A200, R.drawable.ic_round_save_30).setOnClickListener(this)
     }
 
     override fun onDestroyView() {
@@ -135,6 +146,17 @@ class FeatureFragment : Fragment(), View.OnClickListener {
         _binding = null
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
+        when (p0.id) {
+            R.id.fab_main -> {
+                println(viewModel2.value())
+                viewModel2.featuresAPost().observeOnce(this) {
+                    if (it.isSuccessful) {
+                        println(it)
+                        activity?.onBackPressed()
+                    }
+                }
+            }
+        }
     }
 }

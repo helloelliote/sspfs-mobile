@@ -35,6 +35,13 @@ open class FeatureViewModel2 : ViewModel() {
         }
     }
 
+    fun featuresAPost() = liveData {
+        withContext(Dispatchers.IO) {
+            val jsonObject = retrofit.featuresAPost(featureA.value!!)
+            emit(jsonObject)
+        }
+    }
+
     suspend fun fromLatLng(featureA: FeatureA): String? {
         val latLng = featureA.geom.latLngs[0][0] // FIXME: 시점이 아닌 중점으로 검색할 수 있는 방법
         val jsonObject = retrofit.kakaoCoord2Address(latLng.longitude, latLng.latitude)

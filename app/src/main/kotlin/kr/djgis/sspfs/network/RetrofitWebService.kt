@@ -5,7 +5,11 @@
 package kr.djgis.sspfs.network
 
 import com.google.gson.JsonObject
+import kr.djgis.sspfs.data.FeatureA
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface RetrofitWebService {
@@ -25,6 +29,11 @@ interface RetrofitWebService {
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
     ): JsonObject
+
+    @POST("/api/features/a")
+    suspend fun featuresAPost(
+        @Body requestBody: FeatureA,
+    ): Response<JsonObject>
 
     @GET("/api/feature")
     suspend fun featureGet(

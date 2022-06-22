@@ -160,7 +160,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                     .locale(Locale.KOREA)
                     .mapType(Satellite)
                     .contentPadding(0, 0, 0, naverMapPadding)
-                    .camera(CameraPosition(LATLNG_GYEONGJU, 16.0))
+                    .camera(CameraPosition(latLng, 16.0))
                     .minZoom(10.0)
                     .extent(EXTENT_GYEONGJU)
                     .locationButtonEnabled(true)
@@ -327,7 +327,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             captionMinZoom = 18.0
             captionTextSize = 13.0f
 //            captionText = feature.id.drop(2)
-//            captionText = feature.fac_uid?.drop(2) ?: ""
+            captionText = (feature as FeatureA).fac_nam.toString()
             isHideCollidedSymbols = true
             tag = feature
             onClickListener = overlayOnClickListener
@@ -362,9 +362,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 val pointOverlays = mutableSetOf<Marker>()
                 val lineOverlays = mutableSetOf<Overlay>()
                 it.features.stream().forEach { featureA ->
-                    featureA as FeatureA
                     val latLngs = featureA.geom.latLngs
-                    val color = RED
+                    val color = if (featureA.exm_ymd == null) RED else LTGRAY
                     pointOverlays.add(createMarker(point = latLngs[0][0], color, featureA))
                 }
                 handler.post {
