@@ -36,9 +36,7 @@ class FeatureAEdit2 : FeatureTabs() {
         }
 
         viewModel2.featureA.observe(viewLifecycleOwner) {
-            if (!it.fac_adm.isNullOrEmpty()) {
-                binding.facAdm.text = it.fac_adm
-            }
+            binding.facAdm.text = it.fac_adm
         }
     }
 
