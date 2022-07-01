@@ -7,7 +7,7 @@ package kr.djgis.sspfs.data
 import android.graphics.Color.*
 import androidx.annotation.ColorInt
 
-enum class FeaturePK4(
+enum class FeatureType(
     val type: String,
     @ColorInt val color: Int,
 ) {
@@ -31,13 +31,12 @@ enum class FeaturePK4(
     },
     ;
 
-    abstract fun next(): FeaturePK4
+    abstract fun next(): FeatureType
 
     companion object {
         fun toColor(type: String) = values().find { it.type == type.trim() }!!.color
 
-        fun toColor(feature: Feature) =
-            if (feature.a6 != null) LTGRAY else values().find { it.name == feature.pk4.trim() }!!.color
+        fun toColor(feature: Feature) = values().find { it.name == feature.fac_typ!!.trim() }!!.color
 
         fun keys(): List<String> = values().map { it.name }
         fun types(): List<String> = values().map { it.type }

@@ -35,7 +35,7 @@ class FeatureFEdit3 : FeatureTabs() {
 
         }
 
-        viewModel.feature.observe(viewLifecycleOwner) {
+        viewModel.featureF.observe(viewLifecycleOwner) {
 
         }
     }

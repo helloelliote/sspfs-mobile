@@ -7,10 +7,7 @@ package kr.djgis.sspfs.network
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kr.djgis.sspfs.data.FeatureAJsonAdapter
-import kr.djgis.sspfs.data.FeatureAList
-import kr.djgis.sspfs.data.FeatureJsonAdapter
-import kr.djgis.sspfs.data.FeatureList
+import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.data.kakao.geo.Coord2Address
 import kr.djgis.sspfs.data.kakao.geo.Coord2Regioncode
 import kr.djgis.sspfs.data.kakao.search.Keyword
@@ -18,7 +15,7 @@ import kr.djgis.sspfs.data.kakao.search.Keyword
 object Moshi {
 
     private val moshiBuilder: Moshi =
-        Moshi.Builder().add(FeatureJsonAdapter()).addLast(KotlinJsonAdapterFactory()).build()
+        Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     val moshiKeyword: JsonAdapter<Keyword> by lazy {
         moshiBuilder.adapter(Keyword::class.java).serializeNulls()
@@ -32,12 +29,24 @@ object Moshi {
         moshiBuilder.adapter(Coord2Address::class.java).serializeNulls()
     }
 
-    val moshiFeatureList: JsonAdapter<FeatureList> by lazy {
+    val moshiFeatureList: JsonAdapter<FeatureList> =
         moshiBuilder.adapter(FeatureList::class.java).serializeNulls()
-    }
 
-    val moshiFeatureAList: JsonAdapter<FeatureAList> by lazy {
-        Moshi.Builder().add(FeatureAJsonAdapter()).addLast(KotlinJsonAdapterFactory()).build()
-            .adapter(FeatureAList::class.java).serializeNulls()
-    }
+    val moshiFeatureAList: JsonAdapter<FeatureAList> =
+        moshiBuilder.adapter(FeatureAList::class.java).serializeNulls()
+
+    val moshiFeatureBList: JsonAdapter<FeatureBList> =
+        moshiBuilder.adapter(FeatureBList::class.java).serializeNulls()
+
+    val moshiFeatureCList: JsonAdapter<FeatureCList> =
+        moshiBuilder.adapter(FeatureCList::class.java).serializeNulls()
+
+    val moshiFeatureDList: JsonAdapter<FeatureDList> =
+        moshiBuilder.adapter(FeatureDList::class.java).serializeNulls()
+
+    val moshiFeatureEList: JsonAdapter<FeatureEList> =
+        moshiBuilder.adapter(FeatureEList::class.java).serializeNulls()
+
+    val moshiFeatureFList: JsonAdapter<FeatureFList> =
+        moshiBuilder.adapter(FeatureFList::class.java).serializeNulls()
 }

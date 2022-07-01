@@ -8,8 +8,8 @@
   <data>
 
     <variable
-        name="viewModel2"
-        type="kr.djgis.sspfs.model.FeatureViewModel2" />
+        name="viewModel"
+        type="kr.djgis.sspfs.model.FeatureViewModel" />
   </data>
 
   <androidx.core.widget.NestedScrollView
@@ -47,7 +47,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:hint="GC35022A0001"
-              android:text="@={viewModel2.featureA.fac_uid}" />
+              android:text="@={viewModel.featureA.fac_uid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -59,7 +59,7 @@
               style="@style/App.TableLayout.TextView.Small"
               android:layout_weight="3"
               android:hint="남선면 외하리 732천"
-              android:text="@={viewModel2.featureA.fac_adm}"/>
+              android:text="@={viewModel.featureA.fac_adm}"/>
 
         </TableRow>
 
@@ -76,7 +76,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:hint="외하리_소교량_008"
-              android:text="@={viewModel2.featureA.fac_nam}" />
+              android:text="@={viewModel.featureA.fac_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -157,8 +157,7 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="슬래브,라멘,암거,흄관"
-              android:text="@={viewModel2.featureA.typ_txt}" />
+              android:hint="슬래브,라멘,암거,흄관" />
 
         </TableRow>
 
@@ -174,7 +173,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0"
               android:inputType="number"
-              android:text="@={viewModel2.featureA.sub_cnt}" />
+              android:text="@={viewModel.featureA.sub_cnt}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -184,7 +183,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
               android:hint="날개벽, 낙차공 등"
-              android:text="@={viewModel2.featureA.sub_txt}" />
+              android:text="@={viewModel.featureA.sub_txt}" />
 
         </TableRow>
 
@@ -259,7 +258,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
               android:hint="콘크리트 탈락, 균열 및 철근 노출, 교량의 육안상 기울기"
-              android:text="@={viewModel2.featureA.exm_opi}" />
+              android:text="@={viewModel.featureA.exm_opi}" />
 
         </TableRow>
 
@@ -276,7 +275,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:hint="자동입력"
-              android:text="@{viewModel2.featureA.exm_ymd_date}"
+              android:text="@{viewModel.featureA.exm_ymd_date}"
               android:focusable="false" />
 
           <Button
@@ -288,7 +287,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:hint="홍길동"
-              android:text="@={viewModel2.featureA.exm_nam}" />
+              android:text="@={viewModel.featureA.exm_nam}" />
         </TableRow>
 
       </TableLayout>

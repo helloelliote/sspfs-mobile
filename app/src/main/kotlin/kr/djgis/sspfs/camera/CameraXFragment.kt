@@ -66,7 +66,7 @@ class CameraXFragment : Fragment() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
         // Create time stamped name and MediaStore entry.
-        val name = viewModel.feature.value!!.id + SimpleDateFormat(FILENAME_FORMAT,
+        val name = viewModel.feature.value!!.fac_uid + SimpleDateFormat(FILENAME_FORMAT,
             Locale.KOREAN).format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)

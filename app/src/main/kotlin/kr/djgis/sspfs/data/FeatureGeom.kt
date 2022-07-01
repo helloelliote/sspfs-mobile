@@ -1,38 +1,34 @@
 package kr.djgis.sspfs.data
 
-import com.google.gson.JsonArray
 import com.naver.maps.geometry.LatLng
-import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
-@JsonClass(generateAdapter = true)
 data class FeatureGeom(
     val type: String,
-    val coordinates: JsonArray,
-) : Serializable {
+    val coordinates: List<Any>,
+) {
     val latLngs: List<List<LatLng>> = when (type) {
         "Point" -> {
             val list = mutableListOf(mutableListOf<LatLng>())
-            val point = LatLng(coordinates[1].asDouble, coordinates[0].asDouble)
+            val point = LatLng(coordinates[1] as Double, coordinates[0] as Double)
             list[0].add(point)
             list
         }
         "LineString" -> {
             val list = mutableListOf(mutableListOf<LatLng>())
-            val points = coordinates.asJsonArray
+            @Suppress("UNCHECKED_CAST") val points = coordinates as List<List<Double>>
             points.forEach {
-                val point = LatLng(it.asJsonArray[1].asDouble, it.asJsonArray[0].asDouble)
+                val point = LatLng(it[1], it[0])
                 list[0].add(point)
             }
             list
         }
         "MultiLineString" -> {
             val list = mutableListOf(mutableListOf<LatLng>())
-            val lines = coordinates.asJsonArray
+            @Suppress("UNCHECKED_CAST") val lines = coordinates as List<List<List<Double>>>
             lines.forEach { line ->
                 val points = mutableListOf<LatLng>()
-                line.asJsonArray.forEach {
-                    val point = LatLng(it.asJsonArray[1].asDouble, it.asJsonArray[0].asDouble)
+                line.forEach {
+                    val point = LatLng(it[1], it[0])
                     points.add(point)
                 }
                 list.add(points)

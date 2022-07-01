@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kr.djgis.sspfs.data.FeaturePK4
+import kr.djgis.sspfs.data.FeatureType
 import kr.djgis.sspfs.databinding.FragmentNavDrawerBinding
 
 class NavDrawerFragment : BottomSheetDialogFragment() {
@@ -33,7 +33,7 @@ class NavDrawerFragment : BottomSheetDialogFragment() {
         binding.apply {
             setOf(iconPK4A, iconPK4B, iconPK4C, iconPK4D, iconPK4E, iconPK4F).forEach {
                 // @See: https://stackoverflow.com/a/61893468/10521336
-                it.compoundDrawables[2]?.setTint(FeaturePK4.toColor(it.contentDescription.toString()))
+                it.compoundDrawables[2]?.setTint(FeatureType.toColor(it.contentDescription.toString()))
             }
         }
     }

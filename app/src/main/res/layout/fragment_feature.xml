@@ -14,9 +14,6 @@
             name="viewModel"
             type="kr.djgis.sspfs.model.FeatureViewModel" />
 
-        <variable
-            name="viewModel2"
-            type="kr.djgis.sspfs.model.FeatureViewModel2" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -56,6 +56,11 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
+                android:name="type"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
                 android:name="bitmap"
                 android:defaultValue="@null"
                 app:argType="android.graphics.Bitmap"
@@ -97,6 +102,11 @@
             android:name="bitmap"
             android:defaultValue="@null"
             app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
+        <argument
+            android:name="type"
+            android:defaultValue="@null"
+            app:argType="string"
             app:nullable="true" />
         <action
             android:id="@+id/action_to_cameraFragment"

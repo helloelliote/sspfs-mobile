@@ -4,6 +4,7 @@
 
 package kr.djgis.sspfs.network
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kr.djgis.sspfs.data.FeatureA
 import retrofit2.Response
@@ -19,17 +20,12 @@ object RetrofitClient {
         return webService.featuresGet(doubles[0], doubles[1], doubles[2], doubles[3])
     }
 
-    suspend fun featuresAGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): JsonObject {
-        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
-        return webService.featuresAGet(doubles[0], doubles[1], doubles[2], doubles[3])
+    suspend fun featuresAPost(feature: FeatureA): Response<JsonElement> {
+        return webService.featuresAPost(feature)
     }
 
-    suspend fun featuresAPost(featureA: FeatureA): Response<JsonObject> {
-        return webService.featuresAPost(featureA)
-    }
-
-    suspend fun featureGet(id: String): JsonObject {
-        return webService.featureGet(id = id)
+    suspend fun featureGet(fac_uid: String): JsonObject {
+        return webService.featureGet(fac_uid = fac_uid)
     }
 
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {

@@ -16,9 +16,7 @@ import kotlinx.coroutines.Job
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.FeatureAttachment
 import kr.djgis.sspfs.model.FeatureVMFactory
-import kr.djgis.sspfs.model.FeatureVMFactory2
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.model.FeatureViewModel2
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.util.snackbar
@@ -26,7 +24,6 @@ import kr.djgis.sspfs.util.snackbar
 open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
 
     val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
-    val viewModel2: FeatureViewModel2 by activityViewModels { FeatureVMFactory2 }
     private val viewSelect by lazy { return@lazy R.drawable.tablelayout_border_row_select }
     private val viewDeselect by lazy { return@lazy R.drawable.tablelayout_border_row_deselect }
 
@@ -42,7 +39,7 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
 
     fun setTableLayoutOnClickListener(table: TableLayout) {
         try {
-            val vm2 = viewModel2.value()
+            val vm = viewModel.value()
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i) as TableRow
@@ -67,10 +64,10 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
                                     it.isSelected = it.isSelected.not()
                                     println("$key at ${column.tag}: ${it.isSelected}")
                                     if (it.isSelected) {
-                                        if (vm2.getByKey(key) == null) {
+                                        if (vm.getByKey(key) == null) {
                                             it.setBackgroundResource(viewSelect)
                                             it.setTypeface(null, BOLD)
-                                            vm2.setByKey(key, column.tag)
+                                            vm.setByKey(key, column.tag)
                                         } else {
                                             it.isSelected = it.isSelected.not()
                                             snackbar(fab, "앞서 선택된 항목부터 선택 해제해 주세요").setAction("확인") {
@@ -80,8 +77,8 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
                                     } else {
                                         it.setBackgroundResource(viewDeselect)
                                         it.setTypeface(null, NORMAL)
-                                        if (vm2.getByKey(key) == column.tag) {
-                                            vm2.setByKey(key, null)
+                                        if (vm.getByKey(key) == column.tag) {
+                                            vm.setByKey(key, null)
                                         }
                                     }
                                 }
@@ -106,10 +103,6 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
     }
 
     override fun onArchived(attachment: FeatureAttachment) {
-    }
-
-    fun test() {
-
     }
 
     override fun onDestroyView() {

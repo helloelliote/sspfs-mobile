@@ -5,6 +5,8 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
     compileSdk 31
 

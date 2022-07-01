@@ -8,8 +8,8 @@
   <data>
 
     <variable
-        name="viewModel2"
-        type="kr.djgis.sspfs.model.FeatureViewModel2" />
+        name="viewModel"
+        type="kr.djgis.sspfs.model.FeatureViewModel" />
   </data>
 
   <androidx.core.widget.NestedScrollView
@@ -46,7 +46,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
               android:hint="외하리_소교량_008"
-              android:text="@={viewModel2.featureA.fac_nam}" />
+              android:text="@={viewModel.featureA.fac_nam}" />
 
           <Button
               android:tag="pos_nam"
@@ -64,11 +64,10 @@
               android:text="주소" />
 
           <TextView
-              android:id="@+id/fac_adm"
               style="@style/App.TableLayout.TextView.Small"
               android:layout_weight="2"
               android:hint="자동생성"
-              android:text="@={viewModel2.featureA.fac_adm}" />
+              android:text="@={viewModel.featureA.fac_adm}" />
         </TableRow>
 
         <TableRow
@@ -113,7 +112,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.fac_len}" />
+              android:text="@={viewModel.featureA.fac_len}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -123,7 +122,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.fac_wid}" />
+              android:text="@={viewModel.featureA.fac_wid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -133,7 +132,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.fac_hgt}" />
+              android:text="@={viewModel.featureA.fac_hgt}" />
         </TableRow>
 
         <TableRow
@@ -164,7 +163,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.sec_wid}" />
+              android:text="@={viewModel.featureA.sec_wid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -174,7 +173,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.sec_hgt}" />
+              android:text="@={viewModel.featureA.sec_hgt}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -184,7 +183,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.sec_dia}" />
+              android:text="@={viewModel.featureA.sec_dia}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -194,7 +193,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0"
               android:inputType="number"
-              android:text="@={viewModel2.featureA.sec_col}" />
+              android:text="@={viewModel.featureA.sec_col}" />
         </TableRow>
 
         <TableRow
@@ -214,7 +213,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.riv_upp}" />
+              android:text="@={viewModel.featureA.riv_upp}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -226,7 +225,7 @@
               android:layout_weight="0.8"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.riv_mid}" />
+              android:text="@={viewModel.featureA.riv_mid}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -236,7 +235,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@={viewModel2.featureA.riv_low}" />
+              android:text="@={viewModel.featureA.riv_low}" />
         </TableRow>
 
         <TableRow
@@ -697,7 +696,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
               android:hint="* 의견"
-              android:text="@={viewModel2.featureA.eva_opi}" />
+              android:text="@={viewModel.featureA.eva_opi}" />
         </TableRow>
 
       </TableLayout>
