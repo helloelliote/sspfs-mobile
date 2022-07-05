@@ -51,10 +51,7 @@ import kr.djgis.sspfs.databinding.FragmentMapBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.ui.NavDrawerFragment
-import kr.djgis.sspfs.util.observeOnce
-import kr.djgis.sspfs.util.screenSize
-import kr.djgis.sspfs.util.snackbar
-import kr.djgis.sspfs.util.toggle
+import kr.djgis.sspfs.util.*
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -83,16 +80,51 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
         return@lazy resources.getDimensionPixelOffset(R.dimen.bottomappbar_height) + (displayMetrics.heightPixels / 20)
     }
-    private val overlayOnClickListener = Overlay.OnClickListener { overlay ->
-        val selectFeature = (overlay as Marker).tag as Feature
-        viewModel.feature(selectFeature.fac_typ!!, selectFeature.fac_uid!!).observeOnce(this@NaverMapFragment) {
-            when (selectFeature.fac_typ) {
+    private val arrowheadPathMap = mutableMapOf<String?, Overlay?>()
+    private var selectArrowheadPath: ArrowheadPathOverlay? = null
+    private val arrowheadPathOnClickListener = Overlay.OnClickListener { overlay ->
+        overlay as ArrowheadPathOverlay
+        selectArrowheadPath?.apply {
+            outlineColor = WHITE
+            outlineWidth = 2
+            width = 5
+        }.also {
+            selectArrowheadPath = overlay.apply {
+                outlineColor = BLACK
+                outlineWidth = 8
+                width = 10
+            }
+        }
+        return@OnClickListener true
+    }
+    private var selectMarker: Marker? = null
+    private val markerOnClickListener = Overlay.OnClickListener { overlay ->
+        overlay as Marker
+        selectMarker?.apply {
+            height /= 2
+            width /= 2
+        }.also {
+            selectMarker = overlay.apply {
+                height *= 2
+                width *= 2
+            }
+        }
+        val feature = overlay.tag as Feature
+        arrowheadPathMap[feature.fac_uid]?.performClick()
+        viewModel.featureGet(feature.fac_typ!!, feature.fac_uid!!).observeOnce(this@NaverMapFragment) {
+            when (feature.fac_typ) {
                 "A" -> viewModel.setCurrentFeature(it as FeatureA)
                 "B" -> viewModel.setCurrentFeature(it as FeatureB)
                 "C" -> viewModel.setCurrentFeature(it as FeatureC)
                 "D" -> viewModel.setCurrentFeature(it as FeatureD)
                 "E" -> viewModel.setCurrentFeature(it as FeatureE)
                 "F" -> viewModel.setCurrentFeature(it as FeatureF)
+            }
+            overlay.apply {
+                globalZIndex -= 1
+                tag = it
+            }.run {
+                infoWindow?.open(this)
             }
             naverMap.apply {
 //            it.isVisible = false
@@ -102,7 +134,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
                         val directions = NaverMapFragmentDirections.actionToFeatureFragment(
-                            type = selectFeature.fac_typ!!, bitmap = bitmap
+                            type = feature.fac_typ!!, bitmap = bitmap
                         )
                         findNavController().navigate(directions)
                     }
@@ -202,7 +234,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         clearOverlays()
         onFeatureGetResult(false)
         val latLngBounds = naverMap.coveringBounds
-        viewModel.features(
+        viewModel.featuresGet(
             xmin = latLngBounds.westLongitude,
             ymin = latLngBounds.southLatitude,
             xmax = latLngBounds.eastLongitude,
@@ -219,13 +251,13 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                             pointOverlays.add(createMarker(point = latLngs[0][0], color, feature))
                         }
                         "LineString" -> {
-                            lineOverlays.add(createArrowheadPath(line = latLngs[0], color).also {
+                            lineOverlays.add(createArrowheadPath(line = latLngs[0], color, feature).also {
                                 pointOverlays.add(createMarker(point = it.coords[1], color, feature))
                             })
                         }
                         "MultiLineString" -> {
                             latLngs.forEach { latLng ->
-                                lineOverlays.add(createArrowheadPath(line = latLng, color).also {
+                                lineOverlays.add(createArrowheadPath(line = latLng, color, feature).also {
                                     pointOverlays.add(createMarker(point = it.coords[0], color, feature))
                                 })
                             }
@@ -233,7 +265,10 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
                 handler.post {
-                    lineOverlays.stream().forEach { it.map = naverMap }
+                    lineOverlays.stream().forEach {
+                        it.map = naverMap
+                        arrowheadPathMap[it.tag as String] = it
+                    }
                     pointOverlays.stream().forEach { it.map = naverMap }
                     onFeatureGetResult(true, R.color.teal_A400)
                     if (it.featureCount == 0) {
@@ -252,19 +287,28 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             captionColor = tintColor
             captionHaloColor = if (tintColor == RED || tintColor == BLUE) WHITE else BLACK
             captionMinZoom = 18.0
-            captionTextSize = 13.0f
-            captionText = (feature as Feature).fac_nam.toString()
+            captionTextSize = 14.0f
+            captionText = feature.fac_nam.toString()
+            feature.parseDate()?.let {
+                subCaptionText = it
+                subCaptionColor = WHITE
+                subCaptionHaloColor = BLACK
+                subCaptionTextSize = 14.0f
+            }
             isHideCollidedSymbols = true
             tag = feature
-            onClickListener = overlayOnClickListener
+            onClickListener = markerOnClickListener
         }
 
-    private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int) = ArrowheadPathOverlay(line).apply {
-        color = tintColor
-        outlineColor = WHITE
-        width = 5
-        headSizeRatio = 4.5f
-    }
+    private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
+        ArrowheadPathOverlay(line).apply {
+            color = tintColor
+            outlineColor = WHITE
+            width = 5
+            headSizeRatio = 4.5f
+            tag = feature.fac_uid
+            onClickListener = arrowheadPathOnClickListener
+        }
 
     /*
         private fun createMultipartPath(lines: List<List<LatLng>>, @ColorInt tintColor: Int) =

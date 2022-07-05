@@ -5,10 +5,7 @@
 package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
-import kr.djgis.sspfs.Config.DATETIME_FORMAT
-import kr.djgis.sspfs.Config.DATETIME_FORMAT_RECEIVE
-import kr.djgis.sspfs.Config.DATETIME_ZONE
-import java.time.LocalDateTime.parse
+import kr.djgis.sspfs.util.parseDate
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -43,11 +40,7 @@ open class Feature {
     var geom: FeatureGeom? = null
     //    var image: List<FeatureAttachment>? = null
 
-    val exm_ymd_date: String? = exm_ymd?.let(::parseDate)
-
-    private fun parseDate(string: String): String? {
-        return parse(string, DATETIME_FORMAT_RECEIVE).atZone(DATETIME_ZONE).format(DATETIME_FORMAT)
-    }
+    val exm_ymd_date: String? = parseDate()
 
     fun setByKey(key: String, value: Any?) {
         for (property in this::class.declaredMemberProperties) {
@@ -68,6 +61,10 @@ open class Feature {
 
     override fun hashCode(): Int {
         return javaClass.hashCode()
+    }
+
+    override fun toString(): String {
+        return "Feature(fac_typ=$fac_typ, fac_uid=$fac_uid, fac_nam=$fac_nam, mng_nam=$mng_nam, own_nam=$own_nam, mng_tel=$mng_tel, hzd_uid=$hzd_uid, hzd_ymd=$hzd_ymd, fac_adm=$fac_adm, fac_pid=$fac_pid, ben_txt=$ben_txt, sub_cnt=$sub_cnt, sub_txt=$sub_txt, fun_cde=$fun_cde, pos_cde=$pos_cde, exm_opi=$exm_opi, exm_ymd=$exm_ymd, exm_nam=$exm_nam, exm_chk=$exm_chk, img_fac=$img_fac, img_rep=$img_rep)"
     }
 }
 /*

@@ -64,7 +64,7 @@ class FeatureViewModel : ViewModel() {
         _featureF.value = featureF
     }
 
-    fun features(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
+    fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
         withContext(Dispatchers.IO) {
             val jsonObject = retrofit.featuresGet(xmin, ymin, xmax, ymax)
             val featureList = moshiFeatureList.fromJson(jsonObject.toString())
@@ -72,7 +72,7 @@ class FeatureViewModel : ViewModel() {
         }
     }
 
-    fun feature(fac_typ: String, fac_uid: String) = liveData {
+    fun featureGet(fac_typ: String, fac_uid: String) = liveData {
         withContext(Dispatchers.IO) {
             val jsonObject = retrofit.featureGet(fac_uid)
             when (fac_typ) {

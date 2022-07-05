@@ -19,5 +19,5 @@ object Config {
 
     val DATETIME_ZONE: ZoneId = ZoneId.of("GMT+9")
     val DATETIME_FORMAT_RECEIVE: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz")
-    val DATETIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")
+    val DATETIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd a hh:mm")
 }

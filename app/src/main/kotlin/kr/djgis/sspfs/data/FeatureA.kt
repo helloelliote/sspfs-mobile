@@ -50,7 +50,9 @@ class FeatureA(
     var eva_ope: String?,
     var eva_opi: String?,
 ) : Feature() {
-
+    override fun toString(): String {
+        return "FeatureA(${super.toString()} cat_typ=$cat_typ, cat_pos=$cat_pos, cat_fun=$cat_fun, cat_imp=$cat_imp, fac_len=$fac_len, fac_wid=$fac_wid, fac_hgt=$fac_hgt, fac_gap=$fac_gap, sec_flr=$sec_flr, sec_wid=$sec_wid, sec_hgt=$sec_hgt, sec_dia=$sec_dia, sec_col=$sec_col, riv_upp=$riv_upp, riv_mid=$riv_mid, riv_low=$riv_low, str_dmg=$str_dmg, str_reb=$str_reb, str_hol=$str_hol, str_old=$str_old, fld_dmg=$fld_dmg, fld_wal=$fld_wal, etc_trf=$etc_trf, etc_trh=$etc_trh, eva_stt=$eva_stt, eva_sur=$eva_sur, eva_pxm=$eva_pxm, eva_inf=$eva_inf, eva_roa=$eva_roa, eva_ope=$eva_ope, eva_opi=$eva_opi)"
+    }
 }
 
 object FeatureADiffCallback : DiffUtil.ItemCallback<FeatureA>() {
