@@ -40,6 +40,8 @@ class FeatureBEdit3 : FeatureTabs() {
         }
     }
 
+    override var text = "세천 조사 3"
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

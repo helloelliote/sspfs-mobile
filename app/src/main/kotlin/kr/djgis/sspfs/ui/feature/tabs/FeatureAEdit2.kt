@@ -38,6 +38,8 @@ class FeatureAEdit2 : FeatureTabs() {
         }
     }
 
+    override var text = "소교량 조사 2"
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

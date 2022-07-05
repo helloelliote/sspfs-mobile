@@ -40,6 +40,8 @@ class FeatureFEdit3 : FeatureTabs() {
         }
     }
 
+    override var text = "마을진입로 조사 3"
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

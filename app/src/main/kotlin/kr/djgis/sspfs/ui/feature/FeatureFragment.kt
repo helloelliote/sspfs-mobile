@@ -115,8 +115,9 @@ class FeatureFragment : Fragment(), View.OnClickListener {
             }
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
-                    text = "현장조사 ${position + 1}"
-                    icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_description_24, null)
+                    val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
+                    text = tabItem.text
+                    icon = ResourcesCompat.getDrawable(resources, tabItem.iconDrawable, null)!!
                 }
             }.attach()
 

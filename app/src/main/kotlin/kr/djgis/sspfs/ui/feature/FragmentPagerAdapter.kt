@@ -9,7 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class FragmentPagerAdapter(fragment: Fragment, private val tabs: List<Fragment>) : FragmentStateAdapter(fragment) {
+class FragmentPagerAdapter(fragment: Fragment, val tabs: List<Fragment>) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = tabs.size
 

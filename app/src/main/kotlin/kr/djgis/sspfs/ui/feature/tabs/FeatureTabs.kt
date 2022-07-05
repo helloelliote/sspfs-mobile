@@ -8,7 +8,10 @@ import android.graphics.Typeface.BOLD
 import android.graphics.Typeface.NORMAL
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,7 +24,7 @@ import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.util.snackbar
 
-open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
+open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTabsInterface {
 
     val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
     private val viewSelect by lazy { return@lazy R.drawable.tablelayout_border_row_select }
@@ -104,6 +107,10 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener {
 
     override fun onArchived(attachment: FeatureAttachment) {
     }
+
+    override var text = "조사"
+
+    override var iconDrawable = R.drawable.ic_round_description_24
 
     override fun onDestroyView() {
         super.onDestroyView()
