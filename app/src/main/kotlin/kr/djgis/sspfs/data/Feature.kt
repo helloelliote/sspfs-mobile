@@ -5,7 +5,9 @@
 package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
-import kr.djgis.sspfs.util.parseDate
+import kr.djgis.sspfs.Config
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -14,11 +16,11 @@ data class FeatureList(
     @Json(name = "rows") val features: MutableSet<Feature>,
 )
 
-@Suppress("PropertyName")
+@Suppress("PropertyName", "FunctionName")
 open class Feature {
-    var fac_typ: String? = null
-    var fac_uid: String? = null
-    var fac_nam: String? = null
+    var fac_typ: String = ""
+    var fac_uid: String = ""
+    var fac_nam: String = ""
     var mng_nam: String? = null
     var own_nam: String? = null
     var mng_tel: String? = null
@@ -40,7 +42,15 @@ open class Feature {
     var geom: FeatureGeom? = null
     //    var image: List<FeatureAttachment>? = null
 
-    val exm_ymd_date: String? = parseDate()
+    fun exm_ymd(): String {
+        return try {
+            "조사 일자\n${
+                ZonedDateTime.parse(exm_ymd).withZoneSameInstant(ZoneId.of("Asia/Seoul")).format(Config.DATETIME_FORMAT)
+            }"
+        } catch (e: Exception) {
+            "정보 없음"
+        }
+    }
 
     fun setByKey(key: String, value: Any?) {
         for (property in this::class.declaredMemberProperties) {

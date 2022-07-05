@@ -51,7 +51,10 @@ import kr.djgis.sspfs.databinding.FragmentMapBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.ui.NavDrawerFragment
-import kr.djgis.sspfs.util.*
+import kr.djgis.sspfs.util.observeOnce
+import kr.djgis.sspfs.util.screenSize
+import kr.djgis.sspfs.util.snackbar
+import kr.djgis.sspfs.util.toggle
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -288,13 +291,11 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             captionHaloColor = if (tintColor == RED || tintColor == BLUE) WHITE else BLACK
             captionMinZoom = 18.0
             captionTextSize = 14.0f
-            captionText = feature.fac_nam.toString()
-            feature.parseDate()?.let {
-                subCaptionText = it
-                subCaptionColor = WHITE
-                subCaptionHaloColor = BLACK
-                subCaptionTextSize = 14.0f
-            }
+            captionText = feature.fac_nam
+            subCaptionText = feature.exm_ymd()
+            subCaptionColor = WHITE
+            subCaptionHaloColor = BLACK
+            subCaptionTextSize = 14.0f
             isHideCollidedSymbols = true
             tag = feature
             onClickListener = markerOnClickListener

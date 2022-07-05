@@ -275,7 +275,7 @@
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
               android:hint="자동입력"
-              android:text="@{viewModel.featureA.exm_ymd_date}"
+              android:text="@{viewModel.featureA.exm_ymd()}"
               android:focusable="false" />
 
           <Button
