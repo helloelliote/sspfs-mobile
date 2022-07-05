@@ -23,6 +23,7 @@ import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.glide
+import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.toggle
 
 @DelicateCoroutinesApi
@@ -140,13 +141,9 @@ class FeatureFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
-//                println(viewModel.value())
-//                viewModel.featuresAPost().observeOnce(this) {
-//                    if (it.isSuccessful) {
-//                        println(it)
-//                        activity?.onBackPressed()
-//                    }
-//                }
+                viewModel.featurePost(args.type!!).observeOnce(this@FeatureFragment) {
+
+                }
             }
         }
     }

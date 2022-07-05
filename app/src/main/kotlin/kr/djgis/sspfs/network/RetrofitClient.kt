@@ -6,8 +6,7 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import kr.djgis.sspfs.data.FeatureA
-import retrofit2.Response
+import kr.djgis.sspfs.data.Feature
 import kotlin.math.round
 
 object RetrofitClient {
@@ -20,12 +19,12 @@ object RetrofitClient {
         return webService.featuresGet(doubles[0], doubles[1], doubles[2], doubles[3])
     }
 
-    suspend fun featuresAPost(feature: FeatureA): Response<JsonElement> {
-        return webService.featuresAPost(feature)
-    }
-
     suspend fun featureGet(fac_uid: String): JsonObject {
         return webService.featureGet(fac_uid = fac_uid)
+    }
+
+    suspend fun featurePost(fac_uid: String, feature: Feature): JsonElement {
+        return webService.featurePost(fac_uid = fac_uid, requestBody = feature)
     }
 
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {

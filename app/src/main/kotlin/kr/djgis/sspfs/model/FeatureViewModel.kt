@@ -108,6 +108,22 @@ class FeatureViewModel : ViewModel() {
         }
     }
 
+    fun featurePost(fac_typ: String) = liveData {
+        withContext(Dispatchers.IO) {
+            val requestBody: Feature = when (fac_typ) {
+                "A" -> featureA.value!!
+                "B" -> featureB.value!!
+                "C" -> featureC.value!!
+                "D" -> featureD.value!!
+                "E" -> featureE.value!!
+                "F" -> featureF.value!!
+                else -> feature.value!!
+            }
+            val jsonElement = retrofit.featurePost(requestBody.fac_uid!!, requestBody)
+            emit(jsonElement)
+        }
+    }
+
 /*    suspend fun fromLatLng(feature: Feature): String? {
         val latLng = feature.geom!!.latLngs[0][0] // FIXME: 시점이 아닌 중점으로 검색할 수 있는 방법
         val jsonObject = retrofit.kakaoCoord2Address(latLng.longitude, latLng.latitude)
