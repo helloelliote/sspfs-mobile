@@ -78,6 +78,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
     private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) {
         naverMap.locationTrackingMode = if (it) NoFollow else None
     }
+
+    @Suppress("DEPRECATION")
     private val naverMapPadding: Int by lazy {
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -114,7 +116,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         }
         val feature = overlay.tag as Feature
         arrowheadPathMap[feature.fac_uid]?.performClick()
-        viewModel.featureGet(feature.fac_typ!!, feature.fac_uid!!).observeOnce(this@NaverMapFragment) {
+        viewModel.featureGet(feature.fac_typ, feature.fac_uid).observeOnce(this@NaverMapFragment) {
             when (feature.fac_typ) {
                 "A" -> viewModel.setCurrentFeature(it as FeatureA)
                 "B" -> viewModel.setCurrentFeature(it as FeatureB)
@@ -137,7 +139,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
                         val directions = NaverMapFragmentDirections.actionToFeatureFragment(
-                            type = feature.fac_typ!!, bitmap = bitmap
+                            type = feature.fac_typ, bitmap = bitmap
                         )
                         findNavController().navigate(directions)
                     }
@@ -221,10 +223,10 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             if (this.naverMap.cameraPosition.zoom < 14.0) {
                 snackbar(fab, R.string.map_require_zoom).setAction("확대") {
                     this.naverMap.moveCamera(zoomTo(14.0).animate(Easing).finishCallback {
-                        this.onFeatureGet(it)
+                        this.onFeatureGet()
                     })
                 }.show()
-            } else onFeatureGet(it)
+            } else onFeatureGet()
         }
     }
 
@@ -233,7 +235,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             .putFloat("longitude", naverMap.cameraPosition.target.longitude.toFloat()).apply()
     }
 
-    private fun onFeatureGet(view: View) {
+    private fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
         val latLngBounds = naverMap.coveringBounds
