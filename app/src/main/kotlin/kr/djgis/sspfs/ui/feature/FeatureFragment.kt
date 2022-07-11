@@ -64,7 +64,6 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@FeatureFragment.viewModel
             listOf(appbarLayout, collapsingToolbarLayout).forEach {
                 it.layoutParams.height = if (dpWidth) 800 else 800
             }

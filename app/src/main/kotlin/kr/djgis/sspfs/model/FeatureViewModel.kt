@@ -36,8 +36,16 @@ class FeatureViewModel : ViewModel() {
     val featureE: LiveData<FeatureE> = _featureE
     val featureF: LiveData<FeatureF> = _featureF
 
-    fun value(): Feature {
-        return feature.value!!
+    fun of(fac_typ: String): Feature {
+        return when (fac_typ) {
+            "A" -> featureA.value!!
+            "B" -> featureB.value!!
+            "C" -> featureC.value!!
+            "D" -> featureD.value!!
+            "E" -> featureE.value!!
+            "F" -> featureF.value!!
+            else -> feature.value!!
+        }
     }
 
     fun setCurrentFeature(featureA: FeatureA) {
@@ -110,7 +118,7 @@ class FeatureViewModel : ViewModel() {
 
     fun featurePost(fac_typ: String) = liveData {
         withContext(Dispatchers.IO) {
-            val requestBody: Feature = when (fac_typ) {
+            val feature = when (fac_typ) {
                 "A" -> featureA.value!!
                 "B" -> featureB.value!!
                 "C" -> featureC.value!!
@@ -119,7 +127,7 @@ class FeatureViewModel : ViewModel() {
                 "F" -> featureF.value!!
                 else -> feature.value!!
             }
-            val jsonElement = retrofit.featurePost(requestBody.fac_uid!!, requestBody)
+            val jsonElement = retrofit.featurePost(feature.fac_uid!!, feature)
             emit(jsonElement)
         }
     }

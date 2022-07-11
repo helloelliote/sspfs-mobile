@@ -17,7 +17,5 @@ object Config {
     const val ANIMATION_FAST_MILLIS = 50L
     const val ANIMATION_SLOW_MILLIS = 100L
 
-    val DATETIME_ZONE: ZoneId = ZoneId.of("GMT+9")
-    val DATETIME_FORMAT_RECEIVE: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz")
-    val DATETIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd a hh:mm")
+    val DATETIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")
 }

@@ -5,9 +5,9 @@
 package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
-import kr.djgis.sspfs.Config
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import kr.djgis.sspfs.Config.DATETIME_FORMAT
+import java.time.ZoneId.of
+import java.time.ZonedDateTime.parse
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -18,9 +18,9 @@ data class FeatureList(
 
 @Suppress("PropertyName", "FunctionName")
 open class Feature {
-    var fac_typ: String = ""
-    var fac_uid: String = ""
-    var fac_nam: String = ""
+    var fac_typ: String? = ""
+    var fac_uid: String? = ""
+    var fac_nam: String? = ""
     var mng_nam: String? = null
     var own_nam: String? = null
     var mng_tel: String? = null
@@ -29,10 +29,13 @@ open class Feature {
     var fac_adm: String? = null
     var fac_pid: String? = null
     var ben_txt: String? = null
+    var cat_cde: String? = "0"
+    var typ_cde: String? = "{}"
+    var typ_txt: String? = null
     var sub_cnt: String? = null
     var sub_txt: String? = null
-    var fun_cde: String? = null
-    var pos_cde: String? = null
+    var fun_cde: String? = "{}"
+    var pos_cde: String? = "{}"
     var exm_opi: String? = null
     var exm_ymd: String? = null
     var exm_nam: String? = null
@@ -44,11 +47,9 @@ open class Feature {
 
     fun exm_ymd(): String {
         return try {
-            "조사 일자\n${
-                ZonedDateTime.parse(exm_ymd).withZoneSameInstant(ZoneId.of("Asia/Seoul")).format(Config.DATETIME_FORMAT)
-            }"
+            parse(exm_ymd).withZoneSameInstant(of("Asia/Seoul")).format(DATETIME_FORMAT)
         } catch (e: Exception) {
-            "정보 없음"
+            ""
         }
     }
 

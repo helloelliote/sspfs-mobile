@@ -6,7 +6,6 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import kr.djgis.sspfs.data.Feature
 import retrofit2.http.*
 
 interface RetrofitWebService {
@@ -27,6 +26,6 @@ interface RetrofitWebService {
     @POST("/api/feature/{fac_uid}")
     suspend fun featurePost(
         @Path(value = "fac_uid", encoded = true) fac_uid: String,
-        @Body requestBody: Feature,
+        @Body requestBody: Any,
     ): JsonElement
 }

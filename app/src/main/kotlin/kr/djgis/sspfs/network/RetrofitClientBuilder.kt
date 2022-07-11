@@ -19,7 +19,7 @@ object RetrofitClientBuilder {
         Retrofit.Builder()
             .baseUrl("http://djgis.iptime.org:5604")
             .client(okHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create())).build()
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
             .create(RetrofitWebService::class.java)
     }
 
@@ -27,7 +27,7 @@ object RetrofitClientBuilder {
         Retrofit.Builder()
             .baseUrl("https://dapi.kakao.com")
             .client(okHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create())).build()
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
             .create(RetrofitKakaoService::class.java)
     }
 

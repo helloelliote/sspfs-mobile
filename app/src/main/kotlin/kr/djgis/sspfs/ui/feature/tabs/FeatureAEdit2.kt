@@ -28,10 +28,11 @@ class FeatureAEdit2 : FeatureTabs() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = super.viewModel
         }
 
         binding.run {
-            setTableLayoutOnClickListener(table1)
+            setTableLayoutOnClickListener(fac_typ = "A", table = table1)
         }
 
         viewModel.featureA.observe(viewLifecycleOwner) {

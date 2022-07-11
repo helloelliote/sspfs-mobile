@@ -40,9 +40,9 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
         fab = requireActivity().findViewById(R.id.fab_main)
     }
 
-    fun setTableLayoutOnClickListener(table: TableLayout) {
+    fun setTableLayoutOnClickListener(fac_typ: String, table: TableLayout) {
         try {
-            val vm = viewModel.value()
+            val vm = viewModel.of(fac_typ)
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i) as TableRow
@@ -67,21 +67,27 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
                                     it.isSelected = it.isSelected.not()
                                     println("$key at ${column.tag}: ${it.isSelected}")
                                     if (it.isSelected) {
-                                        if (vm.getByKey(key) == null) {
+/*                                        if (vm.getByKey(key) == null) {
                                             it.setBackgroundResource(viewSelect)
                                             it.setTypeface(null, BOLD)
                                             vm.setByKey(key, column.tag)
+                                            println(key)
                                         } else {
                                             it.isSelected = it.isSelected.not()
                                             snackbar(fab, "앞서 선택된 항목부터 선택 해제해 주세요").setAction("확인") {
 
                                             }.show()
-                                        }
+                                        }*/
+                                        it.setBackgroundResource(viewSelect)
+                                        it.setTypeface(null, BOLD)
+                                        vm.setByKey(key, column.tag)
+                                        println(vm)
                                     } else {
                                         it.setBackgroundResource(viewDeselect)
                                         it.setTypeface(null, NORMAL)
                                         if (vm.getByKey(key) == column.tag) {
                                             vm.setByKey(key, null)
+                                            println(vm)
                                         }
                                     }
                                 }

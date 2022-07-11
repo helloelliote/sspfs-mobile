@@ -6,7 +6,6 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import kr.djgis.sspfs.data.Feature
 import kotlin.math.round
 
 object RetrofitClient {
@@ -23,7 +22,7 @@ object RetrofitClient {
         return webService.featureGet(fac_uid = fac_uid)
     }
 
-    suspend fun featurePost(fac_uid: String, feature: Feature): JsonElement {
+    suspend fun featurePost(fac_uid: String, feature: Any): JsonElement {
         return webService.featurePost(fac_uid = fac_uid, requestBody = feature)
     }
 
