@@ -61,6 +61,11 @@
                 app:argType="string"
                 app:nullable="true" />
             <argument
+                android:name="pos"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
                 android:name="bitmap"
                 android:defaultValue="@null"
                 app:argType="android.graphics.Bitmap"
@@ -105,6 +110,11 @@
             app:nullable="true" />
         <argument
             android:name="type"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="pos"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />

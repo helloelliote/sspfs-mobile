@@ -45,7 +45,8 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
             val vm = viewModel.of(fac_typ)
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
-                val row = table.getChildAt(i) as TableRow
+                val row = table.getChildAt(i)
+                if (row !is TableRow) continue
                 val columnCount = row.childCount
                 if (columnCount < 3) continue
                 var key = ""
@@ -54,34 +55,31 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
                         is Button -> {
                             if (column.tag != null) {
                                 key = column.tag.toString()
-                                println("Button TAG!: $key")
                             }
                         }
                         is TextView -> {
                             if (column.isClickable) {
-                                column.tag = (j - 1).toString()
-                                println(column.isSelected)
+                                if (vm.getByKey(key) != null) {
+                                    println("$key: ${vm.getByKey(key).toString().toIntOrNull()}")
+                                    if (vm.getByKey(key).toString().toIntOrNull() != null) {
+                                        val selection = row.findViewWithTag<TextView>(vm.getByKey(key).toString())
+                                        selection.setBackgroundResource(viewSelect)
+                                        selection.setTypeface(null, BOLD)
+                                        selection.isSelected = true
+                                    }
+                                }
                                 column.setOnClickListener {
                                     it as TextView
-                                    println("Text TAG!: " + column.tag)
                                     it.isSelected = it.isSelected.not()
-                                    println("$key at ${column.tag}: ${it.isSelected}")
                                     if (it.isSelected) {
-/*                                        if (vm.getByKey(key) == null) {
+                                        if (vm.getByKey(key) == null) {
                                             it.setBackgroundResource(viewSelect)
                                             it.setTypeface(null, BOLD)
                                             vm.setByKey(key, column.tag)
-                                            println(key)
                                         } else {
                                             it.isSelected = it.isSelected.not()
-                                            snackbar(fab, "앞서 선택된 항목부터 선택 해제해 주세요").setAction("확인") {
-
-                                            }.show()
-                                        }*/
-                                        it.setBackgroundResource(viewSelect)
-                                        it.setTypeface(null, BOLD)
-                                        vm.setByKey(key, column.tag)
-                                        println(vm)
+                                            snackbar(fab, "먼저 선택된 항목부터 선택 해제해 주세요").setAction("확인") {}.show()
+                                        }
                                     } else {
                                         it.setBackgroundResource(viewDeselect)
                                         it.setTypeface(null, NORMAL)

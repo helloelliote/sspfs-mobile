@@ -139,7 +139,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
                         val directions = NaverMapFragmentDirections.actionToFeatureFragment(
-                            type = feature.fac_typ, bitmap = bitmap
+                            type = feature.fac_typ, bitmap = bitmap, pos = "m"
                         )
                         findNavController().navigate(directions)
                     }
