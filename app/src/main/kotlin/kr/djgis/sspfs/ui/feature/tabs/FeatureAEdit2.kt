@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.databinding.FragmentFeatureAEdit2Binding
 
+@DelicateCoroutinesApi
 class FeatureAEdit2 : FeatureTabs() {
 
     // This property is only valid between onCreateView and onDestroyView.

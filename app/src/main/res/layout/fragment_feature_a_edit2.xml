@@ -105,14 +105,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="파손없음·\n소규모균열" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="파손·균열·\n안전상 지장 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="심각한 파손·균열" />
         </TableRow>
 
@@ -127,14 +130,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="안전상 지장 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="균열부위 일부 부식" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="철근노출·심각한 부식" />
         </TableRow>
 
@@ -149,14 +155,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="세굴없음·\n세굴방지공 설치" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="세굴 일부 진행" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="3"
               android:text="세굴로 기초 노출" />
         </TableRow>
 
@@ -171,14 +180,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="양호" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="30년 이하·\n배수구, 난간 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="30년 이상·\n구조적 결함" />
         </TableRow>
 
@@ -217,14 +229,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="날개벽 있음·안전" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="날개벽 노후·균열" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="날개벽 없음·이동·침식" />
         </TableRow>
 
@@ -239,14 +254,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="높음·설계기준 적합" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="일부 설계기준 부적합" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="과거 월류 피해 발생" />
         </TableRow>
 
@@ -285,14 +303,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="거의 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="작     음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="많     음" />
         </TableRow>
 
@@ -307,14 +328,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="계획홍수위보다 높음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="세월교·통행자\n거의 없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="세월교·통행자 많음" />
         </TableRow>
 
@@ -353,14 +377,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="양     호" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="보     통" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="불     량" />
         </TableRow>
 
@@ -375,14 +402,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="산     지" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="농경지" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="취락지" />
         </TableRow>
 
@@ -397,14 +427,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="이     격" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="보     통" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="인     접" />
         </TableRow>
 
@@ -419,14 +452,17 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="작     음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="보     통" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="2"
               android:text="매우 큼" />
         </TableRow>
 
@@ -442,11 +478,13 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="1.5"
+              android:tag="0"
               android:text="미지정" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="1.5"
+              android:tag="1"
               android:text="법정도로" />
 
         </TableRow>
@@ -462,10 +500,12 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="0"
               android:text="없     음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:tag="1"
               android:text="있     음" />
 
           <EditText

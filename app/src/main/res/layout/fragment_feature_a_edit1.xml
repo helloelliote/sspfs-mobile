@@ -101,9 +101,9 @@
               android:text="세천명" />
 
           <TextView
-              style="@style/App.TableLayout.TextView"
+              style="@style/App.TableLayout.EditText"
               android:layout_weight="3"
-              android:hint="" />
+              android:text="@={viewModel.featureA.pos_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -168,12 +168,14 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="임시가설·간이소교량" />
+              android:text="임시가설·간이소교량"
+              android:tag="0" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="산지부 소규모 배수암거" />
+              android:text="산지부 소규모 배수암거"
+              android:tag="1" />
 
         </TableRow>
 
@@ -189,12 +191,12 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="개인사유지 연결 소교량" />
+              android:text="개인사유지 연결 소교량"  android:tag="0"/>
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="법정하천내 포함 소교량" />
+              android:text="법정하천내 포함 소교량" android:tag="1"  />
 
         </TableRow>
 
@@ -209,19 +211,19 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="선정제외①" />
+              android:text="선정제외①"  android:tag="0"/>
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="사유지②" />
+              android:text="사유지②"  android:tag="1" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="관리지역③" />
+              android:text="관리지역③" android:tag="2"  />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="제한지역④" />
+              android:text="제한지역④"  android:tag="3" />
 
         </TableRow>
 
@@ -252,17 +254,17 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="cat_cde"
-              android:text="교량유형" />
+              android:text="형식" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="일반교" />
+              android:text="일반교" android:tag="0" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="세월교" />
+              android:text="세월교" android:tag="1"  />
 
         </TableRow>
 
@@ -332,19 +334,19 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="슬래브교" />
+              android:text="슬래브교" android:tag="0" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="라멘교" />
+              android:text="라멘교"  android:tag="1" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="암거교" />
+              android:text="암거교"  android:tag="2" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="흄관교" />
+              android:text="흄관교"  android:tag="3" />
 
         </TableRow>
 
@@ -360,15 +362,15 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="세천내" />
+              android:text="세천내"  android:tag="0"/>
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="마을진입로내" />
+              android:text="마을진입로내" android:tag="1"  />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="농로내" />
+              android:text="농로내" android:tag="2"  />
 
         </TableRow>
 
@@ -383,19 +385,19 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="도로연결" />
+              android:text="도로연결" android:tag="0" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="부지연결" />
+              android:text="부지연결" android:tag="1"  />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="배수암거" />
+              android:text="배수암거" android:tag="2"  />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="복개도로" />
+              android:text="복개도로"  android:tag="3" />
 
         </TableRow>
 
@@ -411,15 +413,15 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="중요" />
+              android:text="중요" android:tag="0" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="보통" />
+              android:text="보통"  android:tag="1" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="낮음" />
+              android:text="낮음"  android:tag="2" />
 
         </TableRow>
 
@@ -508,7 +510,7 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="하상바닥" />
+              android:text="하상바닥" android:tag="1" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -600,6 +602,13 @@
               android:text="@={viewModel.featureA.riv_low}" />
         </TableRow>
 
+        <LinearLayout
+            android:id="@+id/spacer_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table1" />
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>

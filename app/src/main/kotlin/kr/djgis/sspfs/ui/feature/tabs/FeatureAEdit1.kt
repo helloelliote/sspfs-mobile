@@ -38,11 +38,6 @@ class FeatureAEdit1 : FeatureTabs() {
         }
 
         viewModel.featureA.observe(viewLifecycleOwner) {
-//            if (it.fac_adm.isNullOrEmpty()) coroutineJob = GlobalScope.launch(Dispatchers.Main) {
-//                val d1 = withContext(Dispatchers.Default) { viewModel.fromLatLng(it) }
-//                if (_binding != null) binding.facAdm.text = d1
-//                it.fac_adm = d1
-//           }
         }
     }
 

@@ -26,8 +26,11 @@ open class Feature {
     var mng_tel: String? = null
     var hzd_uid: String? = null
     var hzd_ymd: String? = null
+    var fac_adl: String? = null
     var fac_adm: String? = null
+    var fac_adu: String? = null
     var fac_pid: String? = null
+    var pos_nam: String? = null
     var ben_txt: String? = null
     var cat_cde: String? = "0"
     var typ_cde: String? = "{}"
@@ -45,7 +48,7 @@ open class Feature {
     var geom: FeatureGeom? = null
     //    var image: List<FeatureAttachment>? = null
 
-    fun exm_ymd(): String {
+    open fun exm_ymd(): String {
         return try {
             parse(exm_ymd).withZoneSameInstant(of("Asia/Seoul")).format(DATETIME_FORMAT)
         } catch (e: Exception) {
@@ -53,13 +56,13 @@ open class Feature {
         }
     }
 
-    fun setByKey(key: String, value: Any?) {
+    open fun setByKey(key: String, value: Any?) {
         for (property in this::class.declaredMemberProperties) {
             if (property.name == key) (property as? KMutableProperty<*>)?.setter?.call(this, value)
         }
     }
 
-    fun getByKey(key: String): Any? {
+    open fun getByKey(key: String): Any? {
         for (property in this::class.declaredMemberProperties) {
             if (property.name == key) return property.getter.call(this)
         }
@@ -75,7 +78,7 @@ open class Feature {
     }
 
     override fun toString(): String {
-        return "Feature(fac_typ=$fac_typ, fac_uid=$fac_uid, fac_nam=$fac_nam, mng_nam=$mng_nam, own_nam=$own_nam, mng_tel=$mng_tel, hzd_uid=$hzd_uid, hzd_ymd=$hzd_ymd, fac_adm=$fac_adm, fac_pid=$fac_pid, ben_txt=$ben_txt, sub_cnt=$sub_cnt, sub_txt=$sub_txt, fun_cde=$fun_cde, pos_cde=$pos_cde, exm_opi=$exm_opi, exm_ymd=$exm_ymd, exm_nam=$exm_nam, exm_chk=$exm_chk, img_fac=$img_fac, img_rep=$img_rep)"
+        return "Feature(fac_typ=$fac_typ, fac_uid=$fac_uid, fac_nam=$fac_nam, mng_nam=$mng_nam, own_nam=$own_nam, mng_tel=$mng_tel, hzd_uid=$hzd_uid, hzd_ymd=$hzd_ymd, fac_adm=$fac_adm, fac_pid=$fac_pid, ben_txt=$ben_txt, cat_cde=$cat_cde, typ_cde=$typ_cde, typ_txt=$typ_txt, sub_cnt=$sub_cnt, sub_txt=$sub_txt, fun_cde=$fun_cde, pos_cde=$pos_cde, exm_opi=$exm_opi, exm_ymd=$exm_ymd, exm_nam=$exm_nam, exm_chk=$exm_chk, img_fac=$img_fac, img_rep=$img_rep, geom=$geom)"
     }
 }
 /*
