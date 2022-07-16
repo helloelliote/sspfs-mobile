@@ -254,7 +254,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="cat_cde"
-              android:text="형식" />
+              android:text="교량유형" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"

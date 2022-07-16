@@ -34,7 +34,6 @@ open class Feature {
     var ben_txt: String? = null
     var cat_cde: String? = "0"
     var typ_cde: String? = "{}"
-    var typ_txt: String? = null
     var sub_cnt: String? = null
     var sub_txt: String? = null
     var fun_cde: String? = "{}"
@@ -78,7 +77,7 @@ open class Feature {
     }
 
     override fun toString(): String {
-        return "Feature(fac_typ=$fac_typ, fac_uid=$fac_uid, fac_nam=$fac_nam, mng_nam=$mng_nam, own_nam=$own_nam, mng_tel=$mng_tel, hzd_uid=$hzd_uid, hzd_ymd=$hzd_ymd, fac_adl=$fac_adl, fac_adm=$fac_adm, fac_adu=$fac_adu, fac_pid=$fac_pid, pos_nam=$pos_nam, ben_txt=$ben_txt, cat_cde=$cat_cde, typ_cde=$typ_cde, typ_txt=$typ_txt, sub_cnt=$sub_cnt, sub_txt=$sub_txt, fun_cde=$fun_cde, pos_cde=$pos_cde, exm_opi=$exm_opi, exm_ymd=$exm_ymd, exm_nam=$exm_nam, exm_chk=$exm_chk, img_fac=$img_fac, img_rep=$img_rep, geom=$geom)"
+        return "Feature(fac_typ=$fac_typ, fac_uid=$fac_uid, fac_nam=$fac_nam, mng_nam=$mng_nam, own_nam=$own_nam, mng_tel=$mng_tel, hzd_uid=$hzd_uid, hzd_ymd=$hzd_ymd, fac_adl=$fac_adl, fac_adm=$fac_adm, fac_adu=$fac_adu, fac_pid=$fac_pid, pos_nam=$pos_nam, ben_txt=$ben_txt, cat_cde=$cat_cde, typ_cde=$typ_cde, sub_cnt=$sub_cnt, sub_txt=$sub_txt, fun_cde=$fun_cde, pos_cde=$pos_cde, exm_opi=$exm_opi, exm_ymd=$exm_ymd, exm_nam=$exm_nam, exm_chk=$exm_chk, img_fac=$img_fac, img_rep=$img_rep, geom=$geom)"
     }
 }
 /*
