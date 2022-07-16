@@ -8,18 +8,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kr.djgis.sspfs.databinding.FragmentFeatureBEdit2Binding
+import kr.djgis.sspfs.databinding.FragmentFeatureFEdit1MBinding
 
-class FeatureBEdit2 : FeatureTabs() {
+class FeatureFEdit1M : FeatureTabs() {
 
     // This property is only valid between onCreateView and onDestroyView.
-    private var _binding: FragmentFeatureBEdit2Binding? = null
+    private var _binding: FragmentFeatureFEdit1MBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentFeatureBEdit2Binding.inflate(inflater, container, false)
+        _binding = FragmentFeatureFEdit1MBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -32,15 +32,15 @@ class FeatureBEdit2 : FeatureTabs() {
         }
 
         binding.run {
-            setTableLayoutOnClickListener(fac_typ = "B", table = table1)
+            setTableLayoutOnClickListener(fac_typ = "F", table = table1)
         }
 
-        viewModel.featureB.observe(viewLifecycleOwner) {
+        viewModel.featureF.observe(viewLifecycleOwner) {
 
         }
     }
 
-    override var text = "세천 조사 2"
+    override var text = "중점부 1"
 
     override fun onDestroyView() {
         super.onDestroyView()

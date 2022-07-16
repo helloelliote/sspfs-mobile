@@ -94,46 +94,38 @@ class FeatureFragment : Fragment(), View.OnClickListener {
             "E" -> {
                 FragmentPagerAdapter(
                     this@FeatureFragment, when (args.pos) {
-                        "l" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        "m" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        "u" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        else -> listOf(
+                        "l" -> listOf(
+                            FeatureEEdit1L(),
+                            FeatureEEdit2L(),
                         )
+                        "m" -> listOf(
+                            FeatureEEdit1M(),
+                            FeatureEEdit2M(),
+                        )
+                        "u" -> listOf(
+                            FeatureEEdit1U(),
+                            FeatureEEdit2U(),
+                        )
+                        else -> listOf()
                     }
                 )
             }
             "F" -> {
                 FragmentPagerAdapter(
                     this@FeatureFragment, when (args.pos) {
-                        "l" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        "m" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        "u" -> {
-                            listOf(
-                                FeatureFEdit1(),
-                            )
-                        }
-                        else -> listOf(
+                        "l" -> listOf(
+                            FeatureFEdit1L(),
+                            FeatureFEdit2L(),
                         )
+                        "m" -> listOf(
+                            FeatureFEdit1M(),
+                            FeatureFEdit2M(),
+                        )
+                        "u" -> listOf(
+                            FeatureFEdit1U(),
+                            FeatureFEdit2U(),
+                        )
+                        else -> listOf()
                     }
                 )
             }
