@@ -32,12 +32,12 @@ open class Feature {
     var fac_pid: String? = null
     var pos_nam: String? = null
     var ben_txt: String? = null
-    var cat_cde: String? = "0"
-    var typ_cde: String? = "{}"
+    var cat_cde: String? = null
+    var typ_cde: String? = null
     var sub_cnt: String? = null
     var sub_txt: String? = null
-    var fun_cde: String? = "{}"
-    var pos_cde: String? = "{}"
+    var fun_cde: String? = null
+    var pos_cde: String? = null
     var exm_opi: String? = null
     var exm_ymd: String? = null
     var exm_nam: String? = null

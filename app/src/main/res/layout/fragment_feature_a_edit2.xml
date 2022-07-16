@@ -509,7 +509,6 @@
               android:text="있     음" />
 
           <EditText
-              android:id="@+id/eva_opi"
               style="@style/App.TableLayout.EditText"
               android:hint="* 의견"
               android:text="@={viewModel.featureA.eva_opi}" />
