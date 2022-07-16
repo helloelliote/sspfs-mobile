@@ -310,12 +310,13 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="1.4"
+              android:layout_weight="1.2"
               android:tag="dor_pasm"
               android:text="통관 문비" />
 
           <Button
               style="@style/App.TableLayout.Label"
+              android:layout_weight="1.2"
               android:text="중앙부" />
 
           <TextView

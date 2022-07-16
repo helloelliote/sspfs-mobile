@@ -397,7 +397,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
+              android:layout_weight="5"
               android:text="현장조사 내용" />
         </TableRow>
 

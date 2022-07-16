@@ -37,6 +37,8 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
     private val args: FeatureFragmentArgs by navArgs()
 
+    private lateinit var adapter: FragmentPagerAdapter
+
     private val dpWidth: Boolean by lazy {
         val displayMetrics = resources.displayMetrics
         return@lazy (displayMetrics.widthPixels / displayMetrics.density) > 600.0
@@ -50,6 +52,93 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 activity?.onBackPressed()
             }
         })
+
+        adapter = when (args.type) {
+            "A" -> FragmentPagerAdapter(
+                this@FeatureFragment, listOf(
+                    FeatureAEdit1(),
+                    FeatureAEdit2(),
+                )
+            )
+            "B" -> {
+                FragmentPagerAdapter(
+                    this@FeatureFragment, when (args.pos) {
+                        "l" -> listOf(
+                            FeatureBEdit1L(),
+                            FeatureBEdit2L(),
+                        )
+                        "m" -> listOf(
+                            FeatureBEdit1M(),
+                            FeatureBEdit2M(),
+                        )
+                        "u" -> listOf(
+                            FeatureBEdit1U(),
+                            FeatureBEdit2U(),
+                        )
+                        else -> listOf()
+                    }
+                )
+            }
+            "C" -> FragmentPagerAdapter(
+                this@FeatureFragment, listOf(
+                    FeatureCEdit1(),
+                    FeatureCEdit2(),
+                )
+            )
+            "D" -> FragmentPagerAdapter(
+                this@FeatureFragment, listOf(
+                    FeatureDEdit1(),
+                    FeatureDEdit2(),
+                )
+            )
+            "E" -> {
+                FragmentPagerAdapter(
+                    this@FeatureFragment, when (args.pos) {
+                        "l" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        "m" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        "u" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        else -> listOf(
+                        )
+                    }
+                )
+            }
+            "F" -> {
+                FragmentPagerAdapter(
+                    this@FeatureFragment, when (args.pos) {
+                        "l" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        "m" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        "u" -> {
+                            listOf(
+                                FeatureFEdit1(),
+                            )
+                        }
+                        else -> listOf(
+                        )
+                    }
+                )
+            }
+            else -> FragmentPagerAdapter(this@FeatureFragment, listOf())
+        }
     }
 
     override fun onCreateView(
@@ -71,87 +160,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
         binding.run {
             viewPager.isUserInputEnabled = false
-            viewPager.adapter = when (args.type) {
-                "A" -> FragmentPagerAdapter(
-                    this@FeatureFragment, listOf(
-                        FeatureAEdit1(),
-                        FeatureAEdit2(),
-                    )
-                )
-                "B" -> {
-                    val tabList = when(args.pos) {
-                        "l"-> listOf(
-                            FeatureBEdit1L(),
-                            FeatureBEdit2L(),
-                        )
-                        "m"-> listOf(
-                            FeatureBEdit1M(),
-                            FeatureBEdit2M(),
-                        )
-                        "u"-> listOf(
-                            FeatureBEdit1U(),
-                            FeatureBEdit2U(),
-                        )
-                        else -> listOf()
-                    }
-                    FragmentPagerAdapter(
-                        this@FeatureFragment, tabList
-                    )
-                }
-                "C" -> FragmentPagerAdapter(
-                    this@FeatureFragment, listOf(
-                        FeatureCEdit1(),
-                        FeatureCEdit2(),
-                    )
-                )
-                "D" -> FragmentPagerAdapter(
-                    this@FeatureFragment, listOf(
-                        FeatureDEdit1(),
-                        FeatureDEdit2(),
-                    )
-                )
-                "E" -> {
-                    when(args.type) {
-                        "l"-> {
-
-                        }
-                        "m"-> {
-
-                        }
-                        "u"-> {
-
-                        }
-                    }
-                    FragmentPagerAdapter(
-                        this@FeatureFragment, listOf(
-                            FeatureEEdit1(),
-                            FeatureEEdit2(),
-                            FeatureEEdit3(),
-                        )
-                    )
-                }
-                "F" -> {
-                    when(args.type) {
-                        "l"-> {
-
-                        }
-                        "m"-> {
-
-                        }
-                        "u"-> {
-
-                        }
-                    }
-                    FragmentPagerAdapter(
-                        this@FeatureFragment, listOf(
-                            FeatureFEdit1(),
-                            FeatureFEdit2(),
-                            FeatureFEdit3(),
-                        )
-                    )
-                }
-                else -> FragmentPagerAdapter(this@FeatureFragment, listOf())
-            }
+            viewPager.adapter = adapter
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.apply {
                     val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
