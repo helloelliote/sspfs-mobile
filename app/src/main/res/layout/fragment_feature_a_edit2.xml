@@ -56,7 +56,8 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="1.5"
-              android:hint="" />
+              android:hint=""
+              android:text="@={viewModel.featureA.pos_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"

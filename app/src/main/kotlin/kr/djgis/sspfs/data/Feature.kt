@@ -33,11 +33,11 @@ open class Feature {
     var pos_nam: String? = null
     var ben_txt: String? = null
     var cat_cde: String? = null
-    var typ_cde: String? = null
+    var typ_cde: MutableSet<String>? = mutableSetOf()
     var sub_cnt: String? = null
     var sub_txt: String? = null
-    var fun_cde: String? = null
-    var pos_cde: String? = null
+    var fun_cde: MutableSet<String>? = mutableSetOf()
+    var pos_cde: MutableSet<String>? = mutableSetOf()
     var exm_opi: String? = null
     var exm_ymd: String? = null
     var exm_nam: String? = null
@@ -47,12 +47,11 @@ open class Feature {
     var geom: FeatureGeom? = null
     //    var image: List<FeatureAttachment>? = null
 
-    open fun exm_ymd(): String {
-        return try {
-            parse(exm_ymd).withZoneSameInstant(of("Asia/Seoul")).format(DATETIME_FORMAT)
-        } catch (e: Exception) {
-            ""
+    open fun getByKey(key: String): Any? {
+        for (property in this::class.declaredMemberProperties) {
+            if (property.name == key) return property.getter.call(this)
         }
+        return Feature::class.declaredMemberProperties.find { it.name == key }?.call(this)
     }
 
     open fun setByKey(key: String, value: Any?) {
@@ -61,15 +60,18 @@ open class Feature {
         }
     }
 
-    open fun getByKey(key: String): Any? {
-        for (property in this::class.declaredMemberProperties) {
-            if (property.name == key) return property.getter.call(this)
-        }
-        return null
+    open fun exm_ymd(): String = try {
+        parse(exm_ymd).withZoneSameInstant(of("Asia/Seoul")).format(DATETIME_FORMAT)
+    } catch (e: Exception) {
+        ""
     }
 
     override fun equals(other: Any?): Boolean {
-        return super.equals(other)
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Feature
+        if (fac_uid != other.fac_uid) return false
+        return true
     }
 
     override fun hashCode(): Int {

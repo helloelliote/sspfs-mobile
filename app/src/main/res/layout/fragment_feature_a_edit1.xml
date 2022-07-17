@@ -165,8 +165,8 @@
           <TextView
               style="@style/App.TableLayout.TextView.Select"
               android:layout_weight="2"
-              android:text="임시가설·간이소교량"
-              android:tag="0" />
+              android:tag="0"
+              android:text="임시가설·간이소교량" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -210,19 +210,19 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="선정제외①"  android:tag="0"/>
+              android:tag="0"  android:text="선정제외①"/>
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="사유지②"  android:tag="1" />
+              android:tag="1"  android:text="사유지②" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="관리지역③" android:tag="2"  />
+              android:tag="2" android:text="관리지역③"  />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:text="제한지역④"  android:tag="3" />
+              android:tag="3"  android:text="제한지역④" />
 
         </TableRow>
 

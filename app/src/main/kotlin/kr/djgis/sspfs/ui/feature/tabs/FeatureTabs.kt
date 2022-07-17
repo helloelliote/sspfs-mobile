@@ -53,19 +53,14 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
                 for (j: Int in 0..columnCount) {
                     when (val column = row.getChildAt(j)) {
                         is Button -> {
-                            if (column.tag != null) {
-                                key = column.tag.toString()
-                            }
+                            column.tag?.let { key = it.toString() }
                         }
                         is TextView -> {
                             if (column.isClickable) {
-                                if (vm.getByKey(key) != null) {
-                                    println("$key: ${vm.getByKey(key).toString().toIntOrNull()}")
-                                    if (vm.getByKey(key).toString().toIntOrNull() != null) {
-                                        val selection = row.findViewWithTag<TextView>(vm.getByKey(key).toString())
-                                        selection.setBackgroundResource(viewSelect)
-                                        selection.setTypeface(null, BOLD)
-                                        selection.isSelected = true
+                                vm.getByKey(key)?.let { value ->
+                                    when (value) {
+                                        is String -> row.setSelect(value)
+                                        is MutableSet<*> -> value.forEach { row.setSelect(it.toString()) }
                                     }
                                 }
                                 column.setOnClickListener {
@@ -77,16 +72,41 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
                                             it.setTypeface(null, BOLD)
                                             vm.setByKey(key, column.tag)
                                         } else {
-                                            it.isSelected = it.isSelected.not()
-                                            snackbar(fab, "먼저 선택된 항목부터 선택 해제해 주세요").setAction("확인") {}.show()
+                                            when (vm.getByKey(key)) {
+                                                is String -> {
+                                                    it.isSelected = it.isSelected.not()
+                                                    snackbar(fab, "먼저 선택된 항목부터 선택 해제해 주세요").setAction("확인") {}.show()
+                                                }
+                                                is MutableSet<*> -> {
+                                                    it.setBackgroundResource(viewSelect)
+                                                    it.setTypeface(null, BOLD)
+                                                    (vm.getByKey(key) as MutableSet<String>).add(column.tag as String)
+                                                }
+                                                else -> {
+
+                                                }
+                                            }
                                         }
                                     } else {
                                         it.setBackgroundResource(viewDeselect)
                                         it.setTypeface(null, NORMAL)
-                                        if (vm.getByKey(key) == column.tag) {
-                                            vm.setByKey(key, null)
-                                            println(vm)
-                                        }
+                                            when (vm.getByKey(key)) {
+                                                is String -> {
+                                                    if (vm.getByKey(key) == column.tag) vm.setByKey(key, null)
+                                                }
+                                                is MutableSet<*> -> {
+                                                    (vm.getByKey(key) as MutableSet<String>).remove(column.tag)
+                                                    if ((vm.getByKey(key) as MutableSet<String>).size == 0) {
+                                                        vm.setByKey(key, null)
+                                                    }
+                                                    println(vm.getByKey(key))
+                                                }
+                                                else -> {
+
+                                                }
+                                            }
+
+
                                     }
                                 }
                             }
@@ -97,6 +117,13 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun TableRow.setSelect(tag: String) {
+        val selection = this.findViewWithTag<TextView>(tag)
+        selection.setBackgroundResource(viewSelect)
+        selection.setTypeface(null, BOLD)
+        selection.isSelected = true
     }
 
     override fun onClicked(view: View, attachment: FeatureAttachment) {

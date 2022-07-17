@@ -244,7 +244,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
               android:hint="자연형,콘크리트형,기타"
-              android:text="@{viewModel.featureD.cat_cde}" />
+              android:text="@={viewModel.featureD.cat_cde}" />
 
         </TableRow>
 
@@ -260,7 +260,7 @@
               style="@style/App.TableLayout.EditText"
               android:hint="0"
               android:inputType="number"
-              android:text="@{viewModel.featureD.sub_cnt}" />
+              android:text="@={viewModel.featureD.sub_cnt}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -270,7 +270,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="2"
               android:hint="날개벽,교량 등"
-              android:text="@{viewModel.featureD.sub_txt}" />
+              android:text="@={viewModel.featureD.sub_txt}" />
 
         </TableRow>
 
@@ -286,7 +286,7 @@
               style="@style/App.TableLayout.EditText"
               android:layout_weight="4"
               android:hint="콘크리트 탈락,균열 및 철근 노출"
-              android:text="@{viewModel.featureD.exm_opi}" />
+              android:text="@={viewModel.featureD.exm_opi}" />
 
         </TableRow>
 
@@ -378,7 +378,7 @@
               android:layout_weight="2"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@{viewModel.featureD.fac_len}" />
+              android:text="@={viewModel.featureD.fac_len}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -389,7 +389,7 @@
               android:layout_weight="2"
               android:hint="0m"
               android:inputType="numberDecimal"
-              android:text="@{viewModel.featureD.fac_hgt}" />
+              android:text="@={viewModel.featureD.fac_hgt}" />
         </TableRow>
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

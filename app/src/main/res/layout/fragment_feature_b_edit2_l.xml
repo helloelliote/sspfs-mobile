@@ -44,7 +44,8 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:hint="광덕리_세천_001" />
+              android:hint="광덕리_세천_001"
+              android:text="@{viewModel.featureB.fac_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -52,7 +53,7 @@
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:text="2213" />
+              android:text="@{viewModel.featureB.fac_len}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -60,7 +61,8 @@
 
           <TextView
               style="@style/App.TableLayout.TextView"
-              android:hint="낙동강" />
+              android:hint="낙동강"
+              android:text="@{viewModel.featureB.pos_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -69,7 +71,8 @@
           <TextView
               style="@style/App.TableLayout.TextView.Small"
               android:layout_weight="2"
-              android:hint="광덕리 1278구" />
+              android:hint="광덕리 1278구"
+              android:text="@{viewModel.featureB.fac_adl}" />
         </TableRow>
 
         <TableRow

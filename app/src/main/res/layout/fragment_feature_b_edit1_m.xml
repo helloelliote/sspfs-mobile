@@ -266,7 +266,7 @@
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:hint="0m"
+              android:hint="0"
               android:inputType="number"
               android:text="@={viewModel.featureB.sub_cnt}" />
 

@@ -44,7 +44,8 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:hint="성곡리_취입보_015" />
+              android:hint="성곡리_취입보_015"
+              android:text="@{viewModel.featureC.fac_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -53,7 +54,8 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="2"
-              android:hint="금계리2_세천_011" />
+              android:hint="금계리2_세천_011"
+              android:text="@{viewModel.featureC.pos_nam}" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -62,7 +64,8 @@
           <TextView
               style="@style/App.TableLayout.TextView.Small"
               android:layout_weight="2"
-              android:hint="서후면 성곡리 1006구" />
+              android:hint="서후면 성곡리 1006구"
+              android:text="@{viewModel.featureC.fac_adm}" />
         </TableRow>
 
         <TableRow
