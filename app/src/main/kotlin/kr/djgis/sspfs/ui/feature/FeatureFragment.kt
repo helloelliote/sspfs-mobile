@@ -72,14 +72,21 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                         "l" -> listOf(
                             FeatureBEdit1L(),
                             FeatureBEdit2L(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "m" -> listOf(
+                            FeatureBEdit1U(),
+                            FeatureBEdit2U(),
                             FeatureBEdit1M(),
                             FeatureBEdit2M(),
+                            FeatureBEdit1L(),
+                            FeatureBEdit2L(),
+                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "u" -> listOf(
                             FeatureBEdit1U(),
                             FeatureBEdit2U(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         else -> listOf()
                     }
@@ -89,12 +96,14 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 this@FeatureFragment, listOf(
                     FeatureCEdit1(),
                     FeatureCEdit2(),
+                    FeatureImage(args.type!!, args.pos!!),
                 )
             )
             "D" -> FragmentPagerAdapter(
                 this@FeatureFragment, listOf(
                     FeatureDEdit1(),
                     FeatureDEdit2(),
+                    FeatureImage(args.type!!, args.pos!!),
                 )
             )
             "E" -> {
@@ -103,14 +112,21 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                         "l" -> listOf(
                             FeatureEEdit1L(),
                             FeatureEEdit2L(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "m" -> listOf(
+                            FeatureEEdit1U(),
+                            FeatureEEdit2U(),
                             FeatureEEdit1M(),
                             FeatureEEdit2M(),
+                            FeatureEEdit1L(),
+                            FeatureEEdit2L(),
+                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "u" -> listOf(
                             FeatureEEdit1U(),
                             FeatureEEdit2U(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         else -> listOf()
                     }
@@ -122,14 +138,21 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                         "l" -> listOf(
                             FeatureFEdit1L(),
                             FeatureFEdit2L(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "m" -> listOf(
+                            FeatureFEdit1U(),
+                            FeatureFEdit2U(),
                             FeatureFEdit1M(),
                             FeatureFEdit2M(),
+                            FeatureFEdit1L(),
+                            FeatureFEdit2L(),
+                            FeatureImage(args.type!!, args.pos!!),
                         )
                         "u" -> listOf(
                             FeatureFEdit1U(),
                             FeatureFEdit2U(),
+//                            FeatureImage(args.type!!, args.pos!!),
                         )
                         else -> listOf()
                     }

@@ -23,6 +23,12 @@ import com.google.android.material.button.MaterialButton
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.databinding.FragmentFeatureImageBinding
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_A
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_B
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_C
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_D
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_E
+import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_F
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
 import java.text.SimpleDateFormat
@@ -70,8 +76,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
 //            setTableLayoutOnClickListener(fac_typ = type, table = table1)
 
             featureAttachmentAdapter =
-                FeatureAttachmentAdapter(FeatureAttachmentAdapter.OnClickListener { view, attachment ->
-                    takePictureFullSize_Shared()
+                FeatureAttachmentAdapter(FeatureAttachmentAdapter.OnClickListener { _, attachment ->
+                    takePictureFullSize_Shared(attachment)
                 })
             attachmentRecyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
@@ -82,36 +88,31 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
 
         viewModel.of(type).observe(viewLifecycleOwner) {
             feature = when (type) {
-                "a" -> it as FeatureA
-                "b" -> it as FeatureB
-                "c" -> it as FeatureC
-                "d" -> it as FeatureD
-                "e" -> it as FeatureE
-                "f" -> it as FeatureF
+                "A" -> it as FeatureA
+                "B" -> it as FeatureB
+                "C" -> it as FeatureC
+                "D" -> it as FeatureD
+                "E" -> it as FeatureE
+                "F" -> it as FeatureF
                 else -> it
             }
             featureAttachmentAdapter.submitList(feature.img_fac)
 
-            val buttonTexts = mutableListOf(
-                "전경사진",
-                "주변현황사진",
-                "상류구간 현황사진",
-                "하류구간 현황사진",
-                "부분파손, 균열 현황사진",
-                "철근노출 부식 현황사진",
-                "교각, 교대 세굴피해 현황사진",
-                "날개벽 현황사진",
-            )
-            for (t in buttonTexts) {
+            val buttonTextPreset = when (type) {
+                "A" -> IMAGE_PRESET_A
+                "B" -> IMAGE_PRESET_B
+                "C" -> IMAGE_PRESET_C
+                "D" -> IMAGE_PRESET_D
+                "E" -> IMAGE_PRESET_E
+                "F" -> IMAGE_PRESET_F
+                else -> listOf("")
+            }
+            for (txt in buttonTextPreset) {
                 val button = MaterialButton(requireContext(), null, R.attr.myButtonStyle).apply {
+                    text = txt
                     icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_add_24, null)
-                    text = t
                     setOnClickListener {
-                        feature.img_fac!!.add(
-                            FeatureAttachment(
-                                null, t, "preset"
-                            )
-                        ).also {
+                        feature.img_fac!!.add(FeatureAttachment(null, txt, "preset")).also {
                             featureAttachmentAdapter.submitList(feature.img_fac)
                             featureAttachmentAdapter.notifyDataSetChanged()
                         }
@@ -119,16 +120,15 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
                 }
                 binding.attachmentGridView.addView(button)
             }
-
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun takePictureFullSize_Shared() {
-        val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(requireContext())
+    private fun takePictureFullSize_Shared(attachment: FeatureAttachment) {
+        val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(requireContext(), attachment)
         fullSizePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
             startActivityForResult(
-                fullSizePictureIntent, Companion.REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
+                fullSizePictureIntent, REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
             )
         }
     }
@@ -139,11 +139,13 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
      * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
      */
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun getPictureIntent_Shared_Q_N_Over(context: Context): Intent {
+    fun getPictureIntent_Shared_Q_N_Over(context: Context, attachment: FeatureAttachment): Intent {
         photoSharedURI_Q_N_OVER = Uri.EMPTY
         val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
         val contentValues = ContentValues()
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "${feature.fac_uid}_${timeStamp}.jpg")
+        contentValues.put(
+            MediaStore.MediaColumns.DISPLAY_NAME, "${feature.fac_uid}_${timeStamp}_${attachment.name}.jpg"
+        )
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
         //'RELATIVE_PATH', RequiresApi Q
         contentValues.put(
@@ -202,7 +204,6 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
     }
 
     companion object {
-        private const val TAG = "CameraXApp"
         private const val DIRECTORY_FORMAT = "yyyyMMdd"
         private const val FILENAME_FORMAT = "_yyyyMMdd_HHmmss"
         const val REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER = 600//공용공간 Q이상
