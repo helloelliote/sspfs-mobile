@@ -102,7 +102,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="str_dmg"
-              android:text="① 슬라브·교대·교각\n파손·균열" />
+              android:text="①슬라브·교대·교각\n파손·균열" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -127,7 +127,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="str_reb"
-              android:text="② 철근노출·부식" />
+              android:text="②철근노출·부식" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -152,7 +152,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="str_hol"
-              android:text="③ 교대·교각 세굴" />
+              android:text="③교대·교각 세굴" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -177,7 +177,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="str_old"
-              android:text="④ 노후도·구조물 안전성" />
+              android:text="④노후도·구조물 안전성" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -226,7 +226,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="fld_dmg"
-              android:text="⑤ 제방 접합부 침식" />
+              android:text="⑤제방 접합부 침식" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -251,7 +251,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="fld_wal"
-              android:text="⑤ 여유고 부족·월류" />
+              android:text="⑥여유고 부족·월류" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -300,7 +300,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="etc_trf"
-              android:text="⑨ 입지여건·통행량" />
+              android:text="⑨입지여건·통행량" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -325,7 +325,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="etc_trh"
-              android:text="⑩ 통행위험성·세월교" />
+              android:text="⑩통행위험성·세월교" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -374,7 +374,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_stt"
-              android:text="⑪ 암거 현황 상태" />
+              android:text="⑪암거 현황 상태" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -399,7 +399,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_sur"
-              android:text="⑫ 주변현황" />
+              android:text="⑫주변현황" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -424,7 +424,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_pxm"
-              android:text="⑬ 주택·마을인접도" />
+              android:text="⑬주택·마을인접도" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -515,15 +515,14 @@
               android:text="@={viewModel.featureA.eva_opi}" />
         </TableRow>
 
+        <LinearLayout
+            android:id="@+id/spacer_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table1" />
       </TableLayout>
-
-      <LinearLayout
-          android:id="@+id/spacer_bottom"
-          android:layout_width="match_parent"
-          android:layout_height="250dp"
-          android:orientation="vertical"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@id/table1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>
 </layout>

@@ -366,7 +366,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="피해이력" />
+              android:text="①피해이력" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -394,7 +394,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="피해이력" />
+              android:text="①피해이력" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -442,7 +442,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="fld_cdel"
-              android:text="상습침수" />
+              android:text="②상습침수" />
 
           <Button
               style="@style/App.TableLayout.Label"

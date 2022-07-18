@@ -391,6 +391,14 @@
               android:inputType="numberDecimal"
               android:text="@={viewModel.featureD.fac_hgt}" />
         </TableRow>
+
+        <LinearLayout
+            android:id="@+id/spacer_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table1" />
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>

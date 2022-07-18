@@ -113,7 +113,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="제방" />
+              android:text="③제방" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -173,7 +173,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="호안" />
+              android:text="④호안" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -245,7 +245,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="호안" />
+              android:text="④호안" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -315,7 +315,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="1.2"
               android:tag="dor_pasu"
-              android:text="통관 문비" />
+              android:text="⑤통관 문비" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -377,7 +377,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="riv_chgu"
-              android:text="하폭변화" />
+              android:text="⑥하폭변화" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -408,7 +408,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="riv_depu"
-              android:text="하상침식퇴적" />
+              android:text="⑦하상침식퇴적" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -439,7 +439,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="riv_pltu"
-              android:text="식생유송잡물" />
+              android:text="⑧식생유송잡물" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -470,7 +470,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="riv_posu"
-              android:text="입지여건" />
+              android:text="⑨입지여건" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -501,7 +501,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="riv_dmgu"
-              android:text="훼손불법점용" />
+              android:text="⑩훼손불법점용" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -562,7 +562,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_prxu"
-              android:text="주택마을인접" />
+              android:text="⑪주택마을인접" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -593,7 +593,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_infu"
-              android:text="피해영향범위" />
+              android:text="⑫피해영향범위" />
 
           <Button
               style="@style/App.TableLayout.Label"
@@ -624,7 +624,7 @@
           <Button
               style="@style/App.TableLayout.Label"
               android:tag="eva_opeu"
-              android:text="관계기관의견" />
+              android:text="⑬관계기관의견" />
 
           <Button
               style="@style/App.TableLayout.Label"

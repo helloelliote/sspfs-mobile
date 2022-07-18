@@ -109,7 +109,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="str_bod"
-              android:text="① 본체 노후·파손" />
+              android:text="①본체 노후·파손" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -142,7 +142,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="str_wal"
-              android:text="② 제방연결 옹벽 파손" />
+              android:text="②제방연결 옹벽 파손" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -175,7 +175,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="str_flr"
-              android:text="③ 바닥보호공 파손" />
+              android:text="③바닥보호공 파손" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -208,7 +208,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="str_jnt"
-              android:text="④ 제방 접합부 세굴" />
+              android:text="④제방 접합부 세굴" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -241,7 +241,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="str_hzd"
-              android:text="⑤ 본체 높이로 제방월류" />
+              android:text="⑤본체 높이로 제방월류" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -298,7 +298,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="4"
               android:tag="fun_stt"
-              android:text="⑥ 낙차기능상실" />
+              android:text="⑥낙차기능상실" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -331,7 +331,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="fun_mch"
-              android:text="⑦ 기계장치 파손\n(권양기,기계실)" />
+              android:text="⑦기계장치 파손\n(권양기,기계실)" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -393,7 +393,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="dep_stt"
-              android:text="⑧ 상하류 침식퇴적" />
+              android:text="⑧상하류 침식퇴적" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -454,7 +454,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="etc_env"
-              android:text="⑨ 철거민원·\n사회,환경 영향" />
+              android:text="⑨철거민원·\n사회,환경 영향" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -487,7 +487,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="etc_fsh"
-              android:text="⑩ 어도 유무·파손" />
+              android:text="⑩어도 유무·파손" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -549,7 +549,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="eva_sur"
-              android:text="⑪ 주변현황" />
+              android:text="⑪주변현황" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -582,7 +582,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="eva_inf"
-              android:text="⑫ 피해발생시 영향 범위" />
+              android:text="⑫피해발생시 영향 범위" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -615,7 +615,7 @@
               style="@style/App.TableLayout.Label"
               android:layout_weight="2"
               android:tag="eva_ope"
-              android:text="⑬ 주민·관계기관 의견" />
+              android:text="⑬주민·관계기관 의견" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -636,6 +636,13 @@
               android:text="@{viewModel.featureD.eva_opi}" />
         </TableRow>
 
+        <LinearLayout
+            android:id="@+id/spacer_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table1" />
       </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>
