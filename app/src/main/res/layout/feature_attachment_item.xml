@@ -14,7 +14,7 @@
 
         <variable
             name="listener"
-            type="kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener" />
+            type="kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter.OnClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -32,59 +32,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="275dp"
                 android:contentDescription="@{featureAttachment.type}"
-                android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
+                android:onClick="@{(view) -> listener.onClick(view, featureAttachment)}"
                 android:scaleType="center"
                 app:glideCenterCrop="@{true}"
                 app:glideSrc="@{featureAttachment.url}"
-                app:srcCompat="@drawable/ic_round_image_search_96" />
+                app:srcCompat="@drawable/ic_round_add_a_photo_96" />
 
-            <TextView
-                android:id="@+id/attachment_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:text="@{featureAttachment.name}"
-                android:textSize="20sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/App.TextInputLayout"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-<!--                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/attachment_gallery"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
-                    android:text="@string/button_gallery"
-                    app:icon="@drawable/ic_round_photo_library_24" />-->
-
-<!--                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/attachment_camera"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
-                    android:text="@string/button_camera"
-                    app:icon="@drawable/ic_round_photo_camera_24" />-->
-
-<!--                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/attachment_delete"
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
-                    android:text="@string/button_delete"
-                    android:textColor="@color/red_A200"
-                    app:icon="@drawable/ic_round_delete_forever_24"
-                    app:iconTint="@color/red_A200"
-                    app:rippleColor="@color/red_A200" />-->
-            </LinearLayout>
-
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/App.TextInputEditText"
+                    android:background="@drawable/tablelayout_border_row_edittext_round"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:text="@={featureAttachment.name}" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 </layout>

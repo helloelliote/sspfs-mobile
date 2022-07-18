@@ -5,28 +5,63 @@
     tools:context="kr.djgis.sspfs.ui.feature.tabs.FeatureImage"
     tools:ignore="TooManyViews,HardcodedText">
 
-  <data>
+    <data>
 
-    <variable
-        name="viewModel"
-        type="kr.djgis.sspfs.model.FeatureViewModel" />
+        <variable
+            name="viewModel"
+            type="kr.djgis.sspfs.model.FeatureViewModel" />
 
-    <variable
-        name="featureAttachment"
-        type="kr.djgis.sspfs.data.FeatureAttachment" />
+        <variable
+            name="featureAttachment"
+            type="kr.djgis.sspfs.data.FeatureAttachment" />
 
-    <variable
-        name="listener"
-        type="kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener" />
-  </data>
+        <variable
+            name="listener"
+            type="kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter.OnClickListener" />
+    </data>
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/attachment_recycler_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginVertical="@dimen/grid_2"
-      android:orientation="vertical"
-      android:paddingHorizontal="25dp"
-      android:paddingVertical="25dp"
-      app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="25dp">
+
+            <GridLayout
+                android:id="@+id/attachment_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="3"
+                android:orientation="horizontal"
+                android:rowOrderPreserved="false"
+                android:useDefaultMargins="true"
+                app:layout_constraintBottom_toTopOf="@id/attachment_recycler_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/attachment_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/grid_4"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/attachment_grid_view" />
+
+            <LinearLayout
+                android:id="@+id/spacer_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/attachment_recycler_view" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

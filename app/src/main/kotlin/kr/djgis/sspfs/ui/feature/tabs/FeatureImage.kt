@@ -4,6 +4,7 @@
 
 package kr.djgis.sspfs.ui.feature.tabs
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -16,18 +17,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.button.MaterialButton
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.databinding.FragmentFeatureImageBinding
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
-import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FeatureImage(val type: String, val position: String) : FeatureTabs(), FeatureAttachmentAdapterListener {
+class FeatureImage(val type: String, val position: String) : FeatureTabs() {
 
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureImageBinding? = null
@@ -35,6 +37,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
 
     private lateinit var feature: Feature
     private lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
+
+    private lateinit var photoSharedURI_Q_N_OVER: Uri
     private var reqWidth: Int? = null
     private var reqHeight: Int? = null
 
@@ -52,6 +56,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,7 +69,10 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         binding.run {
 //            setTableLayoutOnClickListener(fac_typ = type, table = table1)
 
-            featureAttachmentAdapter = FeatureAttachmentAdapter(this@FeatureImage)
+            featureAttachmentAdapter =
+                FeatureAttachmentAdapter(FeatureAttachmentAdapter.OnClickListener { view, attachment ->
+                    takePictureFullSize_Shared()
+                })
             attachmentRecyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
                 adapter = featureAttachmentAdapter
@@ -82,28 +91,44 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
                 else -> it
             }
             featureAttachmentAdapter.submitList(feature.img_fac)
-        }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onClicked(view: View, attachment: FeatureAttachment) {
-        when (view.id) {
-            R.id.attachment_image -> {
-                takePictureFullSize_Shared()
+            val buttonTexts = mutableListOf(
+                "전경사진",
+                "주변현황사진",
+                "상류구간 현황사진",
+                "하류구간 현황사진",
+                "부분파손, 균열 현황사진",
+                "철근노출 부식 현황사진",
+                "교각, 교대 세굴피해 현황사진",
+                "날개벽 현황사진",
+            )
+            for (t in buttonTexts) {
+                val button = MaterialButton(requireContext(), null, R.attr.myButtonStyle).apply {
+                    icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_add_24, null)
+                    text = t
+                    setOnClickListener {
+                        feature.img_fac!!.add(
+                            FeatureAttachment(
+                                null, t, "preset"
+                            )
+                        ).also {
+                            featureAttachmentAdapter.submitList(feature.img_fac)
+                            featureAttachmentAdapter.notifyDataSetChanged()
+                        }
+                    }
+                }
+                binding.attachmentGridView.addView(button)
             }
+
         }
     }
-
-    val REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER = 600//공용공간 Q이상
-
-    lateinit var photoSharedURI_Q_N_OVER: Uri
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun takePictureFullSize_Shared() {
         val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(requireContext())
         fullSizePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
             startActivityForResult(
-                fullSizePictureIntent, REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
+                fullSizePictureIntent, Companion.REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
             )
         }
     }
@@ -137,20 +162,10 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         return fullSizeCaptureIntent
     }
 
-    override fun onLongPressed(attachment: FeatureAttachment): Boolean {
-        return false
-    }
-
-    override fun onStarChanged(attachment: FeatureAttachment, newValue: Boolean) {
-    }
-
-    override fun onArchived(attachment: FeatureAttachment) {
-    }
-
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Companion.REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER && resultCode == Activity.RESULT_OK) {
 //            val options = BitmapFactory.Options()
 //            options.inJustDecodeBounds = true
 //            try {
@@ -190,5 +205,6 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         private const val TAG = "CameraXApp"
         private const val DIRECTORY_FORMAT = "yyyyMMdd"
         private const val FILENAME_FORMAT = "_yyyyMMdd_HHmmss"
+        const val REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER = 600//공용공간 Q이상
     }
 }

@@ -40,5 +40,6 @@
 
         <item name="contentDescription">@null</item>
         <item name="android:importantForAccessibility">no</item>
+        <item name="myButtonStyle">@style/CustomButtonStyle</item>
     </style>
 </resources>

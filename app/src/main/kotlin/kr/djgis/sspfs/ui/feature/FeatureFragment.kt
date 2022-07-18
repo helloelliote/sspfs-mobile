@@ -63,6 +63,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 this@FeatureFragment, listOf(
                     FeatureAEdit1(),
                     FeatureAEdit2(),
+                    FeatureImage(args.type!!, args.pos!!),
                 )
             )
             "B" -> {

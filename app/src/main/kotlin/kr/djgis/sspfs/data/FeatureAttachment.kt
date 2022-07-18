@@ -14,19 +14,7 @@ data class FeatureAttachment(
     @Url var url: String?,
     var name: String?,
     val type: String,
-) : Serializable {
-    val position by lazy {
-        return@lazy when (type) {
-            "b" -> "시점"
-            "m" -> "중점"
-            "e" -> "종점"
-            "c" -> "근경"
-            "f" -> "원경"
-            "s" -> "측면"
-            else -> "기타"
-        }
-    }
-}
+) : Serializable
 
 class DiffCallback : DiffUtil.ItemCallback<FeatureAttachment>() {
     override fun areItemsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {

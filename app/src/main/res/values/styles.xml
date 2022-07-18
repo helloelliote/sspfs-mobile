@@ -38,7 +38,7 @@
     <style name="App.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:inputType">textNoSuggestions</item>
@@ -214,15 +214,25 @@
     </style>
 
     <style name="MaterialAlertDialog__Center" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-      <item name="materialAlertDialogTitlePanelStyle">@style/Title.Panel.Center</item>
-      <item name="materialAlertDialogBodyTextStyle">@style/Message.Center</item>
+        <item name="materialAlertDialogTitlePanelStyle">@style/Title.Panel.Center</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Message.Center</item>
     </style>
 
     <style name="Title.Panel.Center" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
-      <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <style name="Message.Center" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-      <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">6dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_gravity">fill_horizontal</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_weight">0.25</item>
     </style>
 </resources>
