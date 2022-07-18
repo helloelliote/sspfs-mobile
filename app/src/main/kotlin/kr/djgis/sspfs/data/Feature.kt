@@ -6,6 +6,7 @@ package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
 import kr.djgis.sspfs.Config.DATETIME_FORMAT
+import java.io.Serializable
 import java.time.ZoneId.of
 import java.time.ZonedDateTime.parse
 import kotlin.reflect.KMutableProperty
@@ -17,7 +18,7 @@ data class FeatureList(
 )
 
 @Suppress("PropertyName", "FunctionName")
-open class Feature {
+open class Feature : Serializable {
     var fac_typ: String? = ""
     var fac_uid: String? = ""
     var fac_nam: String? = ""
@@ -42,10 +43,10 @@ open class Feature {
     var exm_ymd: String? = null
     var exm_nam: String? = null
     var exm_chk: String? = null
-    var img_fac: String? = null
+    var img_fac: List<FeatureAttachment>? = null
     var img_rep: String? = null
     var geom: FeatureGeom? = null
-    //    var image: List<FeatureAttachment>? = null
+    var image: List<FeatureAttachment>? = null
 
     open fun getByKey(key: String): Any? {
         for (property in this::class.declaredMemberProperties) {

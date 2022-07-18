@@ -16,6 +16,7 @@
     <string name="label_map">MapFragment</string>
     <string name="label_place_search">PlaceSearchFragment</string>
     <string name="label_feature">FeatureFragment</string>
+    <string name="label_image">FeatureImage</string>
     <string name="label_camera">CameraFragment</string>
     <string name="label_camerax">CameraXFragment</string>
     <string name="label_image_viewer">ImageViewerFragment</string>

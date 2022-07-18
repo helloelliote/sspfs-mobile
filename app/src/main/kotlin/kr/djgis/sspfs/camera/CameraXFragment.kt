@@ -22,6 +22,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import kr.djgis.sspfs.databinding.FragmentCameraxBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
@@ -36,6 +37,8 @@ class CameraXFragment : Fragment() {
 
     private var _binding: FragmentCameraxBinding? = null
     private val binding get() = _binding!!
+
+    private val args: CameraXFragmentArgs by navArgs()
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -66,7 +69,7 @@ class CameraXFragment : Fragment() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
         // Create time stamped name and MediaStore entry.
-        val name = viewModel.feature.value!!.fac_uid + SimpleDateFormat(FILENAME_FORMAT,
+        val name = args.feature!!.fac_uid + SimpleDateFormat(FILENAME_FORMAT,
             Locale.KOREAN).format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)

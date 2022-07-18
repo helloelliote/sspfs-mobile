@@ -121,7 +121,13 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" >
+            <argument
+                android:name="feature"
+                android:defaultValue="@null"
+                app:argType="kr.djgis.sspfs.data.Feature"
+                app:nullable="true" />
+        </action>
     </fragment>
 
     <fragment
@@ -132,5 +138,11 @@
     <fragment
         android:id="@+id/cameraXFragment"
         android:name="kr.djgis.sspfs.camera.CameraXFragment"
-        android:label="@string/label_camerax" />
+        android:label="@string/label_camerax" >
+        <argument
+            android:name="feature"
+            android:defaultValue="@null"
+            app:argType="kr.djgis.sspfs.data.Feature"
+            app:nullable="true" />
+    </fragment>
 </navigation>

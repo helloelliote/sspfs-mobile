@@ -7,7 +7,6 @@ package kr.djgis.sspfs.ui.feature.tabs
 import android.graphics.Typeface.BOLD
 import android.graphics.Typeface.NORMAL
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -17,21 +16,17 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
 import kr.djgis.sspfs.R
-import kr.djgis.sspfs.data.FeatureAttachment
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
-import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.util.snackbar
 
-open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTabsInterface {
+open class FeatureTabs : Fragment(), FeatureTabsInterface {
 
     val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
     private val viewSelect by lazy { return@lazy R.drawable.tablelayout_border_row_select }
     private val viewDeselect by lazy { return@lazy R.drawable.tablelayout_border_row_deselect }
 
     var coroutineJob: Job? = null
-    lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
 
     private lateinit var fab: FloatingActionButton
 
@@ -42,7 +37,7 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
 
     fun setTableLayoutOnClickListener(fac_typ: String, table: TableLayout) {
         try {
-            val vm = viewModel.of(fac_typ)
+            val vm = viewModel.of(fac_typ).value!!
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i)
@@ -90,21 +85,21 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
                                     } else {
                                         it.setBackgroundResource(viewDeselect)
                                         it.setTypeface(null, NORMAL)
-                                            when (vm.getByKey(key)) {
-                                                is String -> {
-                                                    if (vm.getByKey(key) == column.tag) vm.setByKey(key, null)
-                                                }
-                                                is MutableSet<*> -> {
-                                                    (vm.getByKey(key) as MutableSet<String>).remove(column.tag)
-                                                    if ((vm.getByKey(key) as MutableSet<String>).size == 0) {
-                                                        vm.setByKey(key, null)
-                                                    }
-                                                    println(vm.getByKey(key))
-                                                }
-                                                else -> {
-
-                                                }
+                                        when (vm.getByKey(key)) {
+                                            is String -> {
+                                                if (vm.getByKey(key) == column.tag) vm.setByKey(key, null)
                                             }
+                                            is MutableSet<*> -> {
+                                                (vm.getByKey(key) as MutableSet<String>).remove(column.tag)
+                                                if ((vm.getByKey(key) as MutableSet<String>).size == 0) {
+                                                    vm.setByKey(key, null)
+                                                }
+                                                println(vm.getByKey(key))
+                                            }
+                                            else -> {
+
+                                            }
+                                        }
 
 
                                     }
@@ -124,19 +119,6 @@ open class FeatureTabs : Fragment(), FeatureAttachmentAdapterListener, FeatureTa
         selection.setBackgroundResource(viewSelect)
         selection.setTypeface(null, BOLD)
         selection.isSelected = true
-    }
-
-    override fun onClicked(view: View, attachment: FeatureAttachment) {
-    }
-
-    override fun onLongPressed(attachment: FeatureAttachment): Boolean {
-        return false
-    }
-
-    override fun onStarChanged(attachment: FeatureAttachment, newValue: Boolean) {
-    }
-
-    override fun onArchived(attachment: FeatureAttachment) {
     }
 
     override var text = "조사"

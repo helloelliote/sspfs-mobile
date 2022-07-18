@@ -32,4 +32,12 @@ class FeatureAttachmentAdapter(
     override fun onBindViewHolder(holder: FeatureAttachmentViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
+    override fun getItem(position: Int): FeatureAttachment {
+        return super.getItem(position)
+    }
 }

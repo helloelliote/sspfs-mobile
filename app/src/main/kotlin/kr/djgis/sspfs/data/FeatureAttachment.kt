@@ -12,9 +12,10 @@ import java.io.Serializable
 @JsonClass(generateAdapter = true)
 data class FeatureAttachment(
     @Url var url: String?,
+    var name: String?,
     val type: String,
 ) : Serializable {
-    val name by lazy {
+    val position by lazy {
         return@lazy when (type) {
             "b" -> "시점"
             "m" -> "중점"

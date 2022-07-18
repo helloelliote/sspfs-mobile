@@ -18,7 +18,7 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="275dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -53,25 +53,25 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
+<!--                <com.google.android.material.button.MaterialButton
                     android:id="@+id/attachment_gallery"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
                     android:text="@string/button_gallery"
-                    app:icon="@drawable/ic_round_photo_library_24" />
+                    app:icon="@drawable/ic_round_photo_library_24" />-->
 
-                <com.google.android.material.button.MaterialButton
+<!--                <com.google.android.material.button.MaterialButton
                     android:id="@+id/attachment_camera"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{(view) -> listener.onClicked(view, featureAttachment)}"
                     android:text="@string/button_camera"
-                    app:icon="@drawable/ic_round_photo_camera_24" />
+                    app:icon="@drawable/ic_round_photo_camera_24" />-->
 
-                <com.google.android.material.button.MaterialButton
+<!--                <com.google.android.material.button.MaterialButton
                     android:id="@+id/attachment_delete"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
                     android:textColor="@color/red_A200"
                     app:icon="@drawable/ic_round_delete_forever_24"
                     app:iconTint="@color/red_A200"
-                    app:rippleColor="@color/red_A200" />
+                    app:rippleColor="@color/red_A200" />-->
             </LinearLayout>
 
         </LinearLayout>

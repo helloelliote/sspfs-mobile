@@ -25,6 +25,7 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_dj"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="false"
         android:theme="@style/Theme.AppTheme"
         android:usesCleartextTraffic="true">
@@ -73,7 +74,7 @@
         <!-- FileProvider used to share photos with other apps -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
