@@ -183,11 +183,12 @@
         <item name="android:paddingVertical">18dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:text">""</item>
         <item name="android:background">@drawable/tablelayout_border_row_edittext</item>
         <item name="android:layout_weight">1</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
     </style>
 
     <style name="App.TableLayout.ImageView" parent="Theme.AppTheme">

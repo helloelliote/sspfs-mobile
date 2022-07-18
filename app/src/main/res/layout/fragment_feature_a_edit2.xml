@@ -501,13 +501,20 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:layout_weight="1.5"
               android:tag="0"
               android:text="없     음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
+              android:layout_weight="1.5"
               android:tag="1"
               android:text="있     음" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
           <EditText
               style="@style/App.TableLayout.EditText"

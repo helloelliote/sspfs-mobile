@@ -562,19 +562,23 @@
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
+              android:layout_weight="3"
               android:tag="0"
               android:text="없음" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
+              android:layout_weight="3"
               android:tag="1"
               android:text="있음" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
           <EditText
               style="@style/App.TableLayout.EditText"
-              android:layout_weight="2"
               android:hint="* 의견"
               android:text="@={viewModel.featureF.eva_opil}" />
         </TableRow>

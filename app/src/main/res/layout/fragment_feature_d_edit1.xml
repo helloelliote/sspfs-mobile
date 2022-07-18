@@ -97,8 +97,8 @@
               android:layout_weight="2"
               android:text="세천명" />
 
-          <TextView
-              style="@style/App.TableLayout.TextView"
+          <EditText
+              style="@style/App.TableLayout.EditText"
               android:layout_weight="3"
               android:hint="성곡리_세천_004"
               android:text="@={viewModel.featureD.pos_nam}" />

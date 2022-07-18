@@ -128,7 +128,7 @@
           <TextView
               style="@style/App.TableLayout.TextView"
               android:layout_weight="3"
-              android:hint="2022-00-00"
+              android:hint="자동입력"
               android:text="@{viewModel.featureB.exm_ymd()}" />
 
           <Button
