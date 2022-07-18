@@ -40,7 +40,7 @@ class FeatureFEdit1M : FeatureTabs() {
         }
     }
 
-    override var text = "중점부 1"
+    override var text = "중앙부 A"
 
     override fun onDestroyView() {
         super.onDestroyView()

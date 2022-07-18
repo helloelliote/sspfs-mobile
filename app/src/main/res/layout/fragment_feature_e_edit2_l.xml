@@ -28,6 +28,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_margin="10dp"
+          android:layout_marginStart="4dp"
           android:background="@drawable/tablelayout_border"
           android:stretchColumns="*"
           app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +113,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -148,7 +149,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -185,7 +186,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -250,7 +251,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -286,7 +287,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -351,7 +352,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -417,7 +418,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -448,7 +449,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -485,7 +486,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -522,7 +523,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"
@@ -558,7 +559,7 @@
 
           <Button
               style="@style/App.TableLayout.Label"
-              android:text="중앙부" />
+              android:text="종점부" />
 
           <TextView
               style="@style/App.TableLayout.TextView.Select"

@@ -40,7 +40,7 @@ class FeatureEEdit2L : FeatureTabs() {
         }
     }
 
-    override var text = "종점부 2"
+    override var text = "종점부 B"
 
     override fun onDestroyView() {
         super.onDestroyView()
