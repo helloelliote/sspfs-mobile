@@ -5,23 +5,26 @@
 package kr.djgis.sspfs.ui.feature
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.JsonElement
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
+import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
+import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.toggle
@@ -37,7 +40,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
     private val args: FeatureFragmentArgs by navArgs()
 
-    private lateinit var adapter: FragmentPagerAdapter
+    private var adapter: FragmentPagerAdapter? = null
 
     private val dpWidth: Boolean by lazy {
         val displayMetrics = resources.displayMetrics
@@ -46,6 +49,8 @@ class FeatureFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 isEnabled = false
@@ -209,7 +214,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
-                viewModel.featurePost(args.type!!).observeOnce(this@FeatureFragment) {
+                onSave(EXM_CHK_SAVE) {
 
                 }
             }

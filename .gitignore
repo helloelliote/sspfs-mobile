@@ -476,3 +476,4 @@ obj/
 temp/
 .DS_Store
 /app/debug/output-metadata.json
+/app/release/output-metadata.json
