@@ -38,8 +38,7 @@
     <style name="App.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:inputType">textNoSuggestions</item>
         <item name="maxLines">1</item>

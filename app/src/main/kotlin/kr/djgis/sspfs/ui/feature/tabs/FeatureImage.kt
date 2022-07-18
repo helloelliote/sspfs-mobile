@@ -13,13 +13,17 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputEditText
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.databinding.FragmentFeatureImageBinding
@@ -30,12 +34,15 @@ import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_D
 import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_E
 import kr.djgis.sspfs.ui.feature.Const.IMAGE_PRESET_F
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
+import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
+import kr.djgis.sspfs.util.alertDialog
+import kr.djgis.sspfs.util.glide
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FeatureImage(val type: String, val position: String) : FeatureTabs() {
+class FeatureImage(val type: String, val position: String) : FeatureTabs(), FeatureAttachmentAdapterListener {
 
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureImageBinding? = null
@@ -44,6 +51,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
     private lateinit var feature: Feature
     private lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
 
+    private lateinit var currentAttachment: FeatureAttachment
+    private lateinit var currentView: View
     private lateinit var photoSharedURI_Q_N_OVER: Uri
     private var reqWidth: Int? = null
     private var reqHeight: Int? = null
@@ -73,12 +82,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
         }
 
         binding.run {
-//            setTableLayoutOnClickListener(fac_typ = type, table = table1)
-
             featureAttachmentAdapter =
-                FeatureAttachmentAdapter(FeatureAttachmentAdapter.OnClickListener { _, attachment ->
-                    takePictureFullSize_Shared(attachment)
-                })
+                FeatureAttachmentAdapter(this@FeatureImage)
             attachmentRecyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
                 adapter = featureAttachmentAdapter
@@ -189,9 +194,45 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
 //            val imgOptions = BitmapFactory.Options()
 //            imgOptions.inSampleSize = inSampleSize
 //            val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
-            val bitmap = data?.extras?.get("data")
-//            glide(bitmap).into(binding.attachmentRecyclerView)
+//            val bitmap = data?.extras?.get("data")
+            requireContext().contentResolver.query(photoSharedURI_Q_N_OVER, null, null, null, null)?.use { cursor ->
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                cursor.moveToFirst()
+                currentAttachment.name = null
+                currentAttachment.name = cursor.getString(nameIndex).removeSuffix(".jpg")
+            }
+            with(currentView) {
+                glide(photoSharedURI_Q_N_OVER, true).into(this.findViewById(R.id.attachment_image) as ImageView)
+                (this.findViewById(R.id.attachment_name) as TextInputEditText).setText(currentAttachment.name)
+            }
         }
+    }
+
+    override fun onClick(view: View, attachment: FeatureAttachment) {
+        view as MaterialCardView
+        currentView = view
+        currentAttachment = attachment
+        takePictureFullSize_Shared(currentAttachment)
+    }
+
+    override fun onLongClick(view: View, attachment: FeatureAttachment): Boolean {
+        alertDialog(
+            title = "사진을 삭제합니까?",
+            message = resources.getString(R.string.feature_image_remove)
+        ).setNegativeButton("취소") { dialog, which ->
+        }.setPositiveButton("삭제") { dialog, which ->
+            feature.img_fac!!.remove(attachment).also {
+                featureAttachmentAdapter.submitList(feature.img_fac)
+                featureAttachmentAdapter.notifyDataSetChanged()
+            }
+        }.show()
+        return true
+    }
+
+    override fun onStarChanged(attachment: FeatureAttachment, newValue: Boolean) {
+    }
+
+    override fun onArchived(attachment: FeatureAttachment) {
     }
 
     override var text = "현장 사진"
@@ -205,7 +246,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
 
     companion object {
         private const val DIRECTORY_FORMAT = "yyyyMMdd"
-        private const val FILENAME_FORMAT = "_yyyyMMdd_HHmmss"
+        private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
         const val REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER = 600//공용공간 Q이상
     }
 }

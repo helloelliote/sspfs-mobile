@@ -16,7 +16,7 @@ import kr.djgis.sspfs.databinding.FeatureAttachmentItemBinding
  * Generic RecyclerView.Adapter to display [FeatureAttachment]s.
  */
 class FeatureAttachmentAdapter(
-    private val listener: OnClickListener,
+    private val listener: FeatureAttachmentAdapterListener,
 ) : ListAdapter<FeatureAttachment, FeatureAttachmentViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeatureAttachmentViewHolder {
@@ -40,12 +40,5 @@ class FeatureAttachmentAdapter(
 
     override fun getItem(position: Int): FeatureAttachment {
         return super.getItem(position)
-    }
-
-    class OnClickListener(val clickListener: (view: View, attachment: FeatureAttachment) -> Unit) {
-        fun onClick(view: View, attachment: FeatureAttachment) = clickListener(view, attachment)
-//        fun onLongPressed(attachment: FeatureAttachment): Boolean
-//        fun onStarChanged(attachment: FeatureAttachment, newValue: Boolean)
-//        fun onArchived(attachment: FeatureAttachment)
     }
 }

@@ -14,10 +14,6 @@
         <variable
             name="featureAttachment"
             type="kr.djgis.sspfs.data.FeatureAttachment" />
-
-        <variable
-            name="listener"
-            type="kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter.OnClickListener" />
     </data>
 
     <androidx.core.widget.NestedScrollView

@@ -13,7 +13,7 @@ import kr.djgis.sspfs.data.FeatureAttachment
  * Generic RecyclerView.ViewHolder which is able to bind layouts which expose a variable for [FeatureAttachment].
  */
 class FeatureAttachmentViewHolder(
-    private val binding: ViewDataBinding, private val listener: FeatureAttachmentAdapter.OnClickListener,
+    private val binding: ViewDataBinding, private val listener: FeatureAttachmentAdapterListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(attachment: FeatureAttachment) {
