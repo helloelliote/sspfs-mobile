@@ -4,6 +4,7 @@
 
 package kr.djgis.sspfs.ui.feature.tabs
 
+import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
@@ -18,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,6 +40,7 @@ import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.glide
+import kr.djgis.sspfs.util.snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,6 +50,16 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureImageBinding? = null
     private val binding get() = _binding!!
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (!it) {
+            snackbar(
+                requireActivity().findViewById(R.id.fab_main),
+                "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
+            ).setAction("확인") {
+            }.show()
+        }
+    }
 
     private lateinit var feature: Feature
     private lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
@@ -62,6 +75,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
 
         reqWidth = resources.getDimensionPixelSize(R.dimen.request_image_width)
         reqHeight = resources.getDimensionPixelSize(R.dimen.request_image_height)
+
+        requestPermissionLauncher.launch(CAMERA)
     }
 
     override fun onCreateView(
@@ -132,9 +147,16 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
     private fun takePictureFullSize_Shared(attachment: FeatureAttachment) {
         val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(requireContext(), attachment)
         fullSizePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-            startActivityForResult(
-                fullSizePictureIntent, REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
-            )
+            try {
+                startActivityForResult(
+                    fullSizePictureIntent, REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER
+                )
+            } catch (e: SecurityException) {
+                snackbar(
+                    requireActivity().findViewById(R.id.fab_main),
+                    "카메라 권한이 허용되지 않아 촬영할 수 없습니다."
+                ).setAction("확인") {}.show()
+            }
         }
     }
 
