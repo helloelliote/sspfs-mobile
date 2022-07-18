@@ -162,7 +162,36 @@ class FeatureFragment : Fragment(), View.OnClickListener {
             }.attach()
 
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
-            glide(args.bitmap).into(backdrop)
+            viewModel.getBitmap().observeOnce(this@FeatureFragment) { glide(it).into(backdrop) }
+        }
+    }
+
+    private fun onSave(exm_chk: String, observer: Observer<JsonElement>) {
+        viewModel.of(args.type!!).value!!.exm_chk = exm_chk
+        viewModel.featurePost(args.type!!).observeOnce(this@FeatureFragment, observer)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.bottomappbar_menu_fragment_feature, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_remove -> {
+                alertDialog(
+                    title = viewModel.of(args.type!!).value!!.fac_nam, message = "해당 소규모 공공시설을 조사대상에서 제외하시겠습니까?"
+                )
+//                    .setNeutralButton("취소") { dialog, which ->
+//                    }
+                    .setNegativeButton("취소") { dialog, which ->
+                    }.setPositiveButton("제외") { dialog, which ->
+                        onSave(EXM_CHK_EXCLUDE) {
+                            requireActivity().onBackPressed()
+                        }
+                    }.show()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

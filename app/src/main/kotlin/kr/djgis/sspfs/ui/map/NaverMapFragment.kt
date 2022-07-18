@@ -42,6 +42,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
+import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.Config.EXTENT_GYEONGJU
 import kr.djgis.sspfs.Config.LATLNG_GYEONGJU
 import kr.djgis.sspfs.R
@@ -302,16 +304,45 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             isHideCollidedSymbols = true
             tag = feature
             onClickListener = markerOnClickListener
+            when (feature.exm_chk) {
+                EXM_CHK_SAVE -> {
+                    icon = MarkerIcons.GRAY
+                    captionColor = WHITE
+                    captionHaloColor = BLACK
+                    subCaptionText = feature.exm_ymd()
+                }
+                EXM_CHK_EXCLUDE -> {
+                    icon = MarkerIcons.GRAY
+                    captionColor = WHITE
+                    captionHaloColor = BLACK
+                    subCaptionText = "선정제외"
+                }
+                else -> {
+                    iconTintColor = tintColor
+                    captionColor = tintColor
+                    captionHaloColor = if (tintColor == RED || tintColor == BLUE) WHITE else BLACK
+                }
+            }
         }
 
     private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
         ArrowheadPathOverlay(line).apply {
-            color = tintColor
             outlineColor = WHITE
             width = 5
             headSizeRatio = 4.5f
             tag = feature.fac_uid
             onClickListener = arrowheadPathOnClickListener
+            when (feature.exm_chk) {
+                EXM_CHK_SAVE -> {
+                    color = GRAY
+                }
+                EXM_CHK_EXCLUDE -> {
+                    color = GRAY
+                }
+                else -> {
+                    color = tintColor
+                }
+            }
         }
 
     /*

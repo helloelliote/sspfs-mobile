@@ -52,8 +52,18 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?,
     ) {
         when (destination.id) {
-            R.id.naverMapFragment, R.id.featureFragment -> {
+            R.id.naverMapFragment -> {
                 binding.apply {
+                    bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
+                    bottomAppBar.visibility = View.VISIBLE
+                    bottomAppBar.performShow(true)
+                    fabMain.show()
+                }
+                showSystemUI()
+            }
+            R.id.featureFragment -> {
+                binding.apply {
+                    bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_feature)
                     bottomAppBar.visibility = View.VISIBLE
                     bottomAppBar.performShow(true)
                     fabMain.show()

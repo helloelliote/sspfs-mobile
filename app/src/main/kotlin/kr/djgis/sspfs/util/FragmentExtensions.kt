@@ -68,6 +68,20 @@ fun Fragment.alertDialog(
         }
 }
 
+fun Fragment.alertDialog(
+    title: String?,
+    message: String?,
+    @DrawableRes drawableInt: Int? = R.drawable.ic_round_help_outline_24,
+): MaterialAlertDialogBuilder {
+    return MaterialAlertDialogBuilder(this.requireContext())
+        .setIcon(ResourcesCompat.getDrawable(resources, drawableInt!!, null))
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(resources.getString(R.string.dialog_close)) { _, _ ->
+            // Respond to positive button press
+        }
+}
+
 fun Fragment.glide(source: Any?, isThumbnail: Boolean = true): GlideRequest<Bitmap> {
     return GlideApp.with(this.requireContext()).asBitmap().load(source).thumbnail(if (isThumbnail) 0.25f else 1.0f)
         .transition(BitmapTransitionOptions.withCrossFade()).centerCrop()
