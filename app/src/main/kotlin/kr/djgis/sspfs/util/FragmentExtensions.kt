@@ -59,7 +59,7 @@ fun Fragment.alertDialog(
     @StringRes message: Int,
     @DrawableRes drawableInt: Int? = R.drawable.ic_round_help_outline_24,
 ): MaterialAlertDialogBuilder {
-    return MaterialAlertDialogBuilder(this.requireContext())
+    return MaterialAlertDialogBuilder(this.requireContext(), R.style.MaterialAlertDialog__Center)
         .setIcon(ResourcesCompat.getDrawable(resources, drawableInt!!, null))
         .setTitle(resources.getString(title))
         .setMessage(resources.getString(message))
@@ -73,7 +73,7 @@ fun Fragment.alertDialog(
     message: String?,
     @DrawableRes drawableInt: Int? = R.drawable.ic_round_help_outline_24,
 ): MaterialAlertDialogBuilder {
-    return MaterialAlertDialogBuilder(this.requireContext())
+    return MaterialAlertDialogBuilder(this.requireContext(), R.style.MaterialAlertDialog__Center)
         .setIcon(ResourcesCompat.getDrawable(resources, drawableInt!!, null))
         .setTitle(title)
         .setMessage(message)

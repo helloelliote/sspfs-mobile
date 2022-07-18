@@ -9,7 +9,7 @@
     <item
         android:id="@+id/action_remove"
         android:icon="@drawable/ic_round_cancel_24"
-        android:title=" 선정제외"
+        android:title=" 조사제외"
         app:showAsAction="ifRoom|withText" />
 <!--    <item
         android:id="@+id/action_maptype"

@@ -57,6 +57,7 @@
     <string name="hint_c2">수혜 구역 (농경지)</string>
 
     <string name="feature_require_fail">필수 정보를 모두 입력해주세요.</string>
+    <string name="feature_exclude">해당 소규모 공공시설을 조사대상에서 제외하시겠습니까?\n(※별도 복구 가능하며, 복구 전까지 현장조사앱에서 표시되지 않습니다)</string>
 
     <string name="dialog_title_a1">시설 명칭</string>
     <string name="dialog_title_f1">시설부속물</string>

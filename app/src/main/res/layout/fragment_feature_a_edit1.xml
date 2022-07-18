@@ -100,7 +100,6 @@
           <EditText
               style="@style/App.TableLayout.EditText"
               android:layout_weight="3"
-              android:inputType="number"
               android:text="@={viewModel.featureA.pos_nam}" />
 
           <Button
