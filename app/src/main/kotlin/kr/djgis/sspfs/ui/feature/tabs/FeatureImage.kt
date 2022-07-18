@@ -167,7 +167,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Companion.REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER && resultCode == Activity.RESULT_OK) {
 //            val options = BitmapFactory.Options()
 //            options.inJustDecodeBounds = true
 //            try {
