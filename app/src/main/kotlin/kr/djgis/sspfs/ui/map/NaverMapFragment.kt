@@ -138,8 +138,9 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             }.moveCamera(scrollAndZoomTo(overlay.position, 18.0).animate(Easing, 250).finishCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
+                        viewModel.setBitmap(bitmap)
                         val directions = NaverMapFragmentDirections.actionToFeatureFragment(
-                            type = feature.fac_typ, bitmap = bitmap, pos = "m"
+                            type = feature.fac_typ, pos = "m"
                         )
                         findNavController().navigate(directions)
                     }

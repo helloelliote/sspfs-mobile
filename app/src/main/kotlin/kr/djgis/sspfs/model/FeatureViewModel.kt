@@ -4,6 +4,7 @@
 
 package kr.djgis.sspfs.model
 
+import android.graphics.Bitmap
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,15 +37,21 @@ class FeatureViewModel : ViewModel() {
     val featureE: LiveData<FeatureE> = _featureE
     val featureF: LiveData<FeatureF> = _featureF
 
-    fun of(fac_typ: String): Feature {
+    private val bitmapStore = MutableLiveData<Bitmap>()
+
+    fun getBitmap() = bitmapStore
+
+    fun setBitmap(bitmap: Bitmap) = bitmapStore.postValue(bitmap)
+
+    fun of(fac_typ: String): LiveData<out Feature> {
         return when (fac_typ) {
-            "A" -> featureA.value!!
-            "B" -> featureB.value!!
-            "C" -> featureC.value!!
-            "D" -> featureD.value!!
-            "E" -> featureE.value!!
-            "F" -> featureF.value!!
-            else -> feature.value!!
+            "A" -> featureA
+            "B" -> featureB
+            "C" -> featureC
+            "D" -> featureD
+            "E" -> featureE
+            "F" -> featureF
+            else -> feature
         }
     }
 

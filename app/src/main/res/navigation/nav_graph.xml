@@ -65,11 +65,6 @@
                 android:defaultValue="@null"
                 app:argType="string"
                 app:nullable="true" />
-            <argument
-                android:name="bitmap"
-                android:defaultValue="@null"
-                app:argType="android.graphics.Bitmap"
-                app:nullable="true" />
         </action>
     </fragment>
 
@@ -103,11 +98,6 @@
         android:name="kr.djgis.sspfs.ui.feature.FeatureFragment"
         android:label="@string/label_feature"
         tools:layout="@layout/fragment_feature">
-        <argument
-            android:name="bitmap"
-            android:defaultValue="@null"
-            app:argType="android.graphics.Bitmap"
-            app:nullable="true" />
         <argument
             android:name="type"
             android:defaultValue="@null"
