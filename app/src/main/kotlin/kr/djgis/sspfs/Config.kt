@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 object Config {
 
-    const val BASE_URL = "http://djgis.iptime.org:5605/"
+    const val BASE_URL = "http://djgis.iptime.org:5604/"
 
     val LATLNG_GYEONGJU: LatLng = LatLng(35.85618, 129.222614)
     val EXTENT_GYEONGJU: LatLngBounds = LatLngBounds(LatLng(35.62, 128.95), LatLng(36.08, 129.56))
