@@ -42,12 +42,12 @@ fun Fragment.snackbar(anchorView: View? = null, message: String?): Snackbar {
     }
 }
 
-fun FloatingActionButton.toggle(
+fun Fragment.toggleFab(
     isEnabled: Boolean = true,
     @ColorRes colorInt: Int? = R.color.teal_A400,
     @DrawableRes drawableInt: Int? = R.drawable.ic_round_content_paste_search_30,
 ): FloatingActionButton {
-    return this.apply {
+    return requireActivity().findViewById<FloatingActionButton>(R.id.fab_main).apply {
         colorInt?.let { backgroundTintList = color(colorInt) }
         drawableInt?.let { setImageDrawable(drawable(drawableInt)) }
         this.isEnabled = isEnabled

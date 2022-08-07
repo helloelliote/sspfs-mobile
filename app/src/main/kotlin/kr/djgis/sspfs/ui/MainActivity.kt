@@ -20,7 +20,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.ActivityMainBinding
-import kr.djgis.sspfs.util.toggle
 import java.io.File
 
 const val KEY_EVENT_ACTION = "key_event_action"
@@ -61,6 +60,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
                 showSystemUI()
             }
+
             R.id.featureFragment -> {
                 binding.apply {
                     bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_feature)
@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
                 showSystemUI()
             }
+
             R.id.placeSearchFragment -> {
                 hideApplicationUI()
                 showSystemUI()
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                 true
             }
+
             else -> super.onKeyDown(keyCode, event)
         }
     }
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onBackPressed() {
         super.onBackPressed()
-        binding.fabMain.toggle()
+        binding.fabMain.isEnabled = true
     }
 
     companion object {
