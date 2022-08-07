@@ -25,6 +25,7 @@
     <!--NaverMapFragment-->
     <string name="map_require_zoom">지도를 더 확대하여 공공시설물을 호출해주세요.</string>
     <string name="map_feature_get_empty">현재 영역에는 소규모 공공시설물이 없습니다.</string>
+    <string name="map_region">행정구역명을 터치하면 해당 행정구역의 전체영역을 표시합니다.</string>
     <string name="map_legend_title">소규모 공공시설 범례</string>
     <string name="map_legend_description">현재 영역에는 소규모 공공시설물이 없습니다.</string>
 

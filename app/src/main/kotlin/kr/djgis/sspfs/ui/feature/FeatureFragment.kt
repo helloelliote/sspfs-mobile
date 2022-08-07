@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -59,8 +60,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 alertDialog(
                     title = viewModel.of(args.type).value!!.fac_nam,
                     message = resources.getString(R.string.feature_back)
-                ).setNegativeButton("취소") { dialog, which ->
-                }.setPositiveButton("나가기") { dialog, which ->
+                ).setNegativeButton("취소") { _, _ ->
+                }.setPositiveButton("나가기") { _, _ ->
                     isEnabled = false
                     activity?.onBackPressed()
                 }.show()
@@ -251,8 +252,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 alertDialog(
                     title = viewModel.of(args.type).value!!.fac_nam,
                     message = resources.getString(R.string.feature_exclude)
-                ).setNegativeButton("취소") { dialog, which ->
-                }.setPositiveButton("제외") { dialog, which ->
+                ).setNegativeButton("취소") { _, _ ->
+                }.setPositiveButton("제외") { _, _ ->
                     onSave(EXM_CHK_EXCLUDE) {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
@@ -307,5 +308,13 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private class FragmentPagerAdapter(fragment: Fragment, val tabs: List<Fragment>) :
+        FragmentStateAdapter(fragment) {
+
+        override fun getItemCount(): Int = tabs.size
+
+        override fun createFragment(position: Int): Fragment = tabs[position]
     }
 }

@@ -468,6 +468,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                 }
+                snackbar(fab, R.string.map_region).setAction("확인") {}.show()
                 return true
             }
 
