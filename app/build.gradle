@@ -54,7 +54,7 @@ android {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     implementation "androidx.core:core-ktx:1.8.0"
     implementation 'androidx.appcompat:appcompat:1.4.2'
@@ -85,12 +85,6 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
-
-    // CameraX
-    implementation "androidx.camera:camera-core:$camerax_version"
-    implementation "androidx.camera:camera-lifecycle:$camerax_version"
-    implementation "androidx.camera:camera-view:$camerax_version"
-    implementation "androidx.camera:camera-extensions:$camerax_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -74,10 +74,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 hideApplicationUI()
                 showSystemUI()
             }
-            R.id.cameraFragment, R.id.cameraXFragment -> {
-                hideApplicationUI()
-                hideSystemUI()
-            }
+
             else -> {}
         }
     }

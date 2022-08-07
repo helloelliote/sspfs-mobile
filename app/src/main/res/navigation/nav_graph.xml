@@ -108,41 +108,5 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_to_cameraFragment"
-            app:destination="@id/cameraFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/action_to_cameraXFragment"
-            app:destination="@id/cameraXFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" >
-            <argument
-                android:name="feature"
-                android:defaultValue="@null"
-                app:argType="kr.djgis.sspfs.data.Feature"
-                app:nullable="true" />
-        </action>
-    </fragment>
-
-    <fragment
-        android:id="@+id/cameraFragment"
-        android:name="kr.djgis.sspfs.camera.CameraFragment"
-        android:label="@string/label_camera" />
-
-    <fragment
-        android:id="@+id/cameraXFragment"
-        android:name="kr.djgis.sspfs.camera.CameraXFragment"
-        android:label="@string/label_camerax" >
-        <argument
-            android:name="feature"
-            android:defaultValue="@null"
-            app:argType="kr.djgis.sspfs.data.Feature"
-            app:nullable="true" />
     </fragment>
 </navigation>
