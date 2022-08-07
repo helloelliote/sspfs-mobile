@@ -6,6 +6,7 @@ package kr.djgis.sspfs.model
 
 import android.graphics.Bitmap
 import androidx.lifecycle.*
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.data.*
@@ -16,7 +17,10 @@ import kr.djgis.sspfs.network.Moshi.moshiFeatureDList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureEList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureFList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureList
+import kr.djgis.sspfs.network.Moshi.moshiRegionList
 import kr.djgis.sspfs.network.RetrofitClient
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
 
 class FeatureViewModel : ViewModel() {
 
@@ -95,26 +99,32 @@ class FeatureViewModel : ViewModel() {
                     val featureList = moshiFeatureAList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 "B" -> {
                     val featureList = moshiFeatureBList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 "C" -> {
                     val featureList = moshiFeatureCList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 "D" -> {
                     val featureList = moshiFeatureDList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 "E" -> {
                     val featureList = moshiFeatureEList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 "F" -> {
                     val featureList = moshiFeatureFList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
                 }
+
                 else -> {
                     val featureList = moshiFeatureFList.fromJson(jsonObject.toString())
                     emit(featureList!!.features.first())
@@ -123,7 +133,7 @@ class FeatureViewModel : ViewModel() {
         }
     }
 
-    fun featurePost(fac_typ: String) = liveData {
+    fun featurePost(fac_typ: String, multipartBody: List<MultipartBody.Part?>) = liveData {
         withContext(Dispatchers.IO) {
             val feature = when (fac_typ) {
                 "A" -> featureA.value!!
@@ -134,7 +144,8 @@ class FeatureViewModel : ViewModel() {
                 "F" -> featureF.value!!
                 else -> feature.value!!
             }
-            val jsonElement = retrofit.featurePost(feature.fac_uid!!, feature)
+            val jsonBody = createFormData("json", Gson().toJson(feature).toString())
+            val jsonElement = retrofit.featurePost(feature.fac_uid!!, jsonBody, multipartBody)
             emit(jsonElement)
         }
     }

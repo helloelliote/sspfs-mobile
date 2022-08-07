@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
+import kr.djgis.sspfs.Config.BASE_URL
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.databinding.FragmentFeatureImageBinding
@@ -41,6 +42,7 @@ import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.snackbar
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,16 +52,6 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureImageBinding? = null
     private val binding get() = _binding!!
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (!it) {
-            snackbar(
-                requireActivity().findViewById(R.id.fab_main),
-                "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
-            ).setAction("확인") {
-            }.show()
-        }
-    }
 
     private lateinit var feature: Feature
     private lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
@@ -75,6 +67,16 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
 
         reqWidth = resources.getDimensionPixelSize(R.dimen.request_image_width)
         reqHeight = resources.getDimensionPixelSize(R.dimen.request_image_height)
+
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                snackbar(
+                    requireActivity().findViewById(R.id.fab_main),
+                    "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
+                ).setAction("확인") {
+                }.show()
+            }
+        }
 
         requestPermissionLauncher.launch(CAMERA)
     }
@@ -171,7 +173,8 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
         val contentValues = ContentValues()
         contentValues.put(
-            MediaStore.MediaColumns.DISPLAY_NAME, "${feature.fac_uid}_${timeStamp}_${attachment.name}.jpg"
+            MediaStore.MediaColumns.DISPLAY_NAME,
+            "${feature.fac_uid}_${timeStamp}_${attachment.name?.substringAfterLast("_")}.jpg"
         )
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
         //'RELATIVE_PATH', RequiresApi Q
@@ -221,7 +224,9 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
                 val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 cursor.moveToFirst()
                 currentAttachment.name = null
-                currentAttachment.name = cursor.getString(nameIndex).removeSuffix(".jpg")
+                currentAttachment.name = cursor.getString(nameIndex)
+                currentAttachment.uri = photoSharedURI_Q_N_OVER
+                currentAttachment.url = URL("${BASE_URL}api/images/${currentAttachment.name}").toString()
             }
             with(currentView) {
                 glide(photoSharedURI_Q_N_OVER, true).into(this.findViewById(R.id.attachment_image) as ImageView)
@@ -230,13 +235,16 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onClick(view: View, attachment: FeatureAttachment) {
+        if (attachment.url != null) return
         view as MaterialCardView
         currentView = view
         currentAttachment = attachment
         takePictureFullSize_Shared(currentAttachment)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onLongClick(view: View, attachment: FeatureAttachment): Boolean {
         alertDialog(
             title = "사진을 삭제합니까?",

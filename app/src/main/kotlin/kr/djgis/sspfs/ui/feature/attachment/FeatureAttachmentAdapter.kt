@@ -5,10 +5,9 @@
 package kr.djgis.sspfs.ui.feature.attachment
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import kr.djgis.sspfs.data.DiffCallback
 import kr.djgis.sspfs.data.FeatureAttachment
 import kr.djgis.sspfs.databinding.FeatureAttachmentItemBinding
 
@@ -17,14 +16,22 @@ import kr.djgis.sspfs.databinding.FeatureAttachmentItemBinding
  */
 class FeatureAttachmentAdapter(
     private val listener: FeatureAttachmentAdapterListener,
-) : ListAdapter<FeatureAttachment, FeatureAttachmentViewHolder>(DiffCallback()) {
+) : ListAdapter<FeatureAttachment, FeatureAttachmentViewHolder>(DiffCallback) {
+
+    object DiffCallback : DiffUtil.ItemCallback<FeatureAttachment>() {
+        override fun areItemsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
+            return oldItem.url == newItem.url
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeatureAttachmentViewHolder {
         return FeatureAttachmentViewHolder(
             FeatureAttachmentItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             ),
             listener,
         )
@@ -32,13 +39,5 @@ class FeatureAttachmentAdapter(
 
     override fun onBindViewHolder(holder: FeatureAttachmentViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
-    override fun getItem(position: Int): FeatureAttachment {
-        return super.getItem(position)
     }
 }

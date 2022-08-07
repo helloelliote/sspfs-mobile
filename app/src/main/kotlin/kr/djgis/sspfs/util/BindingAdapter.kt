@@ -23,6 +23,7 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.google.android.material.elevation.ElevationOverlayProvider
 import kr.djgis.sspfs.R
+import kr.djgis.sspfs.data.FeatureAttachment
 
 @BindingAdapter(
     "popupElevationOverlay"
@@ -68,15 +69,15 @@ fun TextView.bindDrawables(
     requireAll = false
 )
 fun ImageView.bindGlideSrc(
-    imageUrl: String?,
+    image: FeatureAttachment?,
     centerCrop: Boolean = false,
     circularCrop: Boolean = false,
 ) {
-    if (imageUrl == null) return
+    if (image == null) return
 
     createGlideRequest(
         context,
-        imageUrl,
+        image,
         centerCrop,
         circularCrop
     ).into(this)
@@ -85,13 +86,13 @@ fun ImageView.bindGlideSrc(
 @SuppressLint("CheckResult")
 private fun createGlideRequest(
     context: Context,
-    imageUrl: String,
+    image: FeatureAttachment,
     centerCrop: Boolean,
     circularCrop: Boolean,
 ): RequestBuilder<Drawable> {
     val req = GlideApp.with(context)
-        .load(imageUrl)
-        .error(R.drawable.ic_round_wifi_off_96)
+        .load(image.url)
+        .error(if (image.uri != null) image.uri else R.drawable.ic_round_add_a_photo_96)
         .thumbnail(0.25f)
         .transition(withCrossFade())
     if (centerCrop) req.centerCrop()

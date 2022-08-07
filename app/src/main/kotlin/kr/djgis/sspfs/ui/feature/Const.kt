@@ -14,7 +14,7 @@ object Const {
         "철근노출부식현황",
         "교각교대세굴피해현황",
         "날개벽현황",
-        "",
+        "기타",
     )
 
     val IMAGE_PRESET_B = listOf(
@@ -26,7 +26,7 @@ object Const {
         "종점부세부현황",
         "피해시영향범위현황",
         "주택마을인접도현황",
-        "",
+        "기타",
     )
 
     val IMAGE_PRESET_C = listOf(
@@ -38,7 +38,7 @@ object Const {
         "구조몰하류방향현황",
         "어도현황",
         "기계장치수문현황",
-        "",
+        "기타",
     )
 
     val IMAGE_PRESET_D = listOf(
@@ -50,7 +50,7 @@ object Const {
         "구조몰하류방향현황",
         "어도현황",
         "기계장치수문현황",
-        "",
+        "기타",
     )
 
     val IMAGE_PRESET_E = listOf(
@@ -62,7 +62,7 @@ object Const {
         "종점부세부현황",
         "단절시영향범위현황",
         "주택마을인접도현황",
-        ","
+        "기타",
     )
 
     val IMAGE_PRESET_F = listOf(
@@ -74,6 +74,6 @@ object Const {
         "종점부세부현황",
         "단절시영향범위현황",
         "주택마을인접도현황",
-        ","
+        "기타",
     )
 }

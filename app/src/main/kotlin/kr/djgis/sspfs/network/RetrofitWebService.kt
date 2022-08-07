@@ -24,10 +24,12 @@ interface RetrofitWebService {
         @Query("fac_uid") fac_uid: String,
     ): JsonObject
 
-    @POST("/api/feature/{fac_uid}")
+    @Multipart
+    @POST("api/feature/{fac_uid}")
     suspend fun featurePost(
         @Path(value = "fac_uid", encoded = true) fac_uid: String,
-        @Body requestBody: Any,
+        @Part jsonBody: MultipartBody.Part,
+        @Part multipartBody: List<MultipartBody.Part?>,
     ): JsonElement
 
     @GET("api/region")

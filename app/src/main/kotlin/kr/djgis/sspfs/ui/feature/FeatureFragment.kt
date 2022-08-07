@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -22,15 +21,18 @@ import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.network.RetrofitProgress
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.observeOnce
-import kr.djgis.sspfs.util.toggle
+import kr.djgis.sspfs.util.toggleFab
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
 
 @DelicateCoroutinesApi
-class FeatureFragment : Fragment(), View.OnClickListener {
+class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -210,15 +212,31 @@ class FeatureFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun onSave(exm_chk: String, observer: Observer<JsonElement>) {
-        viewModel.of(args.type!!).value!!.exm_chk = exm_chk
-        viewModel.featurePost(args.type!!).observeOnce(this@FeatureFragment, observer)
+    private fun onSave(chk: String, observer: Observer<JsonElement>) {
+        val parts = mutableListOf<MultipartBody.Part>()
+        viewModel.of(args.type).value?.apply {
+            img_fac!!.forEach { attachment ->
+                if (attachment.uri == null) {
+                    return@forEach
+                } else {
+                    val part = createFormData(
+                        "files",
+                        attachment.name,
+                        RetrofitProgress(requireContext(), attachment.uri!!, "image", this@FeatureFragment)
+                    )
+                    parts.add(part)
+                }
+            }
+            exm_chk = chk
+        }
+        viewModel.featurePost(args.type, parts).observeOnce(this@FeatureFragment, observer)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.bottomappbar_menu_fragment_feature, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_remove -> {
@@ -233,19 +251,9 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 }.show()
                 return true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        requireActivity().findViewById<FloatingActionButton>(R.id.fab_main)
-            .toggle(true, R.color.light_green_A200, R.drawable.ic_round_save_30).setOnClickListener(this)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onClick(p0: View) {
@@ -256,5 +264,37 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    override fun onInitiate(percentage: Int) {
+        toggleFab(false, R.color.light_green_A200, R.drawable.ic_round_save_30)
+        binding.progressCircular.setProgressCompat(percentage, true)
+    }
+
+    override fun onProgress(percentage: Int) {
+        binding.progressCircular.setProgressCompat(percentage, true)
+    }
+
+    override fun onError() {
+        binding.progressCircular.apply {
+            setProgressCompat(100, true)
+            setIndicatorColor(resources.getColor(R.color.deep_orange_A400, null))
+        }
+        toggleFab(true)
+    }
+
+    override fun onFinish(percentage: Int) {
+        binding.progressCircular.setProgressCompat(100, true)
+        toggleFab(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        toggleFab(true, R.color.light_green_A200, R.drawable.ic_round_save_30).setOnClickListener(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
