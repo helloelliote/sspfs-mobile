@@ -13,6 +13,7 @@ data class FeatureGeom(
             list[0].add(point)
             list
         }
+
         "LineString" -> {
             val list = mutableListOf(mutableListOf<LatLng>())
             @Suppress("UNCHECKED_CAST") val points = coordinates as List<List<Double>>
@@ -22,6 +23,7 @@ data class FeatureGeom(
             }
             list
         }
+
         "MultiLineString" -> {
             val list = mutableListOf(mutableListOf<LatLng>())
             @Suppress("UNCHECKED_CAST") val lines = coordinates as List<List<List<Double>>>
@@ -35,6 +37,21 @@ data class FeatureGeom(
             }
             list.filter { it.size > 1 }
         }
+
+        "MultiPolygon" -> {
+            val list = mutableListOf(mutableListOf<LatLng>())
+            @Suppress("UNCHECKED_CAST") val polygons = coordinates as List<List<List<List<Double>>>>
+            polygons[0].forEach { polygon ->
+                val points = mutableListOf<LatLng>()
+                polygon.forEach {
+                    val point = LatLng(it[1], it[0])
+                    points.add(point)
+                }
+                list.add(points)
+            }
+            list.filter { it.size > 1 }
+        }
+
         else -> listOf()
     }
 }

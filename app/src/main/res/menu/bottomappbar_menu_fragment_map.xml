@@ -12,6 +12,11 @@
     <!--            android:title=""-->
     <!--            app:showAsAction="ifRoom|withText" />-->
     <item
+        android:id="@+id/action_region"
+        android:icon="@drawable/ic_baseline_share_location_24"
+        android:title=" 행정구역경계"
+        app:showAsAction="ifRoom|withText" />
+    <item
         android:id="@+id/action_maptype"
         android:icon="@drawable/ic_round_airplanemode_active_24"
         android:title=" 지도전환"

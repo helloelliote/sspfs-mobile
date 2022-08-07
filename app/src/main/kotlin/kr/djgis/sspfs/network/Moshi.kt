@@ -49,4 +49,7 @@ object Moshi {
 
     val moshiFeatureFList: JsonAdapter<FeatureFList> =
         moshiBuilder.adapter(FeatureFList::class.java).serializeNulls()
+
+    val moshiRegionList: JsonAdapter<RegionList> =
+        moshiBuilder.adapter(RegionList::class.java).serializeNulls()
 }

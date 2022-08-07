@@ -139,17 +139,25 @@ class FeatureViewModel : ViewModel() {
         }
     }
 
-/*    suspend fun fromLatLng(feature: Feature): String? {
-        val latLng = feature.geom!!.latLngs[0][0] // FIXME: 시점이 아닌 중점으로 검색할 수 있는 방법
-        val jsonObject = retrofit.kakaoCoord2Address(latLng.longitude, latLng.latitude)
-        val coord2Address = Moshi.moshiCoord2Address.fromJson(jsonObject.toString())
-        return coord2Address?.let { (documents, meta) ->
-            when (meta.total_count) {
-                1 -> documents[0].address.address_name
-                else -> "주소 정보 없음"
-            }
+    fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
+        withContext(Dispatchers.IO) {
+            val jsonObject = retrofit.regionsGet(xmin, ymin, xmax, ymax)
+            val regionList = moshiRegionList.fromJson(jsonObject.toString())
+            emit(regionList!!)
         }
-    }*/
+    }
+
+    /*    suspend fun fromLatLng(feature: Feature): String? {
+            val latLng = feature.geom!!.latLngs[0][0] // FIXME: 시점이 아닌 중점으로 검색할 수 있는 방법
+            val jsonObject = retrofit.kakaoCoord2Address(latLng.longitude, latLng.latitude)
+            val coord2Address = Moshi.moshiCoord2Address.fromJson(jsonObject.toString())
+            return coord2Address?.let { (documents, meta) ->
+                when (meta.total_count) {
+                    1 -> documents[0].address.address_name
+                    else -> "주소 정보 없음"
+                }
+            }
+        }*/
 }
 
 object FeatureVMFactory : ViewModelProvider.Factory {

@@ -29,4 +29,12 @@ interface RetrofitWebService {
         @Path(value = "fac_uid", encoded = true) fac_uid: String,
         @Body requestBody: Any,
     ): JsonElement
+
+    @GET("api/region")
+    suspend fun regionsGet(
+        @Query("xmin") xmin: Double,
+        @Query("ymin") ymin: Double,
+        @Query("xmax") xmax: Double,
+        @Query("ymax") ymax: Double,
+    ): JsonObject
 }
