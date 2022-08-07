@@ -57,9 +57,8 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="type"
-                android:defaultValue="@null"
                 app:argType="string"
-                app:nullable="true" />
+                app:nullable="false" />
             <argument
                 android:name="pos"
                 android:defaultValue="@null"
@@ -100,9 +99,8 @@
         tools:layout="@layout/fragment_feature">
         <argument
             android:name="type"
-            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="false" />
         <argument
             android:name="pos"
             android:defaultValue="@null"

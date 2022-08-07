@@ -63,9 +63,10 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                 this@FeatureFragment, listOf(
                     FeatureAEdit1(),
                     FeatureAEdit2(),
-                    FeatureImage(args.type!!, args.pos!!),
+                    FeatureImage(args.type, args.pos!!),
                 )
             )
+
             "B" -> {
                 FragmentPagerAdapter(
                     this@FeatureFragment, when (args.pos) {
@@ -74,6 +75,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureBEdit2L(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         "m" -> listOf(
                             FeatureBEdit1U(),
                             FeatureBEdit2U(),
@@ -81,31 +83,36 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureBEdit2M(),
                             FeatureBEdit1L(),
                             FeatureBEdit2L(),
-                            FeatureImage(args.type!!, args.pos!!),
+                            FeatureImage(args.type, args.pos!!),
                         )
+
                         "u" -> listOf(
                             FeatureBEdit1U(),
                             FeatureBEdit2U(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         else -> listOf()
                     }
                 )
             }
+
             "C" -> FragmentPagerAdapter(
                 this@FeatureFragment, listOf(
                     FeatureCEdit1(),
                     FeatureCEdit2(),
-                    FeatureImage(args.type!!, args.pos!!),
+                    FeatureImage(args.type, args.pos!!),
                 )
             )
+
             "D" -> FragmentPagerAdapter(
                 this@FeatureFragment, listOf(
                     FeatureDEdit1(),
                     FeatureDEdit2(),
-                    FeatureImage(args.type!!, args.pos!!),
+                    FeatureImage(args.type, args.pos!!),
                 )
             )
+
             "E" -> {
                 FragmentPagerAdapter(
                     this@FeatureFragment, when (args.pos) {
@@ -114,6 +121,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureEEdit2L(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         "m" -> listOf(
                             FeatureEEdit1U(),
                             FeatureEEdit2U(),
@@ -121,17 +129,20 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureEEdit2M(),
                             FeatureEEdit1L(),
                             FeatureEEdit2L(),
-                            FeatureImage(args.type!!, args.pos!!),
+                            FeatureImage(args.type, args.pos!!),
                         )
+
                         "u" -> listOf(
                             FeatureEEdit1U(),
                             FeatureEEdit2U(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         else -> listOf()
                     }
                 )
             }
+
             "F" -> {
                 FragmentPagerAdapter(
                     this@FeatureFragment, when (args.pos) {
@@ -140,6 +151,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureFEdit2L(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         "m" -> listOf(
                             FeatureFEdit1U(),
                             FeatureFEdit2U(),
@@ -147,17 +159,20 @@ class FeatureFragment : Fragment(), View.OnClickListener {
                             FeatureFEdit2M(),
                             FeatureFEdit1L(),
                             FeatureFEdit2L(),
-                            FeatureImage(args.type!!, args.pos!!),
+                            FeatureImage(args.type, args.pos!!),
                         )
+
                         "u" -> listOf(
                             FeatureFEdit1U(),
                             FeatureFEdit2U(),
 //                            FeatureImage(args.type!!, args.pos!!),
                         )
+
                         else -> listOf()
                     }
                 )
             }
+
             else -> FragmentPagerAdapter(this@FeatureFragment, listOf())
         }
     }
@@ -208,7 +223,7 @@ class FeatureFragment : Fragment(), View.OnClickListener {
         return when (item.itemId) {
             R.id.action_remove -> {
                 alertDialog(
-                    title = viewModel.of(args.type!!).value!!.fac_nam,
+                    title = viewModel.of(args.type).value!!.fac_nam,
                     message = resources.getString(R.string.feature_exclude)
                 ).setNegativeButton("취소") { dialog, which ->
                 }.setPositiveButton("제외") { dialog, which ->
