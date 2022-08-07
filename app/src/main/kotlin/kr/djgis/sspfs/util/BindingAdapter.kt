@@ -91,8 +91,8 @@ private fun createGlideRequest(
     circularCrop: Boolean,
 ): RequestBuilder<Drawable> {
     val req = GlideApp.with(context)
-        .load(image.url)
-        .error(if (image.uri != null) image.uri else R.drawable.ic_round_add_a_photo_96)
+        .load(image.uri)
+        .error(if (image.url != null) image.url else R.drawable.ic_round_add_a_photo_96)
         .thumbnail(0.25f)
         .transition(withCrossFade())
     if (centerCrop) req.centerCrop()

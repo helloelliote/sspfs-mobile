@@ -241,20 +241,16 @@
               style="@style/App.TableLayout.Label"
               android:text="연장" />
 
-          <EditText
-              style="@style/App.TableLayout.EditText"
-              android:hint="0m"
-              android:inputType="numberDecimal"
+          <TextView
+              style="@style/App.TableLayout.TextView"
               android:text="@={viewModel.featureF.fac_len}" />
 
           <Button
               style="@style/App.TableLayout.Label"
               android:text="평균폭" />
 
-          <EditText
-              style="@style/App.TableLayout.EditText"
-              android:hint="0m"
-              android:inputType="numberDecimal"
+          <TextView
+              style="@style/App.TableLayout.TextView"
               android:text="@={viewModel.featureF.fac_wid}" />
 
         </TableRow>

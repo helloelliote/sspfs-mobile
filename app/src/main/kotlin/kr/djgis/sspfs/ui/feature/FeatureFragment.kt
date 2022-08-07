@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
@@ -55,8 +56,14 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                isEnabled = false
-                activity?.onBackPressed()
+                alertDialog(
+                    title = viewModel.of(args.type).value!!.fac_nam,
+                    message = resources.getString(R.string.feature_back)
+                ).setNegativeButton("취소") { dialog, which ->
+                }.setPositiveButton("나가기") { dialog, which ->
+                    isEnabled = false
+                    activity?.onBackPressed()
+                }.show()
             }
         })
 
@@ -247,7 +254,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 ).setNegativeButton("취소") { dialog, which ->
                 }.setPositiveButton("제외") { dialog, which ->
                     onSave(EXM_CHK_EXCLUDE) {
-                        requireActivity().onBackPressed()
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
                     }
                 }.show()
                 return true
@@ -261,7 +269,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         when (p0.id) {
             R.id.fab_main -> {
                 onSave(EXM_CHK_SAVE) {
-                    requireActivity().onBackPressed()
+                    val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                    findNavController().navigate(directions)
                 }
             }
         }

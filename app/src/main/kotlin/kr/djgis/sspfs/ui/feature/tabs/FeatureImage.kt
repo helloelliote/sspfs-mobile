@@ -18,10 +18,10 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -102,7 +102,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
             featureAttachmentAdapter =
                 FeatureAttachmentAdapter(this@FeatureImage)
             attachmentRecyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+                layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, true)
                 adapter = featureAttachmentAdapter
                 addItemDecoration(FeatureAttachmentDecoration())
             }
@@ -137,6 +137,10 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
                         feature.img_fac!!.add(FeatureAttachment(null, txt, "preset")).also {
                             featureAttachmentAdapter.submitList(feature.img_fac)
                             featureAttachmentAdapter.notifyDataSetChanged()
+                        }.also {
+                            currentView = binding.attachmentRecyclerView.children.last() as MaterialCardView
+                            currentAttachment = featureAttachmentAdapter.currentList.last()
+                            takePicture(currentAttachment)
                         }
                     }
                 }
@@ -146,7 +150,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun takePictureFullSize_Shared(attachment: FeatureAttachment) {
+    private fun takePicture(attachment: FeatureAttachment) {
         val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(requireContext(), attachment)
         fullSizePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
             try {
@@ -194,6 +198,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         return fullSizeCaptureIntent
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -223,14 +228,18 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
             requireContext().contentResolver.query(photoSharedURI_Q_N_OVER, null, null, null, null)?.use { cursor ->
                 val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 cursor.moveToFirst()
-                currentAttachment.name = null
-                currentAttachment.name = cursor.getString(nameIndex)
-                currentAttachment.uri = photoSharedURI_Q_N_OVER
-                currentAttachment.url = URL("${BASE_URL}api/images/${currentAttachment.name}").toString()
+                currentAttachment.apply {
+                    name = null
+                    name = cursor.getString(nameIndex)
+                    uri = photoSharedURI_Q_N_OVER
+                    url = URL("${BASE_URL}api/images/${currentAttachment.name}").toString()
+                }
             }
             with(currentView) {
-                glide(photoSharedURI_Q_N_OVER, true).into(this.findViewById(R.id.attachment_image) as ImageView)
-                (this.findViewById(R.id.attachment_name) as TextInputEditText).setText(currentAttachment.name)
+                findViewById<TextInputEditText>(R.id.attachment_name).setText(currentAttachment.name)
+                glide(photoSharedURI_Q_N_OVER, true).into(findViewById(R.id.attachment_image))
+            }.also {
+                featureAttachmentAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -241,7 +250,7 @@ class FeatureImage(val type: String, val position: String) : FeatureTabs(), Feat
         view as MaterialCardView
         currentView = view
         currentAttachment = attachment
-        takePictureFullSize_Shared(currentAttachment)
+        takePicture(currentAttachment)
     }
 
     @SuppressLint("NotifyDataSetChanged")
