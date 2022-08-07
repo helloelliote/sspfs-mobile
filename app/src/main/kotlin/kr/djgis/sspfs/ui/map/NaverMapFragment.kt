@@ -77,9 +77,6 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) {
-        naverMap.locationTrackingMode = if (it) NoFollow else None
-    }
 
     @Suppress("DEPRECATION")
     private val naverMapPadding: Int by lazy {
@@ -159,11 +156,12 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
+        registerForActivityResult(RequestPermission()) {}.launch(ACCESS_FINE_LOCATION)
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
         executor = Executors.newCachedThreadPool()
         handler = Handler(Looper.getMainLooper())
         sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     override fun onCreateView(
@@ -212,7 +210,6 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
-        requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
         naverMap.locationSource = locationSource
         naverMap.addOnCameraIdleListener { onCameraIdle() }
 
