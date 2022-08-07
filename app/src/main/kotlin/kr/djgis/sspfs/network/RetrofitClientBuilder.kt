@@ -6,6 +6,7 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.GsonBuilder
 import kr.djgis.sspfs.BuildConfig
+import kr.djgis.sspfs.Config.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
@@ -17,7 +18,7 @@ object RetrofitClientBuilder {
 
     val webService: RetrofitWebService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://djgis.iptime.org:5604")
+            .baseUrl(BASE_URL)
             .client(okHttpClient())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
             .create(RetrofitWebService::class.java)
