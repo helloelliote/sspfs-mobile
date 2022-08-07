@@ -213,6 +213,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
     }
 
     private fun onSave(chk: String, observer: Observer<JsonElement>) {
+        binding.viewPagerCover.visibility = View.VISIBLE
         val parts = mutableListOf<MultipartBody.Part>()
         viewModel.of(args.type).value?.apply {
             img_fac!!.forEach { attachment ->
@@ -272,6 +273,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
     }
 
     override fun onProgress(percentage: Int) {
+        binding.progressText.text = getString(R.string.progress_percentage, percentage)
         binding.progressCircular.setProgressCompat(percentage, true)
     }
 

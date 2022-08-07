@@ -36,7 +36,7 @@ object RetrofitClientBuilder {
         val builder = OkHttpClient.Builder()
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = if (BuildConfig.DEBUG) BODY else NONE
-        builder.addInterceptor(interceptor)
+//        builder.addInterceptor(interceptor)
         builder.build()
     }
 }

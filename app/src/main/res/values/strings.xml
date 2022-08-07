@@ -58,6 +58,7 @@
 
     <string name="feature_require_fail">필수 정보를 모두 입력해주세요.</string>
     <string name="feature_exclude">해당 소규모 공공시설을 조사대상에서 제외하시겠습니까?\n(※별도 복구 가능하며, 복구 전까지 현장조사앱에서 표시되지 않습니다)</string>
+    <string name="feature_back">해당 소규모 공공시설 조사내용을 저장하지 않고 조사화면에서 나가시겠습니까?</string>
     <string name="feature_image_remove">※로컬 모바일기기의 갤러리에는 유지됩니다.</string>
 
     <string name="dialog_title_a1">시설 명칭</string>
@@ -73,6 +74,8 @@
     <string name="button_camera">카메라</string>
 
     <string name="helper_text_autocomplete">사전입력된 정보입니다</string>
+
+    <string name="progress_percentage">%1$d %%</string>
 
     <!--GalleryFragment-->
     <string name="delete_dialog">Delete current photo?</string>

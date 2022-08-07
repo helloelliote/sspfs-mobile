@@ -57,15 +57,32 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <FrameLayout
+            android:id="@+id/view_pager_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.75"
+            android:background="@color/grey_800"
+            android:visibility="gone" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_circular"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminateOnly="false"
-            app:indicatorColor="@color/purple_A700"
-            app:indicatorSize="100dp"
+            app:indicatorColor="@color/light_green_A700"
+            app:indicatorSize="200dp"
             app:trackColor="@android:color/transparent"
-            app:trackThickness="12dp" />
+            app:trackThickness="10dp" />
+
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/light_green_A700"
+            android:textSize="40sp"
+            android:textStyle="bold" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
