@@ -43,7 +43,7 @@ open class Feature : Serializable {
     var exm_ymd: String? = null
     var exm_nam: String? = null
     var exm_chk: String? = null
-    var img_fac: MutableList<FeatureAttachment>? = null
+    var img_fac: MutableList<FeatureAttachment> = mutableListOf()
     var img_rep: String? = null
     var geom: FeatureGeom? = null
 

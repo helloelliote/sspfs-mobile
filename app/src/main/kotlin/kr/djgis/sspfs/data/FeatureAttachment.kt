@@ -13,7 +13,7 @@ import java.io.Serializable
 data class FeatureAttachment(
     var url: String?,
     var name: String?,
-    val type: String,
+    val type: String?,
     @Json(ignore = true)
     @Transient var uri: Uri? = null,
 ) : Serializable

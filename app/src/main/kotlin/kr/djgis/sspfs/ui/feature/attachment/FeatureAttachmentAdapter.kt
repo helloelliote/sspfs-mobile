@@ -18,16 +18,6 @@ class FeatureAttachmentAdapter(
     private val listener: FeatureAttachmentAdapterListener,
 ) : ListAdapter<FeatureAttachment, FeatureAttachmentViewHolder>(DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<FeatureAttachment>() {
-        override fun areItemsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
-            return oldItem.url == newItem.url
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeatureAttachmentViewHolder {
         return FeatureAttachmentViewHolder(
             FeatureAttachmentItemBinding.inflate(
@@ -39,5 +29,15 @@ class FeatureAttachmentAdapter(
 
     override fun onBindViewHolder(holder: FeatureAttachmentViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+}
+
+object DiffCallback : DiffUtil.ItemCallback<FeatureAttachment>() {
+    override fun areItemsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: FeatureAttachment, newItem: FeatureAttachment): Boolean {
+        return oldItem.url == newItem.url
     }
 }

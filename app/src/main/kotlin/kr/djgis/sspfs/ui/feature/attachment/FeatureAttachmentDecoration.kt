@@ -12,6 +12,6 @@ class FeatureAttachmentDecoration : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.set(10, 0, 10, 20)
+        outRect.set(5, 0, 5, 10)
     }
 }

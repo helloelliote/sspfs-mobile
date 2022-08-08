@@ -134,13 +134,9 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                     text = txt
                     icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_round_add_24, null)
                     setOnClickListener {
-                        feature.img_fac!!.add(FeatureAttachment(null, txt, "preset")).also {
+                        feature.img_fac.add(FeatureAttachment(null, txt, "preset")).also {
                             featureAttachmentAdapter.submitList(feature.img_fac)
                             featureAttachmentAdapter.notifyDataSetChanged()
-                        }.also {
-                            currentView = binding.attachmentRecyclerView.children.last() as MaterialCardView
-                            currentAttachment = featureAttachmentAdapter.currentList.last()
-                            takePicture(currentAttachment)
                         }
                     }
                 }
@@ -232,7 +228,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                     name = null
                     name = cursor.getString(nameIndex)
                     uri = photoSharedURI_Q_N_OVER
-                    url = URL("${BASE_URL}api/images/${currentAttachment.name}").toString()
+                    url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
                 }
             }
             with(currentView) {
@@ -260,7 +256,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
             message = resources.getString(R.string.feature_image_remove)
         ).setNegativeButton("취소") { dialog, which ->
         }.setPositiveButton("삭제") { dialog, which ->
-            feature.img_fac!!.remove(attachment).also {
+            feature.img_fac.remove(attachment).also {
                 featureAttachmentAdapter.submitList(feature.img_fac)
                 featureAttachmentAdapter.notifyDataSetChanged()
             }

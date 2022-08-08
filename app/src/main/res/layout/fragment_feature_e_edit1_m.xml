@@ -229,7 +229,7 @@
               android:text="0. 일반 조사" />
         </TableRow>
 
-        <TableRow
+        <!--<TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -253,7 +253,7 @@
               style="@style/App.TableLayout.TextView"
               android:text="@={viewModel.featureE.fac_wid}" />
 
-        </TableRow>
+        </TableRow>-->
 
         <TableRow
             android:layout_width="match_parent"
