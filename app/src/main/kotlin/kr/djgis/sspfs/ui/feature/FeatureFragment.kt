@@ -8,8 +8,11 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -34,7 +37,7 @@ import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 
 @DelicateCoroutinesApi
-class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback {
+class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -53,7 +56,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -73,37 +75,21 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 this@FeatureFragment, listOf(
                     FeatureAEdit1(),
                     FeatureAEdit2(),
-                    FeatureImage(args.type, args.pos!!),
+                    FeatureImage(args.type),
                 )
             )
 
             "B" -> {
                 FragmentPagerAdapter(
-                    this@FeatureFragment, when (args.pos) {
-                        "l" -> listOf(
-                            FeatureBEdit1L(),
-                            FeatureBEdit2L(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        "m" -> listOf(
-                            FeatureBEdit1U(),
-                            FeatureBEdit2U(),
-                            FeatureBEdit1M(),
-                            FeatureBEdit2M(),
-                            FeatureBEdit1L(),
-                            FeatureBEdit2L(),
-                            FeatureImage(args.type, args.pos!!),
-                        )
-
-                        "u" -> listOf(
-                            FeatureBEdit1U(),
-                            FeatureBEdit2U(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        else -> listOf()
-                    }
+                    this@FeatureFragment, listOf(
+                        FeatureBEdit1U(),
+                        FeatureBEdit2U(),
+                        FeatureBEdit1M(),
+                        FeatureBEdit2M(),
+                        FeatureBEdit1L(),
+                        FeatureBEdit2L(),
+                        FeatureImage(args.type),
+                    )
                 )
             }
 
@@ -111,7 +97,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 this@FeatureFragment, listOf(
                     FeatureCEdit1(),
                     FeatureCEdit2(),
-                    FeatureImage(args.type, args.pos!!),
+                    FeatureImage(args.type),
                 )
             )
 
@@ -119,67 +105,35 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 this@FeatureFragment, listOf(
                     FeatureDEdit1(),
                     FeatureDEdit2(),
-                    FeatureImage(args.type, args.pos!!),
+                    FeatureImage(args.type),
                 )
             )
 
             "E" -> {
                 FragmentPagerAdapter(
-                    this@FeatureFragment, when (args.pos) {
-                        "l" -> listOf(
-                            FeatureEEdit1L(),
-                            FeatureEEdit2L(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        "m" -> listOf(
-                            FeatureEEdit1U(),
-                            FeatureEEdit2U(),
-                            FeatureEEdit1M(),
-                            FeatureEEdit2M(),
-                            FeatureEEdit1L(),
-                            FeatureEEdit2L(),
-                            FeatureImage(args.type, args.pos!!),
-                        )
-
-                        "u" -> listOf(
-                            FeatureEEdit1U(),
-                            FeatureEEdit2U(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        else -> listOf()
-                    }
+                    this@FeatureFragment, listOf(
+                        FeatureEEdit1U(),
+                        FeatureEEdit2U(),
+                        FeatureEEdit1M(),
+                        FeatureEEdit2M(),
+                        FeatureEEdit1L(),
+                        FeatureEEdit2L(),
+                        FeatureImage(args.type),
+                    )
                 )
             }
 
             "F" -> {
                 FragmentPagerAdapter(
-                    this@FeatureFragment, when (args.pos) {
-                        "l" -> listOf(
-                            FeatureFEdit1L(),
-                            FeatureFEdit2L(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        "m" -> listOf(
-                            FeatureFEdit1U(),
-                            FeatureFEdit2U(),
-                            FeatureFEdit1M(),
-                            FeatureFEdit2M(),
-                            FeatureFEdit1L(),
-                            FeatureFEdit2L(),
-                            FeatureImage(args.type, args.pos!!),
-                        )
-
-                        "u" -> listOf(
-                            FeatureFEdit1U(),
-                            FeatureFEdit2U(),
-//                            FeatureImage(args.type!!, args.pos!!),
-                        )
-
-                        else -> listOf()
-                    }
+                    this@FeatureFragment, listOf(
+                        FeatureFEdit1U(),
+                        FeatureFEdit2U(),
+                        FeatureFEdit1M(),
+                        FeatureFEdit2M(),
+                        FeatureFEdit1L(),
+                        FeatureFEdit2L(),
+                        FeatureImage(args.type),
+                    )
                 )
             }
 
@@ -191,6 +145,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFeatureBinding.inflate(inflater, container, false)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -220,6 +176,40 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         }
     }
 
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.action_remove -> {
+                alertDialog(
+                    title = viewModel.of(args.type).value!!.fac_nam,
+                    message = resources.getString(R.string.feature_exclude)
+                ).setNegativeButton("취소") { _, _ ->
+                }.setPositiveButton("제외") { _, _ ->
+                    onSave(EXM_CHK_EXCLUDE) {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }
+                }.show()
+                return true
+            }
+
+            else -> false
+        }
+    }
+
+    override fun onClick(p0: View) {
+        when (p0.id) {
+            R.id.fab_main -> {
+                onSave(EXM_CHK_SAVE) {
+                    val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                    findNavController().navigate(directions)
+                }
+            }
+        }
+    }
+
     private fun onSave(chk: String, observer: Observer<JsonElement>) {
         binding.viewPagerCover.visibility = View.VISIBLE
         val parts = mutableListOf<MultipartBody.Part>()
@@ -239,42 +229,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
             exm_chk = chk
         }
         viewModel.featurePost(args.type, parts).observeOnce(this@FeatureFragment, observer)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_remove -> {
-                alertDialog(
-                    title = viewModel.of(args.type).value!!.fac_nam,
-                    message = resources.getString(R.string.feature_exclude)
-                ).setNegativeButton("취소") { _, _ ->
-                }.setPositiveButton("제외") { _, _ ->
-                    onSave(EXM_CHK_EXCLUDE) {
-                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
-                        findNavController().navigate(directions)
-                    }
-                }.show()
-                return true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onClick(p0: View) {
-        when (p0.id) {
-            R.id.fab_main -> {
-                onSave(EXM_CHK_SAVE) {
-                    val directions = FeatureFragmentDirections.actionToNaverMapFragment()
-                    findNavController().navigate(directions)
-                }
-            }
-        }
     }
 
     override fun onInitiate(percentage: Int) {

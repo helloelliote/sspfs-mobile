@@ -47,7 +47,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FeatureImage(val type: String, val position: String) : FeatureTabs(), FeatureAttachmentAdapterListener {
+class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterListener {
 
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentFeatureImageBinding? = null

@@ -17,8 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -26,6 +29,7 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.CameraAnimation.Easing
 import com.naver.maps.map.CameraUpdate.*
+import com.naver.maps.map.LocationTrackingMode.Follow
 import com.naver.maps.map.LocationTrackingMode.NoFollow
 import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
@@ -58,7 +62,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @DelicateCoroutinesApi
-class NaverMapFragment : Fragment(), OnMapReadyCallback {
+class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -80,16 +84,9 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
         return@lazy resources.getDimensionPixelOffset(R.dimen.bottomappbar_height) + (displayMetrics.heightPixels / 20)
     }
-    private var marker: Marker? = null
     private val markerMap = mutableMapOf<String, Overlay>()
     private val markerOnClickListener = Overlay.OnClickListener { overlay ->
         overlay as Marker
-        marker?.apply {
-        }.also {
-            marker = overlay.apply {
-                map = naverMap
-            }
-        }
         val feature = overlay.tag as Feature
         if (arrowheadPathMap.containsKey(feature.fac_uid)) {
             arrowheadPathMap[feature.fac_uid]?.performClick()
@@ -100,7 +97,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 width = 5
             }
         }
-        viewModel.featureGet(feature.fac_typ!!, feature.fac_uid!!).observeOnce(this@NaverMapFragment) { _feature ->
+        viewModel.featureGet(feature.fac_typ, feature.fac_uid).observeOnce(this@NaverMapFragment) { _feature ->
             when (feature.fac_typ) {
                 "A" -> viewModel.setCurrentFeature(_feature as FeatureA)
                 "B" -> viewModel.setCurrentFeature(_feature as FeatureB)
@@ -119,9 +116,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
                         viewModel.setBitmap(bitmap)
-                        val directions = NaverMapFragmentDirections.actionToFeatureFragment(
-                            type = feature.fac_typ!!, pos = "m"
-                        )
+                        val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
                         findNavController().navigate(directions)
                     }
                 }
@@ -147,10 +142,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         }
         return@OnClickListener true
     }
-
     private val polygonMap = mutableMapOf<String, PolygonOverlay>()
     private val centerMap = mutableMapOf<String, Marker>()
-
     private val centerOnClickListener = Overlay.OnClickListener { overlay ->
         overlay as Marker
         polygonMap.values.stream().forEach {
@@ -170,7 +163,6 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
 
         registerForActivityResult(RequestPermission()) {}.launch(ACCESS_FINE_LOCATION)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
@@ -186,6 +178,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -229,9 +223,11 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         naverMap.locationSource = locationSource
         naverMap.addOnCameraIdleListener { onCameraIdle() }
 
-        args.location?.let {
+        if (args.location != null) {
             naverMap.locationTrackingMode = NoFollow
-            naverMap.cameraPosition = CameraPosition(it, naverMap.cameraPosition.zoom)
+            naverMap.cameraPosition = CameraPosition(args.location!!, naverMap.cameraPosition.zoom)
+        } else {
+            naverMap.locationTrackingMode = Follow
         }
 
         fab = requireActivity().findViewById(R.id.fab_main)
@@ -263,7 +259,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         ).observeOnce(this@NaverMapFragment) {
             executor.execute {
                 it.features.stream().forEach { feature ->
-                    val key = feature.fac_uid!!
+                    val key = feature.fac_uid
                     val latLngs = feature.geom!!.latLngs
                     val color = toColor(feature)
                     when (feature.geom!!.type) {
@@ -309,7 +305,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             width = 45
             captionMinZoom = 17.0
             captionTextSize = 14.0f
-            captionText = feature.fac_nam!!
+            captionText = feature.fac_nam
             subCaptionColor = WHITE
             subCaptionHaloColor = BLACK
             subCaptionTextSize = 14.0f
@@ -365,27 +361,13 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
             headSizeRatio = 4.5f
             tag = feature
             onClickListener = arrowheadPathOnClickListener
-            when (feature.exm_chk) {
-                EXM_CHK_SAVE -> {
-                    color = GRAY
-                }
-
-                EXM_CHK_EXCLUDE -> {
-                    color = GRAY
-                }
-
-                else -> {
-                    color = tintColor
-                }
+            color = when (feature.exm_chk) {
+                EXM_CHK_SAVE -> GRAY
+                EXM_CHK_EXCLUDE -> GRAY
+                else -> tintColor
             }
         }
 
-    private fun createPolygon(coords: List<LatLng>, region: Region) =
-        PolygonOverlay(coords).apply {
-            color = resources.getColor(android.R.color.transparent, null)
-            outlineWidth = 5
-            outlineColor = WHITE
-        }
     /*
         private fun createMultipartPath(lines: List<List<LatLng>>, @ColorInt tintColor: Int) =
             MultipartPathOverlay(lines, List(lines.size) { ColorPart(tintColor, WHITE, WHITE, WHITE) }).apply {
@@ -406,7 +388,6 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun clearOverlays() {
-        marker?.map = null
         arrowheadPath?.map = null
         markerMap.values.stream().forEach {
             if (it is Overlay) it.map = null
@@ -417,6 +398,45 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         }
         arrowheadPathMap.clear()
     }
+
+    private fun onRegionGet() {
+        clearRegionOverlays()
+        val latLngBounds = naverMap.coveringBounds
+        viewModel.regionsGet(
+            xmin = latLngBounds.westLongitude,
+            ymin = latLngBounds.southLatitude,
+            xmax = latLngBounds.eastLongitude,
+            ymax = latLngBounds.northLatitude,
+        ).observeOnce(this@NaverMapFragment) {
+            executor.execute {
+                it.regions.stream().forEach { region ->
+                    val latLngs = region.geom.latLngs
+                    latLngs.forEach { latLng ->
+                        polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
+                            val centerLatlng = region.center.latLngs
+                            centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
+                        })
+                    }
+                }
+                handler.post {
+                    polygonMap.values.stream().forEach {
+                        it.map = naverMap
+                    }
+                    centerMap.values.stream().forEach {
+                        it.map = naverMap
+                    }
+                }
+            }
+        }
+        snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+    }
+
+    private fun createPolygon(coords: List<LatLng>) =
+        PolygonOverlay(coords).apply {
+            color = resources.getColor(android.R.color.transparent, null)
+            outlineWidth = 5
+            outlineColor = WHITE
+        }
 
     private fun clearRegionOverlays() {
         centerMap.values.stream().forEach {
@@ -429,46 +449,18 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
         polygonMap.clear()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.bottomappbar_menu_fragment_map, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.bottomappbar_menu_fragment_map, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
             /*            R.id.action_legend -> {
                             NavDrawerFragment().show(childFragmentManager, null)
                             return true
                         }*/
             R.id.action_region -> {
-                clearRegionOverlays()
-                val latLngBounds = naverMap.coveringBounds
-                viewModel.regionsGet(
-                    xmin = latLngBounds.westLongitude,
-                    ymin = latLngBounds.southLatitude,
-                    xmax = latLngBounds.eastLongitude,
-                    ymax = latLngBounds.northLatitude,
-                ).observeOnce(this@NaverMapFragment) {
-                    executor.execute {
-                        it.regions.stream().forEach { region ->
-                            val latLngs = region.geom.latLngs
-                            latLngs.forEach { latLng ->
-                                polygonMap[region.bjd_nam] = (createPolygon(coords = latLng, region = region).also {
-                                    val centerLatlng = region.center.latLngs
-                                    centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
-                                })
-                            }
-                        }
-                        handler.post {
-                            polygonMap.values.stream().forEach {
-                                it.map = naverMap
-                            }
-                            centerMap.values.stream().forEach {
-                                it.map = naverMap
-                            }
-                        }
-                    }
-                }
-                snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+                onRegionGet()
                 return true
             }
 
@@ -491,7 +483,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback {
                 return true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 

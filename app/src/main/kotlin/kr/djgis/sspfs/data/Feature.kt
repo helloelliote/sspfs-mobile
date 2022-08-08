@@ -19,9 +19,9 @@ data class FeatureList(
 
 @Suppress("PropertyName", "FunctionName")
 open class Feature : Serializable {
-    var fac_typ: String? = ""
-    var fac_uid: String? = ""
-    var fac_nam: String? = ""
+    var fac_typ: String = ""
+    var fac_uid: String = ""
+    var fac_nam: String = ""
     var mng_nam: String? = null
     var own_nam: String? = null
     var mng_tel: String? = null
