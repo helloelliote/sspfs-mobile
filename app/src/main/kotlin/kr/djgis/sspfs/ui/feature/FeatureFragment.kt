@@ -23,6 +23,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
+import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE_AND_SAVE
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
@@ -218,9 +219,15 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 alertDialog(
                     title = viewModel.of(args.type).fac_nam,
                     message = resources.getString(R.string.feature_action_geom_reverse)
-                ).setNegativeButton("취소") { _, _ ->
-                }.setPositiveButton("확인") { _, _ ->
+                ).setNeutralButton("취소") { dialog, _ ->
+                    dialog.cancel()
+                }.setNegativeButton("반전") { _, _ ->
                     onSave(EXM_CHK_SAVE, EDIT_GEOM_REVERSE) {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }
+                }.setPositiveButton("반전 후 저장") { _, _ ->
+                    onSave(EXM_CHK_SAVE, EDIT_GEOM_REVERSE_AND_SAVE) {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
                     }
