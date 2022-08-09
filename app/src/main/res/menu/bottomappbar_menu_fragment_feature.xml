@@ -5,18 +5,14 @@
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/action_remove"
-            android:icon="@drawable/ic_round_cancel_24"
-            android:title=" 조사제외"
-            app:showAsAction="ifRoom|withText" />
-    </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/action_reverse_geom"
-            android:icon="@drawable/ic_round_loop_24"
-            android:title=" 시·종점반전"
-            app:showAsAction="ifRoom|withText" />
-    </group>
+    <item
+        android:id="@+id/action_remove"
+        android:icon="@drawable/ic_round_cancel_24"
+        android:title=" 조사제외"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_reverse_geom"
+        android:icon="@drawable/ic_round_loop_24"
+        android:title=" 시·종점반전"
+        app:showAsAction="ifRoom|withText" />
 </menu>

@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import com.naver.maps.map.*
@@ -30,7 +31,7 @@ import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.network.RetrofitProgress
+import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
@@ -39,8 +40,7 @@ import kr.djgis.sspfs.util.toggleFab
 import java.util.*
 
 @DelicateCoroutinesApi
-class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider,
-    OnMapReadyCallback {
+class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallback, MenuProvider, OnMapReadyCallback {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -51,11 +51,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
     private val args: FeatureFragmentArgs by navArgs()
 
     private var adapter: FragmentPagerAdapter? = null
-
-    private val dpWidth: Boolean by lazy {
-        val displayMetrics = resources.displayMetrics
-        return@lazy (displayMetrics.widthPixels / displayMetrics.density) > 600.0
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,16 +156,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         }
 
         binding.run {
-            viewPager.isUserInputEnabled = false
-            viewPager.adapter = adapter
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                tab.apply {
-                    val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
-                    text = tabItem.text
-                    icon = ResourcesCompat.getDrawable(resources, tabItem.iconDrawable, null)!!
-                }
-            }.attach()
-
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
 
             val mapFragment = childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment?
@@ -187,6 +172,22 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                     childFragmentManager.beginTransaction().add(R.id.toolbar, it).commit()
                 }
             mapFragment.getMapAsync(this@FeatureFragment)
+
+            viewPager.isUserInputEnabled = false
+            viewPager.adapter = adapter
+            viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+//            viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+//                override fun onPageSelected(position: Int) {
+//                    super.onPageSelected(position)
+//                }
+//            })
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.apply {
+                    val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
+                    text = tabItem.text
+                    icon = ResourcesCompat.getDrawable(resources, tabItem.iconDrawable, null)!!
+                }
+            }.attach()
         }
     }
 
