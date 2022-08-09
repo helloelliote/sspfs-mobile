@@ -170,7 +170,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
             }.attach()
 
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
-            viewModel.getBitmap().observeOnce(viewLifecycleOwner) { glide(it).into(backdrop) }
+            viewModel.bitmap.observeOnce(viewLifecycleOwner) { glide(it).into(backdrop) }
         }
     }
 

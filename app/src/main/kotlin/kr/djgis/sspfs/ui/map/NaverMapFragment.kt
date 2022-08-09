@@ -115,7 +115,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             ).animate(Easing, 250).finishCallback {
                 GlobalScope.launch(Dispatchers.Main) {
                     naverMap.takeSnapshot(false) { bitmap ->
-                        viewModel.setBitmap(bitmap)
+                        viewModel.bitmap(bitmap)
                         val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
                         findNavController().navigate(directions)
                     }

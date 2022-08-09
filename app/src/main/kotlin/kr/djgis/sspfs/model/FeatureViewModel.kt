@@ -42,7 +42,8 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
     val featureE: LiveData<FeatureE> = _featureE
     val featureF: LiveData<FeatureF> = _featureF
 
-    private val bitmapStore = MutableLiveData<Bitmap>()
+    private val _bitmap = MutableLiveData<Bitmap>()
+    val bitmap: LiveData<Bitmap> = _bitmap
 
     fun getBitmap() = bitmapStore
 
@@ -82,6 +83,10 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setCurrentFeature(featureF: FeatureF) {
         _featureF.value = featureF
+    }
+
+    fun bitmap(bitmap: Bitmap) {
+        _bitmap.value = bitmap
     }
 
     fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
