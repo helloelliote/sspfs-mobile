@@ -97,15 +97,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 width = 5
             }
         }
-        viewModel.featureGet(feature.fac_typ, feature.fac_uid).observeOnce(viewLifecycleOwner) { _feature ->
-            when (feature.fac_typ) {
-                "A" -> viewModel.setCurrentFeature(_feature as FeatureA)
-                "B" -> viewModel.setCurrentFeature(_feature as FeatureB)
-                "C" -> viewModel.setCurrentFeature(_feature as FeatureC)
-                "D" -> viewModel.setCurrentFeature(_feature as FeatureD)
-                "E" -> viewModel.setCurrentFeature(_feature as FeatureE)
-                "F" -> viewModel.setCurrentFeature(_feature as FeatureF)
-            }
+        viewModel.type(feature.fac_typ).featureGet(feature.fac_uid).observeOnce(viewLifecycleOwner) {
+            viewModel.set(it)
             naverMap.apply {
                 setContentPadding(0, 0, 0, 0)
                 naverMap.mapType = Satellite

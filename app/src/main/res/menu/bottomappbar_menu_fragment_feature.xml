@@ -12,4 +12,11 @@
             android:title=" 조사제외"
             app:showAsAction="ifRoom|withText" />
     </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_reverse_geom"
+            android:icon="@drawable/ic_round_loop_24"
+            android:title=" 시·종점반전"
+            app:showAsAction="ifRoom|withText" />
+    </group>
 </menu>

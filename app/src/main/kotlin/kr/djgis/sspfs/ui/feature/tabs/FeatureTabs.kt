@@ -37,7 +37,7 @@ open class FeatureTabs : Fragment(), FeatureTabsInterface {
 
     fun setTableLayoutOnClickListener(fac_typ: String, table: TableLayout) {
         try {
-            val vm = viewModel.of(fac_typ).value!!
+            val vm = viewModel.of(fac_typ)
             val rowCount = table.childCount
             for (i: Int in 0..rowCount) {
                 val row = table.getChildAt(i)

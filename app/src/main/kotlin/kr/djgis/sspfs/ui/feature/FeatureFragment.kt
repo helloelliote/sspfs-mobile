@@ -20,6 +20,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
@@ -58,7 +59,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 alertDialog(
-                    title = viewModel.of(args.type).value!!.fac_nam,
+                    title = viewModel.of(args.type).fac_nam,
                     message = resources.getString(R.string.feature_back)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("나가기") { _, _ ->
@@ -181,11 +182,25 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         return when (menuItem.itemId) {
             R.id.action_remove -> {
                 alertDialog(
-                    title = viewModel.of(args.type).value!!.fac_nam,
-                    message = resources.getString(R.string.feature_exclude)
+                    title = viewModel.of(args.type).fac_nam,
+                    message = resources.getString(R.string.feature_action_exclude)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("제외") { _, _ ->
                     onSave(EXM_CHK_EXCLUDE) {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }
+                }.show()
+                return true
+            }
+
+            R.id.action_reverse_geom -> {
+                alertDialog(
+                    title = viewModel.of(args.type).fac_nam,
+                    message = resources.getString(R.string.feature_action_geom_reverse)
+                ).setNegativeButton("취소") { _, _ ->
+                }.setPositiveButton("확인") { _, _ ->
+                    onSave(EXM_CHK_SAVE, EDIT_GEOM_REVERSE) {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
                     }
@@ -208,9 +223,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         }
     }
 
-    private fun onSave(exm_chk: String, observer: Observer<JsonElement>) {
+    private fun onSave(exm_chk: String, edit: String? = null, observer: Observer<JsonElement>) {
         binding.viewPagerCover.visibility = View.VISIBLE
-        viewModel.featurePost(args.type, exm_chk, this@FeatureFragment).observeOnce(viewLifecycleOwner, observer)
+        viewModel.type(args.type).featurePost(exm_chk, edit, this@FeatureFragment)
+            .observeOnce(viewLifecycleOwner, observer)
     }
 
     override fun onInitiate(percentage: Int) {

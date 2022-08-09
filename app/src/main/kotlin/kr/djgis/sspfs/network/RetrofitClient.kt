@@ -23,8 +23,8 @@ object RetrofitClient {
         return webService.featureGet(fac_uid = fac_uid)
     }
 
-    suspend fun featurePost(fac_uid: String, jsonBody: Part, multipartBody: List<Part?>): JsonElement {
-        return webService.featurePost(fac_uid = fac_uid, jsonBody = jsonBody, multipartBody = multipartBody)
+    suspend fun featurePost(jsonBody: Part, edit: String? = null, multipartBody: List<Part?>): JsonElement {
+        return webService.featurePost(jsonBody = jsonBody, edit = edit, multipartBody = multipartBody)
     }
 
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {

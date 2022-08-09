@@ -18,7 +18,7 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
     })
 }
 
-fun <T> LiveData<T>.observeOnceFeature(lifecycleOwner: LifecycleOwner, fac_typ: String, observer: Observer<T>) {
+fun <T> LiveData<T>.observeFeatureOnce(lifecycleOwner: LifecycleOwner, fac_typ: String, observer: Observer<T>) {
     observe(lifecycleOwner, object : Observer<T> {
         override fun onChanged(t: T?) {
             when (fac_typ) {

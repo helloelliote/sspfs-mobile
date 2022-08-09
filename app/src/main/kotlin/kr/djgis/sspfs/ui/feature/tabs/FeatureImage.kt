@@ -104,7 +104,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
             }
         }
 
-        viewModel.of(type).observeOnceFeature(viewLifecycleOwner, type) { _feature ->
+        viewModel.to(type).observeFeatureOnce(viewLifecycleOwner, type) { _feature ->
             currentFeature = _feature
             featureAttachmentAdapter.submitList(currentFeature.img_fac)
 

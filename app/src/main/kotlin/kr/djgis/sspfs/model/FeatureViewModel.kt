@@ -22,6 +22,7 @@ import kr.djgis.sspfs.network.Moshi.moshiFeatureList
 import kr.djgis.sspfs.network.Moshi.moshiRegionList
 import kr.djgis.sspfs.network.RetrofitClient
 import kr.djgis.sspfs.network.RetrofitProgress
+import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 
@@ -45,11 +46,10 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
     private val _bitmap = MutableLiveData<Bitmap>()
     val bitmap: LiveData<Bitmap> = _bitmap
 
-    fun getBitmap() = bitmapStore
+    private val _type = MutableLiveData<String>()
+    val type: LiveData<String> = _type
 
-    fun setBitmap(bitmap: Bitmap) = bitmapStore.postValue(bitmap)
-
-    fun of(fac_typ: String): LiveData<out Feature> {
+    fun to(fac_typ: String): LiveData<out Feature> {
         return when (fac_typ) {
             "A" -> featureA
             "B" -> featureB
@@ -61,27 +61,47 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun setCurrentFeature(featureA: FeatureA) {
+    fun of(fac_typ: String): Feature {
+        return to(fac_typ).value!!
+    }
+
+    fun type(fac_typ: String): FeatureViewModel {
+        _type.value = fac_typ
+        return this
+    }
+
+    fun set(feature: Any) {
+        when (type.value) {
+            "A" -> _set(feature as FeatureA)
+            "B" -> _set(feature as FeatureB)
+            "C" -> _set(feature as FeatureC)
+            "D" -> _set(feature as FeatureD)
+            "E" -> _set(feature as FeatureE)
+            "F" -> _set(feature as FeatureF)
+        }
+    }
+
+    private fun _set(featureA: FeatureA) {
         _featureA.value = featureA
     }
 
-    fun setCurrentFeature(featureB: FeatureB) {
+    private fun _set(featureB: FeatureB) {
         _featureB.value = featureB
     }
 
-    fun setCurrentFeature(featureC: FeatureC) {
+    private fun _set(featureC: FeatureC) {
         _featureC.value = featureC
     }
 
-    fun setCurrentFeature(featureD: FeatureD) {
+    private fun _set(featureD: FeatureD) {
         _featureD.value = featureD
     }
 
-    fun setCurrentFeature(featureE: FeatureE) {
+    private fun _set(featureE: FeatureE) {
         _featureE.value = featureE
     }
 
-    fun setCurrentFeature(featureF: FeatureF) {
+    private fun _set(featureF: FeatureF) {
         _featureF.value = featureF
     }
 
@@ -97,53 +117,27 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun featureGet(fac_typ: String, fac_uid: String) = liveData {
+    fun featureGet(fac_uid: String) = liveData {
         withContext(Dispatchers.IO) {
-            val jsonObject = retrofit.featureGet(fac_uid)
-            when (fac_typ) {
-                "A" -> {
-                    val featureList = moshiFeatureAList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                "B" -> {
-                    val featureList = moshiFeatureBList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                "C" -> {
-                    val featureList = moshiFeatureCList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                "D" -> {
-                    val featureList = moshiFeatureDList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                "E" -> {
-                    val featureList = moshiFeatureEList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                "F" -> {
-                    val featureList = moshiFeatureFList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
-
-                else -> {
-                    val featureList = moshiFeatureFList.fromJson(jsonObject.toString())
-                    emit(featureList!!.features.first())
-                }
+            val jsonObject = RetrofitClient.featureGet(fac_uid)
+            val result = when (type.value!!) {
+                "A" -> moshiFeatureAList.fromJson(jsonObject.toString())!!.features.first()
+                "B" -> moshiFeatureBList.fromJson(jsonObject.toString())!!.features.first()
+                "C" -> moshiFeatureCList.fromJson(jsonObject.toString())!!.features.first()
+                "D" -> moshiFeatureDList.fromJson(jsonObject.toString())!!.features.first()
+                "E" -> moshiFeatureEList.fromJson(jsonObject.toString())!!.features.first()
+                "F" -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
+                else -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
             }
+            emit(result)
         }
     }
 
-    fun featurePost(fac_typ: String, exm_chk: String, callback: RetrofitProgress.MultipartUploadCallback) = liveData {
+    fun featurePost(status: String, edit: String?, callback: MultipartUploadCallback) = liveData {
         withContext(Dispatchers.IO) {
             val multipartBody = mutableListOf<MultipartBody.Part>()
-            val feature = this@FeatureViewModel.of(fac_typ).value!!
-            feature.exm_chk = exm_chk
+            val feature = this@FeatureViewModel.of(type.value!!)
+            feature.exm_chk = status
             feature.img_fac.forEach { attachment ->
                 if (attachment.uri == null) {
                     return@forEach
