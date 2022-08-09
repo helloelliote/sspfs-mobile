@@ -89,10 +89,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         if (arrowheadPathMap.containsKey(feature.fac_uid)) {
             selectOverlay = arrowheadPathMap[feature.fac_uid] as ArrowheadPathOverlay
             arrowheadPathMap[feature.fac_uid]!!.performClick()
-            bounds = arrowheadPathMap[feature.fac_uid]!!.bounds.buffer(10.0)
+            bounds = arrowheadPathMap[feature.fac_uid]!!.bounds.buffer(0.05)
         } else {
             selectOverlay = overlay
-            bounds = LatLngBounds(overlay.position, overlay.position).buffer(10.0)
+            bounds = LatLngBounds(overlay.position, overlay.position).buffer(0.05)
             arrowheadPath?.apply {
                 outlineColor = WHITE
                 outlineWidth = 2
