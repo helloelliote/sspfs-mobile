@@ -25,9 +25,7 @@ import kr.djgis.sspfs.network.RetrofitProgress
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 
-class FeatureViewModel(val app: Application) : AndroidViewModel(app) {
-
-    private val retrofit = RetrofitClient
+class FeatureViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _feature = MutableLiveData<Feature>()
     private val _featureA = MutableLiveData<FeatureA>()
@@ -88,7 +86,7 @@ class FeatureViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
         withContext(Dispatchers.IO) {
-            val jsonObject = retrofit.featuresGet(xmin, ymin, xmax, ymax)
+            val jsonObject = RetrofitClient.featuresGet(xmin, ymin, xmax, ymax)
             val featureList = moshiFeatureList.fromJson(jsonObject.toString())
             emit(featureList!!)
         }
@@ -151,15 +149,15 @@ class FeatureViewModel(val app: Application) : AndroidViewModel(app) {
                     multipartBody.add(part)
                 }
             }
-            val jsonBody = createFormData("json", Gson().toJson(feature).toString())
-            val jsonElement = retrofit.featurePost(feature.fac_uid, jsonBody, multipartBody)
+            val jsonBody = createFormData("json", Gson().toJson(feature))
+            val jsonElement = RetrofitClient.featurePost(jsonBody, edit, multipartBody)
             emit(jsonElement)
         }
     }
 
     fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
         withContext(Dispatchers.IO) {
-            val jsonObject = retrofit.regionsGet(xmin, ymin, xmax, ymax)
+            val jsonObject = RetrofitClient.regionsGet(xmin, ymin, xmax, ymax)
             val regionList = moshiRegionList.fromJson(jsonObject.toString())
             emit(regionList!!)
         }

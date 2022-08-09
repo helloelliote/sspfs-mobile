@@ -14,11 +14,9 @@ import kr.djgis.sspfs.network.RetrofitClient
 
 class Coord2AddressViewModel : ViewModel() {
 
-    private val retrofit = RetrofitClient
-
     fun coord2Address(x: Double, y: Double, input: String? = null) = liveData {
         withContext(Dispatchers.IO) {
-            val jsonObject = retrofit.kakaoCoord2Address(x, y, input)
+            val jsonObject = RetrofitClient.kakaoCoord2Address(x, y, input)
             val coord2Address = moshiCoord2Address.fromJson(jsonObject.toString())
             emit(coord2Address!!)
         }

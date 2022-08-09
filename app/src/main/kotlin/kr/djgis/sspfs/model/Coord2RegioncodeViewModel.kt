@@ -14,11 +14,9 @@ import kr.djgis.sspfs.network.RetrofitClient
 
 class Coord2RegioncodeViewModel : ViewModel() {
 
-    private val retrofit = RetrofitClient
-
     fun coord2Regioncode(x: Double, y: Double, input: String? = null, output: String? = null) = liveData {
         withContext(Dispatchers.IO) {
-            val jsonObject = retrofit.kakaoCoord2Regioncode(x, y, input, output)
+            val jsonObject = RetrofitClient.kakaoCoord2Regioncode(x, y, input, output)
             val coord2Regioncode = moshiCoord2Regioncode.fromJson(jsonObject.toString())
             emit(coord2Regioncode!!)
         }

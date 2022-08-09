@@ -15,7 +15,6 @@ class FeatureEList(
     @Json(name = "rows") val features: MutableSet<FeatureE>,
 ) : Serializable
 
-@Suppress("PropertyName")
 @JsonClass(generateAdapter = true)
 class FeatureE(
     var cat_funl: String?,
