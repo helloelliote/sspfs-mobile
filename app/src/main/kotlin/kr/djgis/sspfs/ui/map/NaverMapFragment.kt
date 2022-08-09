@@ -97,7 +97,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 width = 5
             }
         }
-        viewModel.featureGet(feature.fac_typ, feature.fac_uid).observeOnce(this@NaverMapFragment) { _feature ->
+        viewModel.featureGet(feature.fac_typ, feature.fac_uid).observeOnce(viewLifecycleOwner) { _feature ->
             when (feature.fac_typ) {
                 "A" -> viewModel.setCurrentFeature(_feature as FeatureA)
                 "B" -> viewModel.setCurrentFeature(_feature as FeatureB)
@@ -256,7 +256,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             ymin = latLngBounds.southLatitude,
             xmax = latLngBounds.eastLongitude,
             ymax = latLngBounds.northLatitude,
-        ).observeOnce(this@NaverMapFragment) {
+        ).observeOnce(viewLifecycleOwner) {
             executor.execute {
                 it.features.stream().forEach { feature ->
                     val key = feature.fac_uid
@@ -407,7 +407,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             ymin = latLngBounds.southLatitude,
             xmax = latLngBounds.eastLongitude,
             ymax = latLngBounds.northLatitude,
-        ).observeOnce(this@NaverMapFragment) {
+        ).observeOnce(viewLifecycleOwner) {
             executor.execute {
                 it.regions.stream().forEach { region ->
                     val latLngs = region.geom.latLngs

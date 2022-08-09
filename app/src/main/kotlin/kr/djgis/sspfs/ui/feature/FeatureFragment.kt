@@ -33,8 +33,6 @@ import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.toggleFab
-import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.createFormData
 
 @DelicateCoroutinesApi
 class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider {
@@ -172,7 +170,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
             }.attach()
 
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
-            viewModel.getBitmap().observeOnce(this@FeatureFragment) { glide(it).into(backdrop) }
+            viewModel.getBitmap().observeOnce(viewLifecycleOwner) { glide(it).into(backdrop) }
         }
     }
 
@@ -210,25 +208,9 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         }
     }
 
-    private fun onSave(chk: String, observer: Observer<JsonElement>) {
+    private fun onSave(exm_chk: String, observer: Observer<JsonElement>) {
         binding.viewPagerCover.visibility = View.VISIBLE
-        val parts = mutableListOf<MultipartBody.Part>()
-        viewModel.of(args.type).value?.apply {
-            img_fac!!.forEach { attachment ->
-                if (attachment.uri == null) {
-                    return@forEach
-                } else {
-                    val part = createFormData(
-                        "files",
-                        attachment.name,
-                        RetrofitProgress(requireContext(), attachment.uri!!, "image", this@FeatureFragment)
-                    )
-                    parts.add(part)
-                }
-            }
-            exm_chk = chk
-        }
-        viewModel.featurePost(args.type, parts).observeOnce(this@FeatureFragment, observer)
+        viewModel.featurePost(args.type, exm_chk, this@FeatureFragment).observeOnce(viewLifecycleOwner, observer)
     }
 
     override fun onInitiate(percentage: Int) {

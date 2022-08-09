@@ -4,11 +4,13 @@
 
 package kr.djgis.sspfs.model
 
+import android.app.Application
 import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kr.djgis.sspfs.App
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureBList
@@ -19,10 +21,11 @@ import kr.djgis.sspfs.network.Moshi.moshiFeatureFList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureList
 import kr.djgis.sspfs.network.Moshi.moshiRegionList
 import kr.djgis.sspfs.network.RetrofitClient
+import kr.djgis.sspfs.network.RetrofitProgress
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 
-class FeatureViewModel : ViewModel() {
+class FeatureViewModel(val app: Application) : AndroidViewModel(app) {
 
     private val retrofit = RetrofitClient
 
@@ -133,19 +136,23 @@ class FeatureViewModel : ViewModel() {
         }
     }
 
-    fun featurePost(fac_typ: String, multipartBody: List<MultipartBody.Part?>) = liveData {
+    fun featurePost(fac_typ: String, exm_chk: String, callback: RetrofitProgress.MultipartUploadCallback) = liveData {
         withContext(Dispatchers.IO) {
-            val feature = when (fac_typ) {
-                "A" -> featureA.value!!
-                "B" -> featureB.value!!
-                "C" -> featureC.value!!
-                "D" -> featureD.value!!
-                "E" -> featureE.value!!
-                "F" -> featureF.value!!
-                else -> feature.value!!
+            val multipartBody = mutableListOf<MultipartBody.Part>()
+            val feature = this@FeatureViewModel.of(fac_typ).value!!
+            feature.exm_chk = exm_chk
+            feature.img_fac.forEach { attachment ->
+                if (attachment.uri == null) {
+                    return@forEach
+                } else {
+                    val part = createFormData(
+                        "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
+                    )
+                    multipartBody.add(part)
+                }
             }
             val jsonBody = createFormData("json", Gson().toJson(feature).toString())
-            val jsonElement = retrofit.featurePost(feature.fac_uid!!, jsonBody, multipartBody)
+            val jsonElement = retrofit.featurePost(feature.fac_uid, jsonBody, multipartBody)
             emit(jsonElement)
         }
     }
@@ -174,6 +181,6 @@ class FeatureViewModel : ViewModel() {
 object FeatureVMFactory : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST") return FeatureViewModel() as T
+        @Suppress("UNCHECKED_CAST") return FeatureViewModel(App()) as T
     }
 }

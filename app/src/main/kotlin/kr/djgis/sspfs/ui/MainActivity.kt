@@ -4,7 +4,6 @@
 
 package kr.djgis.sspfs.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
@@ -20,7 +19,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.ActivityMainBinding
-import java.io.File
 
 const val KEY_EVENT_ACTION = "key_event_action"
 const val KEY_EVENT_EXTRA = "key_event_extra"
@@ -129,17 +127,5 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onBackPressed() {
         super.onBackPressed()
         binding.fabMain.isEnabled = true
-    }
-
-    companion object {
-
-        /** Use external media if it is available, our app's file directory otherwise */
-        fun getOutputDirectory(context: Context): File {
-            val appContext = context.applicationContext
-            val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-                File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() }
-            }
-            return if (mediaDir != null && mediaDir.exists()) mediaDir else appContext.filesDir
-        }
     }
 }

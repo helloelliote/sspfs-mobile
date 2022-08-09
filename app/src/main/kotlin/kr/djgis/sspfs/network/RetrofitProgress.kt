@@ -5,10 +5,10 @@
 package kr.djgis.sspfs.network
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import kr.djgis.sspfs.App
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -17,7 +17,6 @@ import java.io.File
 import java.io.IOException
 
 class RetrofitProgress(
-    private val context: Context,
     private val uri: Uri,
     private val contentType: String,
     private val callback: MultipartUploadCallback,
@@ -39,7 +38,7 @@ class RetrofitProgress(
         val file = File(uriToFilePath(uri))
         val totalSize = file.length()
         val buffer = ByteArray(2048)
-        context.contentResolver.openInputStream(uri).use { inputStream ->
+        App.context.contentResolver.openInputStream(uri).use { inputStream ->
             var uploadSize = 0L
             var readSize: Int
             var number = 0
@@ -61,7 +60,7 @@ class RetrofitProgress(
 
     @SuppressLint("Range")
     private fun uriToFilePath(uri: Uri?): String {
-        val cursor = context.contentResolver.query(uri!!, arrayOf("_data"), null, null, null)
+        val cursor = App.context.contentResolver.query(uri!!, arrayOf("_data"), null, null, null)
         var path = ""
         cursor?.use {
             it.moveToNext()

@@ -72,7 +72,7 @@ class PlaceSearchFragment : Fragment(), KeywordAdapterListener {
                         query = query,
                         x = latLng?.longitude,
                         y = latLng?.latitude,
-                    ).observeOnce(this@PlaceSearchFragment) {
+                    ).observeOnce(viewLifecycleOwner) {
                         if (it.meta.total_count == 0) {
                             resetSearch()
                         } else {

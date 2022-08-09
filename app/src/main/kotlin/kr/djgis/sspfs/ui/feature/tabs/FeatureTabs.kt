@@ -50,6 +50,7 @@ open class FeatureTabs : Fragment(), FeatureTabsInterface {
                         is Button -> {
                             column.tag?.let { key = it.toString() }
                         }
+
                         is TextView -> {
                             if (column.isClickable) {
                                 vm.getByKey(key)?.let { value ->
@@ -72,11 +73,13 @@ open class FeatureTabs : Fragment(), FeatureTabsInterface {
                                                     it.isSelected = it.isSelected.not()
                                                     snackbar(fab, "먼저 선택된 항목부터 선택 해제해 주세요").setAction("확인") {}.show()
                                                 }
+
                                                 is MutableSet<*> -> {
                                                     it.setBackgroundResource(viewSelect)
                                                     it.setTypeface(null, BOLD)
                                                     (vm.getByKey(key) as MutableSet<String>).add(column.tag as String)
                                                 }
+
                                                 else -> {
 
                                                 }
@@ -89,6 +92,7 @@ open class FeatureTabs : Fragment(), FeatureTabsInterface {
                                             is String -> {
                                                 if (vm.getByKey(key) == column.tag) vm.setByKey(key, null)
                                             }
+
                                             is MutableSet<*> -> {
                                                 (vm.getByKey(key) as MutableSet<String>).remove(column.tag)
                                                 if ((vm.getByKey(key) as MutableSet<String>).size == 0) {
@@ -96,6 +100,7 @@ open class FeatureTabs : Fragment(), FeatureTabsInterface {
                                                 }
                                                 println(vm.getByKey(key))
                                             }
+
                                             else -> {
 
                                             }
