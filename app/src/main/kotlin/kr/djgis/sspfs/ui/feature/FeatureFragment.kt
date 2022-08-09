@@ -19,6 +19,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
+import com.naver.maps.map.*
+import com.naver.maps.map.NaverMap.MapType.Satellite
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
@@ -31,12 +33,13 @@ import kr.djgis.sspfs.network.RetrofitProgress
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
-import kr.djgis.sspfs.util.glide
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.toggleFab
+import java.util.*
 
 @DelicateCoroutinesApi
-class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider {
+class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider,
+    OnMapReadyCallback {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -154,9 +157,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            listOf(appbarLayout, collapsingToolbarLayout).forEach {
-                it.layoutParams.height = if (dpWidth) 800 else 800
-            }
         }
 
         binding.run {
@@ -171,7 +171,27 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
             }.attach()
 
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
-            viewModel.bitmap.observeOnce(viewLifecycleOwner) { glide(it).into(backdrop) }
+
+            val mapFragment = childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment?
+                ?: MapFragment.newInstance(
+                    NaverMapOptions()
+                        .locale(Locale.KOREA)
+                        .mapType(Satellite)
+                        .camera(CameraPosition(viewModel.latLngBounds.value!!.center, 18.0))
+                        .minZoom(16.0)
+                        .extent(viewModel.latLngBounds.value)
+                        .tiltGesturesEnabled(false)
+                        .zoomGesturesEnabled(true)
+                ).also {
+                    childFragmentManager.beginTransaction().add(R.id.toolbar, it).commit()
+                }
+            mapFragment.getMapAsync(this@FeatureFragment)
+        }
+    }
+
+    override fun onMapReady(naverMap: NaverMap) {
+        viewModel.overlay.value?.let {
+            it.map = naverMap
         }
     }
 

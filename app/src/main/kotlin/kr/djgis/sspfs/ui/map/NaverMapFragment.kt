@@ -7,6 +7,7 @@ package kr.djgis.sspfs.ui.map
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.Color.*
 import android.os.Bundle
 import android.os.Handler
@@ -24,26 +25,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.CameraAnimation.Easing
 import com.naver.maps.map.CameraUpdate.*
-import com.naver.maps.map.LocationTrackingMode.Follow
 import com.naver.maps.map.LocationTrackingMode.NoFollow
 import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
 import com.naver.maps.map.NaverMap.MapType.Satellite
-import com.naver.maps.map.overlay.ArrowheadPathOverlay
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
-import com.naver.maps.map.overlay.PolygonOverlay
+import com.naver.maps.map.overlay.*
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.Config.EXTENT_GYEONGJU
@@ -62,21 +58,21 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @DelicateCoroutinesApi
-class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
+open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
-    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
-    private val args: NaverMapFragmentArgs by navArgs()
+    val args: NaverMapFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and onDestroyView.
-    private var _binding: FragmentMapBinding? = null
-    private val binding get() = _binding!!
+    var _binding: FragmentMapBinding? = null
+    val binding get() = _binding!!
 
-    private lateinit var executor: ExecutorService
-    private lateinit var handler: Handler
-    private lateinit var sharedPref: SharedPreferences
-    private lateinit var locationSource: FusedLocationSource
-    private lateinit var naverMap: NaverMap
+    lateinit var executor: ExecutorService
+    lateinit var handler: Handler
+    lateinit var sharedPref: SharedPreferences
+    lateinit var locationSource: FusedLocationSource
+    open lateinit var naverMap: NaverMap
 
     @Suppress("DEPRECATION")
     private val naverMapPadding: Int by lazy {
@@ -88,9 +84,15 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private val markerOnClickListener = Overlay.OnClickListener { overlay ->
         overlay as Marker
         val feature = overlay.tag as Feature
+        val selectOverlay: Overlay
+        val bounds: LatLngBounds
         if (arrowheadPathMap.containsKey(feature.fac_uid)) {
-            arrowheadPathMap[feature.fac_uid]?.performClick()
+            selectOverlay = arrowheadPathMap[feature.fac_uid] as ArrowheadPathOverlay
+            arrowheadPathMap[feature.fac_uid]!!.performClick()
+            bounds = arrowheadPathMap[feature.fac_uid]!!.bounds.buffer(10.0)
         } else {
+            selectOverlay = overlay
+            bounds = LatLngBounds(overlay.position, overlay.position).buffer(10.0)
             arrowheadPath?.apply {
                 outlineColor = WHITE
                 outlineWidth = 2
@@ -98,27 +100,18 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             }
         }
         viewModel.type(feature.fac_typ).featureGet(feature.fac_uid).observeOnce(viewLifecycleOwner) {
-            viewModel.set(it)
+            viewModel.set(it).overlay(selectOverlay).latLngBounds(bounds)
             naverMap.apply {
-                setContentPadding(0, 0, 0, 0)
                 naverMap.mapType = Satellite
-            }.moveCamera(scrollAndZoomTo(
-                overlay.position,
-                if (naverMap.cameraPosition.zoom > 18.0) naverMap.cameraPosition.zoom else 18.0
-            ).animate(Easing, 250).finishCallback {
-                GlobalScope.launch(Dispatchers.Main) {
-                    naverMap.takeSnapshot(false) { bitmap ->
-                        viewModel.bitmap(bitmap)
-                        val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
-                        findNavController().navigate(directions)
-                    }
-                }
+            }.moveCamera(fitBounds(bounds).animate(Easing, 250).finishCallback {
+                val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
+                findNavController().navigate(directions)
             })
         }
         return@OnClickListener true
     }
     private var arrowheadPath: ArrowheadPathOverlay? = null
-    private val arrowheadPathMap = mutableMapOf<String, Overlay>()
+    private val arrowheadPathMap = mutableMapOf<String, ArrowheadPathOverlay>()
     private val arrowheadPathOnClickListener = Overlay.OnClickListener { overlay ->
         overlay as ArrowheadPathOverlay
         arrowheadPath?.apply {
@@ -151,8 +144,12 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
         return@OnClickListener true
     }
+    open var pathMarker: Marker? = null
+    open var pathOverlay: ArrowheadPathOverlay? = null
+    open val pathOverlayList = mutableListOf<LatLng>()
 
-    private lateinit var fab: FloatingActionButton
+    open lateinit var fab: FloatingActionButton
+    open lateinit var bottomAppBar: BottomAppBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,7 +182,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         onCreateMap()
     }
 
-    private fun onCreateMap() {
+    fun onCreateMap() {
         val latLng = if (sharedPref.contains("latitude") && sharedPref.contains("longitude"))
             LatLng(
                 sharedPref.getFloat("latitude", 0.0F).toDouble(),
@@ -220,7 +217,8 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             naverMap.locationTrackingMode = NoFollow
             naverMap.cameraPosition = CameraPosition(args.location!!, naverMap.cameraPosition.zoom)
         } else {
-            naverMap.locationTrackingMode = Follow
+//            naverMap.locationTrackingMode = Follow
+            naverMap.locationTrackingMode = NoFollow
         }
 
         fab = requireActivity().findViewById(R.id.fab_main)
@@ -233,14 +231,57 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 }.show()
             } else onFeatureGet()
         }
+        bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
+
+        FeatureEdit(
+            this.naverMap,
+            bottomAppBar,
+            fab,
+            pathOverlay,
+            pathOverlayList
+        )
+
+        naverMap.setOnMapLongClickListener { point, coord ->
+            bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_add)
+            val cameraUpdate = CameraUpdate.scrollTo(coord).animate(CameraAnimation.Linear)
+                .finishCallback {
+                    when (pathOverlayList.size) {
+                        0 -> {
+                            pathMarker = Marker(coord, MarkerIcons.BLACK).apply {
+                                iconTintColor = Color.WHITE
+                                captionText = "시작점"
+                                captionColor = Color.WHITE
+                                captionHaloColor = BLACK
+                                map = naverMap
+                            }
+                            pathOverlayList.add(coord)
+                        }
+
+                        1 -> {
+                            pathOverlayList.add(coord)
+                            pathOverlay = ArrowheadPathOverlay().apply {
+                                headSizeRatio = 3.0f
+                                coords = pathOverlayList
+                                map = naverMap
+                            }
+                        }
+
+                        else -> {
+                            pathOverlayList.add(coord)
+                            pathOverlay?.coords = pathOverlayList
+                        }
+                    }
+                }
+            naverMap.moveCamera(cameraUpdate)
+        }
     }
 
-    private fun onCameraIdle() {
+    fun onCameraIdle() {
         sharedPref.edit().putFloat("latitude", naverMap.cameraPosition.target.latitude.toFloat())
             .putFloat("longitude", naverMap.cameraPosition.target.longitude.toFloat()).apply()
     }
 
-    private fun onFeatureGet() {
+    fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
         val latLngBounds = naverMap.coveringBounds
@@ -292,7 +333,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
     }
 
-    private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
+    fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
         Marker(point, MarkerIcons.BLACK).apply {
             height = 60
             width = 45
@@ -307,15 +348,14 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             onClickListener = markerOnClickListener
             when (feature.exm_chk) {
                 EXM_CHK_SAVE -> {
-                    icon = MarkerIcons.BLACK
-                    iconTintColor = WHITE
+                    iconTintColor = LTGRAY
                     captionColor = WHITE
                     captionHaloColor = BLACK
                     subCaptionText = feature.exm_ymd()
                 }
 
                 EXM_CHK_EXCLUDE -> {
-                    icon = MarkerIcons.GRAY
+                    iconTintColor = GRAY
                     captionColor = WHITE
                     captionHaloColor = BLACK
                     subCaptionText = "선정제외"
@@ -329,7 +369,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             }
         }
 
-    private fun createRegionMarker(point: LatLng, region: Region) =
+    fun createRegionMarker(point: LatLng, region: Region) =
         Marker(point).apply {
             width = 1
             height = 1
@@ -347,7 +387,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             onClickListener = centerOnClickListener
         }
 
-    private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
+    fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
         ArrowheadPathOverlay(line).apply {
             outlineColor = WHITE
             width = 5
@@ -362,13 +402,13 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
 
     /*
-        private fun createMultipartPath(lines: List<List<LatLng>>, @ColorInt tintColor: Int) =
+        fun createMultipartPath(lines: List<List<LatLng>>, @ColorInt tintColor: Int) =
             MultipartPathOverlay(lines, List(lines.size) { ColorPart(tintColor, WHITE, WHITE, WHITE) }).apply {
                 width = 5
             }
     */
 
-    private fun onFeatureGetResult(
+    fun onFeatureGetResult(
         isEnabled: Boolean, @ColorRes colorInt: Int? = null, @DrawableRes drawableInt: Int? = null,
     ) {
         naverMap.uiSettings.apply {
@@ -380,7 +420,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         toggleFab(isEnabled, colorInt, drawableInt)
     }
 
-    private fun clearOverlays() {
+    fun clearOverlays() {
         arrowheadPath?.map = null
         markerMap.values.stream().forEach {
             if (it is Overlay) it.map = null
@@ -392,7 +432,7 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         arrowheadPathMap.clear()
     }
 
-    private fun onRegionGet() {
+    fun onRegionGet() {
         clearRegionOverlays()
         val latLngBounds = naverMap.coveringBounds
         viewModel.regionsGet(
@@ -424,14 +464,14 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         snackbar(fab, R.string.map_region).setAction("확인") {}.show()
     }
 
-    private fun createPolygon(coords: List<LatLng>) =
+    fun createPolygon(coords: List<LatLng>) =
         PolygonOverlay(coords).apply {
             color = resources.getColor(android.R.color.transparent, null)
             outlineWidth = 5
             outlineColor = WHITE
         }
 
-    private fun clearRegionOverlays() {
+    fun clearRegionOverlays() {
         centerMap.values.stream().forEach {
             if (it is Marker) it.map = null
         }
@@ -476,6 +516,15 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 return true
             }
 
+            R.id.action_cancel -> {
+                bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
+                pathOverlay?.map = null
+                pathOverlay?.coords?.clear()
+                pathOverlayList.clear()
+                pathMarker?.map = null
+                return true
+            }
+
             else -> false
         }
     }
@@ -491,7 +540,20 @@ class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         _binding = null
     }
 
+    private class FeatureEdit(
+        override var naverMap: NaverMap,
+        override var bottomAppBar: BottomAppBar,
+        override var fab: FloatingActionButton,
+        override var pathOverlay: ArrowheadPathOverlay?,
+        override val pathOverlayList: MutableList<LatLng>,
+    ) : NaverMapFragment() {
+
+        init {
+
+        }
+    }
+
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
 }

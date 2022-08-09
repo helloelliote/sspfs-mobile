@@ -5,9 +5,10 @@
 package kr.djgis.sspfs.model
 
 import android.app.Application
-import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.google.gson.Gson
+import com.naver.maps.geometry.LatLngBounds
+import com.naver.maps.map.overlay.Overlay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.App
@@ -43,11 +44,24 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
     val featureE: LiveData<FeatureE> = _featureE
     val featureF: LiveData<FeatureF> = _featureF
 
-    private val _bitmap = MutableLiveData<Bitmap>()
-    val bitmap: LiveData<Bitmap> = _bitmap
+    private val _latLngBounds = MutableLiveData<LatLngBounds>()
+    val latLngBounds: LiveData<LatLngBounds> = _latLngBounds
+
+    private val _overlay = MutableLiveData<Overlay>()
+    val overlay: LiveData<Overlay> = _overlay
 
     private val _type = MutableLiveData<String>()
     val type: LiveData<String> = _type
+
+    fun latLngBounds(latLngBounds: LatLngBounds): FeatureViewModel {
+        _latLngBounds.value = latLngBounds
+        return this
+    }
+
+    fun overlay(overlay: Overlay): FeatureViewModel {
+        _overlay.value = overlay
+        return this
+    }
 
     fun to(fac_typ: String): LiveData<out Feature> {
         return when (fac_typ) {
@@ -70,7 +84,7 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         return this
     }
 
-    fun set(feature: Any) {
+    fun set(feature: Any): FeatureViewModel {
         when (type.value) {
             "A" -> _set(feature as FeatureA)
             "B" -> _set(feature as FeatureB)
@@ -79,6 +93,7 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
             "E" -> _set(feature as FeatureE)
             "F" -> _set(feature as FeatureF)
         }
+        return this
     }
 
     private fun _set(featureA: FeatureA) {
@@ -103,10 +118,6 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun _set(featureF: FeatureF) {
         _featureF.value = featureF
-    }
-
-    fun bitmap(bitmap: Bitmap) {
-        _bitmap.value = bitmap
     }
 
     fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
