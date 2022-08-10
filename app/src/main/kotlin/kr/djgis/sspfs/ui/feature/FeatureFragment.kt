@@ -17,19 +17,21 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import com.naver.maps.map.*
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
+import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE_AND_SAVE
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.network.RetrofitProgress
+import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
@@ -38,8 +40,7 @@ import kr.djgis.sspfs.util.toggleFab
 import java.util.*
 
 @DelicateCoroutinesApi
-class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.MultipartUploadCallback, MenuProvider,
-    OnMapReadyCallback {
+class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallback, MenuProvider, OnMapReadyCallback {
 
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
 
@@ -50,11 +51,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
     private val args: FeatureFragmentArgs by navArgs()
 
     private var adapter: FragmentPagerAdapter? = null
-
-    private val dpWidth: Boolean by lazy {
-        val displayMetrics = resources.displayMetrics
-        return@lazy (displayMetrics.widthPixels / displayMetrics.density) > 600.0
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -160,16 +156,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
         }
 
         binding.run {
-            viewPager.isUserInputEnabled = false
-            viewPager.adapter = adapter
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                tab.apply {
-                    val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
-                    text = tabItem.text
-                    icon = ResourcesCompat.getDrawable(resources, tabItem.iconDrawable, null)!!
-                }
-            }.attach()
-
             (requireActivity() as MainActivity).setSupportActionBar(toolbar)
 
             val mapFragment = childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment?
@@ -186,6 +172,22 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                     childFragmentManager.beginTransaction().add(R.id.toolbar, it).commit()
                 }
             mapFragment.getMapAsync(this@FeatureFragment)
+
+            viewPager.isUserInputEnabled = false
+            viewPager.adapter = adapter
+            viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+//            viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+//                override fun onPageSelected(position: Int) {
+//                    super.onPageSelected(position)
+//                }
+//            })
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.apply {
+                    val tabItem = (viewPager.adapter as FragmentPagerAdapter).tabs[position] as FeatureTabsInterface
+                    text = tabItem.text
+                    icon = ResourcesCompat.getDrawable(resources, tabItem.iconDrawable, null)!!
+                }
+            }.attach()
         }
     }
 
@@ -218,9 +220,15 @@ class FeatureFragment : Fragment(), View.OnClickListener, RetrofitProgress.Multi
                 alertDialog(
                     title = viewModel.of(args.type).fac_nam,
                     message = resources.getString(R.string.feature_action_geom_reverse)
-                ).setNegativeButton("취소") { _, _ ->
-                }.setPositiveButton("확인") { _, _ ->
+                ).setNeutralButton("취소") { dialog, _ ->
+                    dialog.cancel()
+                }.setNegativeButton("반전") { _, _ ->
                     onSave(EXM_CHK_SAVE, EDIT_GEOM_REVERSE) {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }
+                }.setPositiveButton("반전 후 저장") { _, _ ->
+                    onSave(EXM_CHK_SAVE, EDIT_GEOM_REVERSE_AND_SAVE) {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
                     }
