@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2022 대진기술정보(주) All Rights Reserved
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText,AlwaysShowAction">
+    <item
+        android:id="@+id/action_cancel"
+        android:icon="@drawable/ic_round_cancel_24"
+        android:title=" 취소"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_undo"
+        android:icon="@drawable/ic_round_replay_circle_filled_24"
+        android:title=" 되돌리기"
+        app:showAsAction="ifRoom|withText" />
+    <group
+        android:id="@+id/action_group_point"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <item
+            android:id="@+id/action_a"
+            android:icon="@drawable/ic_round_add_a_circle_24"
+            android:title=" 신규: 소교량"
+            app:showAsAction="always|withText" />
+        <item
+            android:id="@+id/action_c"
+            android:icon="@drawable/ic_round_add_c_circle_24"
+            android:title=" 신규: 취입보/낙차공"
+            app:showAsAction="always|withText" />
+    </group>
+    <group
+        android:id="@+id/action_group_line"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <item
+            android:id="@+id/action_b"
+            android:icon="@drawable/ic_round_add_b_circle_24"
+            android:title=" 신규: 세천"
+            app:showAsAction="always|withText" />
+        <item
+            android:id="@+id/action_e"
+            android:icon="@drawable/ic_round_add_e_circle_24"
+            android:title=" 신규: 농로"
+            app:showAsAction="always|withText" />
+        <item
+            android:id="@+id/action_f"
+            android:icon="@drawable/ic_round_add_f_circle_24"
+            android:title=" 신규: 마을진입로"
+            app:showAsAction="always|withText" />
+    </group>
+</menu>

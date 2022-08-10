@@ -7,7 +7,6 @@ package kr.djgis.sspfs.ui.map
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.graphics.Color.*
 import android.os.Bundle
 import android.os.Handler
@@ -18,11 +17,13 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -31,11 +32,13 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.CameraAnimation.Easing
+import com.naver.maps.map.CameraAnimation.Linear
 import com.naver.maps.map.CameraUpdate.*
 import com.naver.maps.map.LocationTrackingMode.NoFollow
 import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
 import com.naver.maps.map.NaverMap.MapType.Satellite
+import com.naver.maps.map.NaverMap.OnMapLongClickListener
 import com.naver.maps.map.overlay.*
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
@@ -50,6 +53,7 @@ import kr.djgis.sspfs.data.FeatureType.Companion.toColor
 import kr.djgis.sspfs.databinding.FragmentMapBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.util.ListLiveData
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
@@ -58,6 +62,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @DelicateCoroutinesApi
+@Suppress("PropertyName")
 open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
@@ -68,8 +73,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     var _binding: FragmentMapBinding? = null
     val binding get() = _binding!!
 
-    lateinit var executor: ExecutorService
-    lateinit var handler: Handler
+    private lateinit var executor: ExecutorService
+    private lateinit var handler: Handler
     lateinit var sharedPref: SharedPreferences
     lateinit var locationSource: FusedLocationSource
     open lateinit var naverMap: NaverMap
@@ -144,12 +149,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
         return@OnClickListener true
     }
-    open var pathMarker: Marker? = null
-    open var pathOverlay: ArrowheadPathOverlay? = null
-    open val pathOverlayList = mutableListOf<LatLng>()
 
     open lateinit var fab: FloatingActionButton
     open lateinit var bottomAppBar: BottomAppBar
+
+    private lateinit var featureEdit: FeatureEdit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -182,7 +186,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         onCreateMap()
     }
 
-    fun onCreateMap() {
+    private fun onCreateMap() {
         val latLng = if (sharedPref.contains("latitude") && sharedPref.contains("longitude"))
             LatLng(
                 sharedPref.getFloat("latitude", 0.0F).toDouble(),
@@ -233,55 +237,19 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
         bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
 
-        FeatureEdit(
-            this.naverMap,
-            bottomAppBar,
-            fab,
-            pathOverlay,
-            pathOverlayList
+        featureEdit = FeatureEdit(
+            naverMap = naverMap,
+            bottomAppBar = bottomAppBar,
+            lifecycleOwner = viewLifecycleOwner
         )
-
-        naverMap.setOnMapLongClickListener { point, coord ->
-            bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_add)
-            val cameraUpdate = CameraUpdate.scrollTo(coord).animate(CameraAnimation.Linear)
-                .finishCallback {
-                    when (pathOverlayList.size) {
-                        0 -> {
-                            pathMarker = Marker(coord, MarkerIcons.BLACK).apply {
-                                iconTintColor = Color.WHITE
-                                captionText = "시작점"
-                                captionColor = Color.WHITE
-                                captionHaloColor = BLACK
-                                map = naverMap
-                            }
-                            pathOverlayList.add(coord)
-                        }
-
-                        1 -> {
-                            pathOverlayList.add(coord)
-                            pathOverlay = ArrowheadPathOverlay().apply {
-                                headSizeRatio = 3.0f
-                                coords = pathOverlayList
-                                map = naverMap
-                            }
-                        }
-
-                        else -> {
-                            pathOverlayList.add(coord)
-                            pathOverlay?.coords = pathOverlayList
-                        }
-                    }
-                }
-            naverMap.moveCamera(cameraUpdate)
-        }
     }
 
-    fun onCameraIdle() {
+    private fun onCameraIdle() {
         sharedPref.edit().putFloat("latitude", naverMap.cameraPosition.target.latitude.toFloat())
             .putFloat("longitude", naverMap.cameraPosition.target.longitude.toFloat()).apply()
     }
 
-    fun onFeatureGet() {
+    private fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
         val latLngBounds = naverMap.coveringBounds
@@ -333,7 +301,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
     }
 
-    fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
+    private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
         Marker(point, MarkerIcons.BLACK).apply {
             height = 60
             width = 45
@@ -369,7 +337,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             }
         }
 
-    fun createRegionMarker(point: LatLng, region: Region) =
+    private fun createRegionMarker(point: LatLng, region: Region) =
         Marker(point).apply {
             width = 1
             height = 1
@@ -387,7 +355,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             onClickListener = centerOnClickListener
         }
 
-    fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
+    private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
         ArrowheadPathOverlay(line).apply {
             outlineColor = WHITE
             width = 5
@@ -408,7 +376,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             }
     */
 
-    fun onFeatureGetResult(
+    private fun onFeatureGetResult(
         isEnabled: Boolean, @ColorRes colorInt: Int? = null, @DrawableRes drawableInt: Int? = null,
     ) {
         naverMap.uiSettings.apply {
@@ -420,7 +388,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         toggleFab(isEnabled, colorInt, drawableInt)
     }
 
-    fun clearOverlays() {
+    private fun clearOverlays() {
         arrowheadPath?.map = null
         markerMap.values.stream().forEach {
             if (it is Overlay) it.map = null
@@ -432,7 +400,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         arrowheadPathMap.clear()
     }
 
-    fun onRegionGet() {
+    private fun onRegionGet() {
         clearRegionOverlays()
         val latLngBounds = naverMap.coveringBounds
         viewModel.regionsGet(
@@ -464,14 +432,14 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         snackbar(fab, R.string.map_region).setAction("확인") {}.show()
     }
 
-    fun createPolygon(coords: List<LatLng>) =
+    private fun createPolygon(coords: List<LatLng>) =
         PolygonOverlay(coords).apply {
             color = resources.getColor(android.R.color.transparent, null)
             outlineWidth = 5
             outlineColor = WHITE
         }
 
-    fun clearRegionOverlays() {
+    private fun clearRegionOverlays() {
         centerMap.values.stream().forEach {
             if (it is Marker) it.map = null
         }
@@ -516,14 +484,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 return true
             }
 
-            R.id.action_cancel -> {
-                bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
-                pathOverlay?.map = null
-                pathOverlay?.coords?.clear()
-                pathOverlayList.clear()
-                pathMarker?.map = null
-                return true
-            }
+            R.id.action_undo -> featureEdit.undo()
+            R.id.action_cancel -> featureEdit.cancel()
 
             else -> false
         }
@@ -543,13 +505,105 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private class FeatureEdit(
         override var naverMap: NaverMap,
         override var bottomAppBar: BottomAppBar,
-        override var fab: FloatingActionButton,
-        override var pathOverlay: ArrowheadPathOverlay?,
-        override val pathOverlayList: MutableList<LatLng>,
+        lifecycleOwner: LifecycleOwner,
     ) : NaverMapFragment() {
 
-        init {
+        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
+            iconTintColor = WHITE
+            captionText = "시작점"
+            captionColor = WHITE
+            captionHaloColor = BLACK
+        }
+        val path: ArrowheadPathOverlay = ArrowheadPathOverlay().apply {
+            headSizeRatio = 3.0f
+        }
+        val latLngs = ListLiveData<LatLng>()
 
+        val onMapLongClickListener = OnMapLongClickListener { _, coord ->
+            bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
+            val cameraUpdate = scrollTo(coord).animate(Linear).finishCallback {
+                when (latLngs.size) {
+                    0 -> {
+                        marker.apply {
+                            position = coord
+                            map = naverMap
+                        }
+                        latLngs.add(coord)
+                    }
+
+                    1 -> {
+                        latLngs.add(coord)
+                        path.apply {
+                            coords = latLngs.all
+                            map = naverMap
+                        }
+                    }
+
+                    else -> {
+                        latLngs.add(coord)
+                        path.coords = latLngs.all
+                    }
+                }
+            }
+            naverMap.moveCamera(cameraUpdate)
+
+        }
+
+        init {
+            latLngs.observe(lifecycleOwner) {
+                when (latLngs.size) {
+                    0 -> {
+                        hideMenu(R.id.action_group_point)
+                        hideMenu(R.id.action_group_line)
+                    }
+
+                    1 -> {
+                        showMenu(R.id.action_group_point)
+                        hideMenu(R.id.action_group_line)
+                    }
+
+                    else -> {
+                        hideMenu(R.id.action_group_point)
+                        showMenu(R.id.action_group_line)
+                    }
+                }
+            }
+            naverMap.onMapLongClickListener = onMapLongClickListener
+        }
+
+        fun undo(step: Int = 1): Boolean {
+            when (latLngs.size) {
+                0, 1 -> {}
+                2 -> {
+                    path.map = null
+                    latLngs.removeLast()
+                }
+
+                else -> {
+                    path.coords = path.coords.dropLast(step)
+                    latLngs.removeLast()
+                }
+            }
+            return true
+        }
+
+        fun cancel(): Boolean {
+            marker.map = null
+            path.apply {
+                map = null
+                coords.clear()
+            }
+            latLngs.clear(true)
+            bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
+            return true
+        }
+
+        private fun showMenu(@IdRes id: Int) {
+            bottomAppBar.menu.setGroupVisible(id, true)
+        }
+
+        private fun hideMenu(@IdRes id: Int) {
+            bottomAppBar.menu.setGroupVisible(id, false)
         }
     }
 
