@@ -17,20 +17,19 @@
             android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
+            android:background="@color/white_1000">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:background="@android:color/transparent" />
+                android:background="@color/white_1000" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                android:background="@android:color/transparent"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed" />
         </com.google.android.material.appbar.AppBarLayout>

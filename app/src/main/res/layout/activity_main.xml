@@ -27,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:backgroundTint="@color/white_1000"
+            app:elevation="10dp"
             app:fabAlignmentMode="end"
             app:fabAnimationMode="scale"
             app:hideOnScroll="false"

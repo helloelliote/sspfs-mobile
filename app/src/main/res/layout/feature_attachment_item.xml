@@ -40,7 +40,7 @@
                 android:scaleType="center"
                 app:glideCenterCrop="@{true}"
                 app:glideSrc="@{featureAttachment}"
-                app:srcCompat="@drawable/ic_round_add_a_photo_96" />
+                app:srcCompat="@drawable/ic_round_add_photo_96" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/App.TextInputLayout"

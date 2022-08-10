@@ -36,7 +36,7 @@ enum class FeatureType(
     companion object {
         fun toColor(type: String) = values().find { it.type == type.trim() }!!.color
 
-        fun toColor(feature: Feature) = values().find { it.name == feature.fac_typ!!.trim() }!!.color
+        fun toColor(feature: Feature) = values().find { it.name == feature.fac_typ.trim() }!!.color
 
         fun keys(): List<String> = values().map { it.name }
         fun types(): List<String> = values().map { it.type }
