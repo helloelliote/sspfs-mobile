@@ -51,9 +51,10 @@ import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.data.FeatureType.Companion.toColor
 import kr.djgis.sspfs.databinding.FragmentMapBinding
+import kr.djgis.sspfs.model.FeatureEditVMFactory
+import kr.djgis.sspfs.model.FeatureEditViewModel
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.util.ListLiveData
 import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
@@ -65,7 +66,8 @@ import java.util.concurrent.Executors
 @Suppress("PropertyName")
 open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
-    val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    open val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    open val editViewModel: FeatureEditViewModel by activityViewModels { FeatureEditVMFactory }
 
     val args: NaverMapFragmentArgs by navArgs()
 
@@ -240,7 +242,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         featureEdit = FeatureEdit(
             naverMap = naverMap,
             bottomAppBar = bottomAppBar,
-            lifecycleOwner = viewLifecycleOwner
+            editViewModel = editViewModel,
+            lifecycleOwner = viewLifecycleOwner,
         )
     }
 
@@ -487,7 +490,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_undo -> featureEdit.undo()
             R.id.action_cancel -> featureEdit.cancel()
 
-            else -> false
+            else -> {
+                editViewModel.add(menuItem.itemId).observeOnce(viewLifecycleOwner) {
+
+                }
+                return true
+            }
         }
     }
 
@@ -505,6 +513,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private class FeatureEdit(
         override var naverMap: NaverMap,
         override var bottomAppBar: BottomAppBar,
+        override var editViewModel: FeatureEditViewModel,
         lifecycleOwner: LifecycleOwner,
     ) : NaverMapFragment() {
 
@@ -517,71 +526,72 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         val path: ArrowheadPathOverlay = ArrowheadPathOverlay().apply {
             headSizeRatio = 3.0f
         }
-        val latLngs = ListLiveData<LatLng>()
 
         val onMapLongClickListener = OnMapLongClickListener { _, coord ->
             bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
             val cameraUpdate = scrollTo(coord).animate(Linear).finishCallback {
-                when (latLngs.size) {
+                when (editViewModel.size) {
                     0 -> {
                         marker.apply {
                             position = coord
                             map = naverMap
                         }
-                        latLngs.add(coord)
+                        editViewModel.latLngs.add(coord)
                     }
 
                     1 -> {
-                        latLngs.add(coord)
+                        editViewModel.latLngs.add(coord)
                         path.apply {
-                            coords = latLngs.all
+                            coords = editViewModel.coords
                             map = naverMap
                         }
                     }
 
                     else -> {
-                        latLngs.add(coord)
-                        path.coords = latLngs.all
+                        editViewModel.latLngs.add(coord)
+                        path.coords = editViewModel.coords
                     }
                 }
             }
             naverMap.moveCamera(cameraUpdate)
-
         }
 
         init {
-            latLngs.observe(lifecycleOwner) {
-                when (latLngs.size) {
+            editViewModel.latLngs.observe(lifecycleOwner) {
+                when (editViewModel.size) {
                     0 -> {
                         hideMenu(R.id.action_group_point)
                         hideMenu(R.id.action_group_line)
+                        editViewModel
                     }
 
                     1 -> {
                         showMenu(R.id.action_group_point)
                         hideMenu(R.id.action_group_line)
+                        editViewModel
                     }
 
                     else -> {
                         hideMenu(R.id.action_group_point)
                         showMenu(R.id.action_group_line)
+                        editViewModel
                     }
-                }
+                }.also { it.update() }
             }
             naverMap.onMapLongClickListener = onMapLongClickListener
         }
 
         fun undo(step: Int = 1): Boolean {
-            when (latLngs.size) {
+            when (editViewModel.size) {
                 0, 1 -> {}
                 2 -> {
                     path.map = null
-                    latLngs.removeLast()
+                    editViewModel.latLngs.removeLast()
                 }
 
                 else -> {
                     path.coords = path.coords.dropLast(step)
-                    latLngs.removeLast()
+                    editViewModel.latLngs.removeLast()
                 }
             }
             return true
@@ -593,7 +603,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 map = null
                 coords.clear()
             }
-            latLngs.clear(true)
+            editViewModel.latLngs.clear(true)
             bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
             return true
         }

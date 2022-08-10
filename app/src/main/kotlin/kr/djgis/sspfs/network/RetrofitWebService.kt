@@ -6,6 +6,7 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import kr.djgis.sspfs.model.FeatureEditViewModel.Feature
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -31,6 +32,11 @@ interface RetrofitWebService {
         @Query("edit") edit: String?,
         @Part multipartBody: List<MultipartBody.Part?>,
     ): JsonElement
+
+    @POST("api/feature/create")
+    suspend fun createFeaturePost(
+        @Body feature: Feature,
+    ): JsonObject
 
     @GET("api/region")
     suspend fun regionsGet(

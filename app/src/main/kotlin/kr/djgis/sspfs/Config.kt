@@ -23,5 +23,4 @@ object Config {
     const val EXM_CHK_SAVE = "1"
     const val EXM_CHK_EXCLUDE = "2"
     const val EDIT_GEOM_REVERSE = "1"
-    const val EDIT_GEOM_REVERSE_AND_SAVE = "2"
 }

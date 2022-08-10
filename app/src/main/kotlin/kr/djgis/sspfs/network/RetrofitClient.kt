@@ -6,6 +6,7 @@ package kr.djgis.sspfs.network
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import kr.djgis.sspfs.model.FeatureEditViewModel
 import okhttp3.MultipartBody.Part
 import kotlin.math.round
 
@@ -25,6 +26,10 @@ object RetrofitClient {
 
     suspend fun featurePost(jsonBody: Part, edit: String? = null, multipartBody: List<Part?>): JsonElement {
         return webService.featurePost(jsonBody = jsonBody, edit = edit, multipartBody = multipartBody)
+    }
+
+    suspend fun createFeaturePost(feature: FeatureEditViewModel.Feature): JsonObject {
+        return webService.createFeaturePost(feature = feature)
     }
 
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {
