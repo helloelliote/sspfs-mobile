@@ -22,9 +22,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import com.naver.maps.map.*
 import com.naver.maps.map.NaverMap.MapType.Satellite
+import com.naver.maps.map.overlay.ArrowheadPathOverlay
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
-import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE_AND_SAVE
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
@@ -36,6 +36,7 @@ import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.observeOnce
+import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
 import java.util.*
 
@@ -51,6 +52,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     private val args: FeatureFragmentArgs by navArgs()
 
     private var adapter: FragmentPagerAdapter? = null
+
+    private var isReversed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -217,7 +220,16 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
             }
 
             R.id.action_reverse_geom -> {
-                alertDialog(
+                viewModel.overlay.value?.let {
+                    isReversed = !isReversed
+                    (it as ArrowheadPathOverlay).coords = it.coords.reversed()
+                }.also {
+                    snackbar(
+                        anchorView = requireActivity().findViewById(R.id.fab_main),
+                        message = R.string.feature_action_geom_reversed
+                    ).show()
+                }
+                /*alertDialog(
                     title = viewModel.of(args.type).fac_nam,
                     message = resources.getString(R.string.feature_action_geom_reverse)
                 ).setNeutralButton("취소") { dialog, _ ->
@@ -232,7 +244,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
                     }
-                }.show()
+                }.show()*/
                 return true
             }
 
@@ -243,7 +255,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
-                onSave(EXM_CHK_SAVE) {
+                onSave(EXM_CHK_SAVE, if (isReversed) EDIT_GEOM_REVERSE else null) {
                     val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                     findNavController().navigate(directions)
                 }
