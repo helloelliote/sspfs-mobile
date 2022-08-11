@@ -45,10 +45,19 @@ interface RetrofitWebService {
     ): JsonObject
 
     @GET("api/region")
-    suspend fun regionsGet(
+    suspend fun districtGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
+    ): JsonObject
+
+    @GET("api/theme")
+    suspend fun themeGet(
+        @Query("xmin") xmin: Double,
+        @Query("ymin") ymin: Double,
+        @Query("xmax") xmax: Double,
+        @Query("ymax") ymax: Double,
+        @Query("name") name: String,
     ): JsonObject
 }

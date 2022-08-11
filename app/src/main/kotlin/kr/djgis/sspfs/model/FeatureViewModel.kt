@@ -11,6 +11,7 @@ import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
 import kr.djgis.sspfs.App
 import kr.djgis.sspfs.data.*
+import kr.djgis.sspfs.network.Moshi.moshiDistrictList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureBList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureCList
@@ -18,7 +19,7 @@ import kr.djgis.sspfs.network.Moshi.moshiFeatureDList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureEList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureFList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureList
-import kr.djgis.sspfs.network.Moshi.moshiRegionList
+import kr.djgis.sspfs.network.Moshi.moshiThemeList
 import kr.djgis.sspfs.network.RetrofitClient
 import kr.djgis.sspfs.network.RetrofitProgress
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
@@ -157,10 +158,16 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         emit(jsonElement)
     }
 
-    fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
+    fun districtGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
         val jsonObject = RetrofitClient.regionsGet(xmin, ymin, xmax, ymax)
-        val regionList = moshiRegionList.fromJson(jsonObject.toString())
+        val regionList = moshiDistrictList.fromJson(jsonObject.toString())
         emit(regionList!!)
+    }
+
+    fun themeGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double, name: String) = liveData {
+        val jsonObject = RetrofitClient.themeGet(xmin, ymin, xmax, ymax, name)
+        val themeList = moshiThemeList.fromJson(jsonObject.toString())
+        emit(themeList!!)
     }
 
     /*    suspend fun fromLatLng(feature: Feature): String? {

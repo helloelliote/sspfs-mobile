@@ -23,7 +23,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:background="@color/white_1000" />
+                android:background="@color/white_1000"
+                android:elevation="50dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"

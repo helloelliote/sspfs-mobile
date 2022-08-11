@@ -9,15 +9,12 @@ import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
-data class RegionList(
-    @Json(name = "rowCount") val regionCount: Int,
-    @Json(name = "rows") val regions: MutableSet<Region>,
+data class ThemeList(
+    @Json(name = "rowCount") val themeCount: Int,
+    @Json(name = "rows") val themes: MutableSet<Theme>,
 )
 
 @JsonClass(generateAdapter = true)
-data class Region(
-    val hjd_nam: String,
-    val bjd_nam: String,
+data class Theme(
     val geom: FeatureGeom,
-    val center: FeatureGeom,
 ) : Serializable

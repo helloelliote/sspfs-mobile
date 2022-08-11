@@ -6,33 +6,39 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText,AlwaysShowAction">
+    tools:ignore="HardcodedText">
     <group android:checkableBehavior="single">
         <!--        <item-->
         <!--            android:id="@+id/action_legend"-->
         <!--            android:icon="@drawable/ic_outline_not_listed_location_24"-->
         <!--            android:title=""-->
-        <!--            app:showAsAction="ifRoom|withText" />-->
+        <!--            app:showAsAction="withText" />-->
         <item
-            android:id="@+id/action_region"
+            android:id="@+id/action_district"
             android:icon="@drawable/ic_baseline_share_location_24"
-            android:title=" 행정구역경계"
-            app:showAsAction="ifRoom|withText"
+            android:title=" 행정구역"
+            app:showAsAction="always|withText"
+            tools:ignore="HardcodedText" />
+        <item
+            android:id="@+id/action_theme"
+            android:icon="@drawable/ic_round_pie_chart_24"
+            android:title=" 주제도"
+            app:showAsAction="always|withText"
             tools:ignore="HardcodedText" />
         <item
             android:id="@+id/action_maptype"
             android:icon="@drawable/ic_round_airplanemode_active_24"
             android:title=" 지도전환"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="always|withText" />
         <item
             android:id="@+id/action_layergroup"
             android:icon="@drawable/ic_round_landscape_30"
             android:title=" 지적편집도"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="always|withText" />
         <item
             android:id="@+id/action_search"
             android:icon="@drawable/ic_round_search_28"
             android:title=" 주소·지명검색"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="always|withText" />
     </group>
 </menu>

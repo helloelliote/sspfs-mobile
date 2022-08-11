@@ -54,6 +54,9 @@ object Moshi {
     val moshiFeatureEditList: JsonAdapter<FeatureEditViewModel.FeatureList> =
         moshiBuilder.adapter(FeatureEditViewModel.FeatureList::class.java).serializeNulls()
 
-    val moshiRegionList: JsonAdapter<RegionList> =
-        moshiBuilder.adapter(RegionList::class.java).serializeNulls()
+    val moshiDistrictList: JsonAdapter<DistrictList> =
+        moshiBuilder.adapter(DistrictList::class.java).serializeNulls()
+
+    val moshiThemeList: JsonAdapter<ThemeList> =
+        moshiBuilder.adapter(ThemeList::class.java).serializeNulls()
 }

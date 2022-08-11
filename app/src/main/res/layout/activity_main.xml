@@ -22,17 +22,87 @@
             app:navGraph="@navigation/nav_graph"
             tools:context=".MainActivity" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="175dp"
+            android:paddingStart="100dp"
+            android:paddingEnd="50dp"
+            app:layout_anchor="@id/bottom_app_bar"
+            app:layout_anchorGravity="top">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:chipSpacingHorizontal="25dp"
+                app:chipSpacingVertical="0dp"
+                app:singleSelection="false">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip8"
+                    style="@style/App.Chip"
+                    android:tag="traffic"
+                    android:text="교통시설" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip7"
+                    style="@style/App.Chip"
+                    android:tag="industry"
+                    android:text="산업단지" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip6"
+                    style="@style/App.Chip"
+                    android:tag="city"
+                    android:text="도시지역" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip5"
+                    style="@style/App.Chip"
+                    android:tag="farm_area"
+                    android:text="농어촌구역" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip4"
+                    style="@style/App.Chip"
+                    android:tag="farm_prom"
+                    android:text="농업진흥구역" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip3"
+                    style="@style/App.Chip"
+                    android:tag="farm_rep"
+                    android:text="농어촌정비" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip2"
+                    style="@style/App.Chip"
+                    android:tag="plan"
+                    android:text="국토계획구역" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1"
+                    style="@style/App.Chip"
+                    android:tag="tour"
+                    android:text="관광지" />
+            </com.google.android.material.chip.ChipGroup>
+        </FrameLayout>
+
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:backgroundTint="@color/white_1000"
-            app:elevation="10dp"
+            app:elevation="50dp"
             app:fabAlignmentMode="end"
             app:fabAnimationMode="scale"
-            app:hideOnScroll="false"
-            app:navigationIcon="@drawable/ic_round_checklist_30" />
+            app:navigationIcon="@drawable/ic_round_checklist_30">
+
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_main"

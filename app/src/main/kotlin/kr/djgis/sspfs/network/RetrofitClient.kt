@@ -46,6 +46,16 @@ object RetrofitClient {
         return webService.createFeatureLine(feature = feature)
     }
 
+    suspend fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): JsonObject {
+        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
+        return webService.districtGet(doubles[0], doubles[1], doubles[2], doubles[3])
+    }
+
+    suspend fun themeGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double, name: String): JsonObject {
+        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
+        return webService.themeGet(doubles[0], doubles[1], doubles[2], doubles[3], name)
+    }
+
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {
         return kakaoService.searchKeyword(query = query, x = x, y = y)
     }
@@ -56,10 +66,5 @@ object RetrofitClient {
 
     suspend fun kakaoCoord2Address(x: Double, y: Double, input: String? = null): JsonObject {
         return kakaoService.geoCoord2Address(x = x, y = y, input = input)
-    }
-
-    suspend fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): JsonObject {
-        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
-        return webService.regionsGet(doubles[0], doubles[1], doubles[2], doubles[3])
     }
 }

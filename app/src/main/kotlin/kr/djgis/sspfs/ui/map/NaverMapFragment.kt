@@ -7,12 +7,15 @@ package kr.djgis.sspfs.ui.map
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Color.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -20,13 +23,17 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -61,13 +68,14 @@ import kr.djgis.sspfs.util.toggleFab
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.collections.set
 
 @DelicateCoroutinesApi
 @Suppress("PropertyName")
 open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
-    open val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
-    open val editViewModel: FeatureEditViewModel by activityViewModels { FeatureEditVMFactory }
+    private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
+    private val editViewModel: FeatureEditViewModel by activityViewModels { FeatureEditVMFactory }
 
     val args: NaverMapFragmentArgs by navArgs()
 
@@ -79,7 +87,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private lateinit var handler: Handler
     lateinit var sharedPref: SharedPreferences
     lateinit var locationSource: FusedLocationSource
-    open lateinit var naverMap: NaverMap
+    private lateinit var naverMap: NaverMap
 
     @Suppress("DEPRECATION")
     private val naverMapPadding: Int by lazy {
@@ -152,10 +160,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         return@OnClickListener true
     }
 
-    open lateinit var fab: FloatingActionButton
-    open lateinit var bottomAppBar: BottomAppBar
+    private lateinit var fab: FloatingActionButton
+    private lateinit var bottomAppBar: BottomAppBar
+    private lateinit var chipGroup: ChipGroup
 
     private lateinit var featureEdit: FeatureEdit
+    private lateinit var districtTheme: DistrictTheme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -189,28 +199,17 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private fun onCreateMap() {
-        val latLng = if (sharedPref.contains("latitude") && sharedPref.contains("longitude"))
-            LatLng(
-                sharedPref.getFloat("latitude", 0.0F).toDouble(),
-                sharedPref.getFloat("longitude", 0.0F).toDouble()
-            ) else LATLNG_GYEONGJU
+        val latLng = if (sharedPref.contains("latitude") && sharedPref.contains("longitude")) LatLng(
+            sharedPref.getFloat("latitude", 0.0F).toDouble(), sharedPref.getFloat("longitude", 0.0F).toDouble()
+        ) else LATLNG_GYEONGJU
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment?
-            ?: MapFragment.newInstance(
-                NaverMapOptions()
-                    .locale(Locale.KOREA)
-                    .mapType(Satellite)
-                    .contentPadding(0, 0, 0, naverMapPadding)
-                    .camera(CameraPosition(latLng, 16.0))
-                    .minZoom(10.0)
-                    .extent(EXTENT_GYEONGJU)
-                    .locationButtonEnabled(true)
-                    .tiltGesturesEnabled(false)
-                    .msaaEnabled(true)
-                    .symbolScale(1.5f)
-            ).also {
-                childFragmentManager.beginTransaction().add(R.id.map, it).commit()
-            }
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment? ?: MapFragment.newInstance(
+            NaverMapOptions().locale(Locale.KOREA).mapType(Satellite).contentPadding(0, 0, 0, naverMapPadding)
+                .camera(CameraPosition(latLng, 16.0)).minZoom(10.0).extent(EXTENT_GYEONGJU).locationButtonEnabled(true)
+                .tiltGesturesEnabled(false).msaaEnabled(true).symbolScale(1.5f)
+        ).also {
+            childFragmentManager.beginTransaction().add(R.id.map, it).commit()
+        }
         mapFragment.getMapAsync(this)
     }
 
@@ -238,12 +237,23 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             } else onFeatureGet()
         }
         bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
+        chipGroup = requireActivity().findViewById(R.id.chipGroup)
 
         featureEdit = FeatureEdit(
             naverMap = naverMap,
             bottomAppBar = bottomAppBar,
             editViewModel = editViewModel,
             lifecycleOwner = viewLifecycleOwner,
+        )
+
+        districtTheme = DistrictTheme(
+            naverMap = naverMap,
+            chipGroup = chipGroup,
+            viewModel = viewModel,
+            lifecycleOwner = viewLifecycleOwner,
+            resources = resources,
+            executor = executor,
+            handler = handler,
         )
     }
 
@@ -340,23 +350,22 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             }
         }
 
-    private fun createRegionMarker(point: LatLng, region: Region) =
-        Marker(point).apply {
-            width = 1
-            height = 1
-            captionMinZoom = 12.0
-            captionTextSize = 12.0f
-            captionText = region.hjd_nam
-            captionColor = WHITE
-            captionHaloColor = BLACK
-            subCaptionTextSize = 16.0f
-            subCaptionText = region.bjd_nam
-            subCaptionColor = WHITE
-            subCaptionHaloColor = BLACK
-            isHideCollidedSymbols = true
-            tag = region.bjd_nam
-            onClickListener = centerOnClickListener
-        }
+    private fun createRegionMarker(point: LatLng, district: District) = Marker(point).apply {
+        width = 1
+        height = 1
+        captionMinZoom = 12.0
+        captionTextSize = 12.0f
+        captionText = district.hjd_nam
+        captionColor = WHITE
+        captionHaloColor = BLACK
+        subCaptionTextSize = 16.0f
+        subCaptionText = district.bjd_nam
+        subCaptionColor = WHITE
+        subCaptionHaloColor = BLACK
+        isHideCollidedSymbols = true
+        tag = district.bjd_nam
+        onClickListener = centerOnClickListener
+    }
 
     private fun createArrowheadPath(line: List<LatLng>, @ColorInt tintColor: Int, feature: Feature) =
         ArrowheadPathOverlay(line).apply {
@@ -406,14 +415,14 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private fun onRegionGet() {
         clearRegionOverlays()
         val latLngBounds = naverMap.coveringBounds
-        viewModel.regionsGet(
+        viewModel.districtGet(
             xmin = latLngBounds.westLongitude,
             ymin = latLngBounds.southLatitude,
             xmax = latLngBounds.eastLongitude,
             ymax = latLngBounds.northLatitude,
         ).observeOnce(viewLifecycleOwner) {
             executor.execute {
-                it.regions.stream().forEach { region ->
+                it.districts.stream().forEach { region ->
                     val latLngs = region.geom.latLngs
                     latLngs.forEach { latLng ->
                         polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
@@ -435,12 +444,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         snackbar(fab, R.string.map_region).setAction("확인") {}.show()
     }
 
-    private fun createPolygon(coords: List<LatLng>) =
-        PolygonOverlay(coords).apply {
-            color = resources.getColor(android.R.color.transparent, null)
-            outlineWidth = 5
-            outlineColor = WHITE
-        }
+    private fun createPolygon(coords: List<LatLng>) = PolygonOverlay(coords).apply {
+        color = resources.getColor(android.R.color.transparent, null)
+        outlineWidth = 5
+        outlineColor = WHITE
+    }
 
     private fun clearRegionOverlays() {
         centerMap.values.stream().forEach {
@@ -458,13 +466,17 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            /*            R.id.action_legend -> {
+        return when (menuItem.itemId) {/*            R.id.action_legend -> {
                             NavDrawerFragment().show(childFragmentManager, null)
                             return true
                         }*/
-            R.id.action_region -> {
+            R.id.action_district -> {
                 onRegionGet()
+                return true
+            }
+
+            R.id.action_theme -> {
+                districtTheme.toggle()
                 return true
             }
 
@@ -475,8 +487,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
             R.id.action_layergroup -> {
                 naverMap.setLayerGroupEnabled(
-                    LAYER_GROUP_CADASTRAL,
-                    !naverMap.isLayerGroupEnabled(LAYER_GROUP_CADASTRAL)
+                    LAYER_GROUP_CADASTRAL, !naverMap.isLayerGroupEnabled(LAYER_GROUP_CADASTRAL)
                 )
                 return true
             }
@@ -515,11 +526,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private class FeatureEdit(
-        override var naverMap: NaverMap,
-        override var bottomAppBar: BottomAppBar,
-        override var editViewModel: FeatureEditViewModel,
+        val naverMap: NaverMap,
+        val bottomAppBar: BottomAppBar,
+        val editViewModel: FeatureEditViewModel,
         lifecycleOwner: LifecycleOwner,
-    ) : NaverMapFragment() {
+    ) {
 
         private val marker: Marker = Marker(MarkerIcons.BLACK).apply {
             iconTintColor = WHITE
@@ -528,7 +539,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             captionHaloColor = BLACK
         }
         private val path: ArrowheadPathOverlay = ArrowheadPathOverlay().apply {
-            headSizeRatio = 3.0f
+            headSizeRatio = 3.5f
+            width = 7
         }
 
         private val onMapLongClickListener = OnMapLongClickListener { _, coord ->
@@ -615,6 +627,94 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         private fun showMenu(@IdRes id: Int) = bottomAppBar.menu.setGroupVisible(id, true)
 
         private fun hideMenu(@IdRes id: Int) = bottomAppBar.menu.setGroupVisible(id, false)
+    }
+
+    @Suppress("PrivatePropertyName")
+    class DistrictTheme(
+        naverMap: NaverMap,
+        val chipGroup: ChipGroup,
+        viewModel: FeatureViewModel,
+        lifecycleOwner: LifecycleOwner,
+        resources: Resources,
+        executor: ExecutorService,
+        handler: Handler,
+    ) {
+
+        private val liveData = MutableLiveData<Chip>()
+        private val white = resources.getColorStateList(R.color.white_1000, null)
+        private val transparent = resources.getColor(android.R.color.transparent, null)
+        private val red_600 = resources.getColorStateList(R.color.red_600, null)
+        private val deep_orange_500 = resources.getColorStateList(R.color.deep_orange_500, null)
+        private val yellow_A400 = resources.getColorStateList(R.color.yellow_A400, null)
+        private val green_600 = resources.getColorStateList(R.color.green_600, null)
+        private val light_blue_A400 = resources.getColorStateList(R.color.light_blue_A400, null)
+        private val light_green_A400 = resources.getColorStateList(R.color.light_green_A400, null)
+        private val amber_A400 = resources.getColorStateList(R.color.amber_A400, null)
+        private val purple_400 = resources.getColorStateList(R.color.purple_400, null)
+        private val polygonSet = mutableSetOf<PolygonOverlay>()
+
+        init {
+            chipGroup.children.forEach {
+                it as Chip
+                it.setOnCheckedChangeListener { chip, isChecked ->
+                    val colorStateList = when ((chip as Chip).id) {
+                        R.id.chip1 -> purple_400
+                        R.id.chip2 -> amber_A400
+                        R.id.chip3 -> light_green_A400
+                        R.id.chip4 -> light_blue_A400
+                        R.id.chip5 -> green_600
+                        R.id.chip6 -> yellow_A400
+                        R.id.chip7 -> deep_orange_500
+                        R.id.chip8 -> red_600
+                        else -> white
+                    }
+                    it.chipBackgroundColor = if (isChecked) colorStateList else white
+                }
+            }
+            chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+                if (checkedIds.isNotEmpty()) {
+                    liveData.postValue(chipGroup.findViewById(checkedIds.last()))
+                }
+            }
+            liveData.observe(lifecycleOwner) { chip ->
+                val latLngBounds = naverMap.coveringBounds
+                viewModel.themeGet(
+                    xmin = latLngBounds.westLongitude,
+                    ymin = latLngBounds.southLatitude,
+                    xmax = latLngBounds.eastLongitude,
+                    ymax = latLngBounds.northLatitude,
+                    chip.tag as String
+                ).observeOnce(lifecycleOwner) {
+                    executor.execute {
+                        it.themes.stream().forEach { region ->
+                            val latLngs = region.geom.latLngs
+                            latLngs.forEach { latLng ->
+                                polygonSet.add(PolygonOverlay(latLng).apply {
+                                    color = transparent
+                                    outlineWidth = 4
+                                    outlineColor = WHITE
+                                })
+                            }
+                        }
+                        handler.post {
+                            polygonSet.stream().forEach {
+                                it.map = naverMap
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        fun toggle() {
+            with(chipGroup.visibility) {
+                chipGroup.visibility = when (this) {
+                    VISIBLE -> GONE
+                    GONE -> VISIBLE
+                    else -> GONE
+                }
+            }
+        }
     }
 
     companion object {

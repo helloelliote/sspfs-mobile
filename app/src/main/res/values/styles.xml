@@ -212,6 +212,15 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="App.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipStrokeColor">@color/white_1000</item>
+        <item name="chipStrokeWidth">3dp</item>
+    </style>
+
     <style name="MaterialAlertDialog__Center" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="materialAlertDialogTitlePanelStyle">@style/Title.Panel.Center</item>
         <item name="materialAlertDialogBodyTextStyle">@style/Message.Center</item>
