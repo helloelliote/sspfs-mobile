@@ -5,649 +5,649 @@
     tools:context="kr.djgis.sspfs.ui.feature.tabs.FeatureDEdit2"
     tools:ignore="TooManyViews,HardcodedText">
 
-  <data>
+    <data>
 
-    <variable
-        name="viewModel"
-        type="kr.djgis.sspfs.model.FeatureViewModel" />
-  </data>
+        <variable
+            name="viewModel"
+            type="kr.djgis.sspfs.model.FeatureViewModel" />
+    </data>
 
-  <androidx.core.widget.NestedScrollView
-      android:id="@+id/nested_scrollview"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:paddingHorizontal="10dp"
-      android:paddingVertical="10dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp">
 
-      <TableLayout
-          android:id="@+id/table1"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="10dp"
-          android:background="@drawable/tablelayout_border"
-          android:stretchColumns="*"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="낙차공명" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:hint="성곡리_낙차공_015"
-              android:text="@{viewModel.featureD.fac_nam}" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="세천명" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView"
-              android:layout_weight="2"
-              android:hint="금계리2_세천_011"
-              android:text="@{viewModel.featureD.pos_nam}" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="주소" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Small"
-              android:layout_weight="2"
-              android:hint="서후면 성곡리 1006구"
-              android:text="@{viewModel.featureD.fac_adm}" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="2. 구조적 안정성" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="조사항목" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
-              android:text="현장조사 내용" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="안정성" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="str_bod"
-              android:text="①본체 노후·파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양     호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="노후·일부파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="파     손" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="str_wal"
-              android:text="②제방연결 옹벽 파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양     호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="노     후" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="없음·파손" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="str_flr"
-              android:text="③바닥보호공 파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양     호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="없음·일부파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="파손·세굴" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="str_jnt"
-              android:text="④제방 접합부 세굴" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양     호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="옹벽 없으나 양호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="파손·세굴" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="str_hzd"
-              android:text="⑤본체 높이로 제방월류" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
-              android:tag="0"
-              android:text="양호·과거 월류피해 없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
-              android:text="과거 월류피해·보 높음·제방 낮음" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="3. 기능성" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="조사항목" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
-              android:text="현장조사 내용" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="기능성" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="4"
-              android:tag="fun_stt"
-              android:text="⑥낙차기능상실" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="5"
-              android:tag="1"
-              android:text="비교적 양호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="5"
-              android:tag="2"
-              android:text="본체파괴·퇴적·기능상실" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="fun_mch"
-              android:text="⑦기계장치 파손\n(권양기,기계실)" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="양     호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="작동가능·일부노출" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="작동불가" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="4. 침식·퇴적" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="조사항목" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
-              android:text="현장조사 내용" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="침식퇴적" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="dep_stt"
-              android:text="⑧상하류 침식퇴적" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="거의 없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:text="일부 침식·퇴적" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="침식·퇴적·취수영향" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="5. 기타" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="조사항목" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
-              android:text="현장조사 내용" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="기타" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="etc_env"
-              android:text="⑨철거민원·\n사회,환경 영향" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="기능 확실" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="기능 상실·영향 없음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="영향 있음·개선필요" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="etc_fsh"
-              android:text="⑩어도 유무·파손" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="어도기능 양호" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="어도 없음·역할 미미" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="어도 파손" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="6. 후보지 평가 (현장조사서)" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="구분" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:text="조사항목" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="6"
-              android:text="현장조사 내용" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="평가" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="eva_sur"
-              android:text="⑪주변현황" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="산     지" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="농 경 지" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="취 락 지" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="eva_inf"
-              android:text="⑫피해발생시 영향 범위" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="0"
-              android:text="작     음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="1"
-              android:text="보     통" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="2"
-              android:tag="2"
-              android:text="넓     음" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:text="" />
-
-          <Button
-              style="@style/App.TableLayout.Label"
-              android:layout_weight="2"
-              android:tag="eva_ope"
-              android:text="⑬주민·관계기관 의견" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
-              android:tag="0"
-              android:text="없     음" />
-
-          <TextView
-              style="@style/App.TableLayout.TextView.Select"
-              android:layout_weight="3"
-              android:tag="1"
-              android:text="있     음" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-          <EditText
-              style="@style/App.TableLayout.EditText"
-              android:hint="* 의견"
-              android:text="@{viewModel.featureD.eva_opi}" />
-        </TableRow>
-
-        <LinearLayout
-            android:id="@+id/spacer_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/table1" />
-      </TableLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </androidx.core.widget.NestedScrollView>
+            <TableLayout
+                android:id="@+id/table1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/tablelayout_border"
+                android:stretchColumns="*"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="낙차공명" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:layout_weight="2"
+
+                        android:text="@{viewModel.featureD.fac_nam}" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="세천명" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView"
+                        android:layout_weight="2"
+
+                        android:text="@{viewModel.featureD.pos_nam}" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="주소" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Small"
+                        android:layout_weight="2"
+                        android:hint="자동입력"
+                        android:text="@{viewModel.featureD.fac_adm}" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="2. 구조적 안정성" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="구분" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="조사항목" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="6"
+                        android:text="현장조사 내용" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="안정성" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="str_bod"
+                        android:text="①본체 노후·파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양     호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="노후·일부파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="파     손" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="str_wal"
+                        android:text="②제방연결 옹벽 파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양     호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="노     후" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="없음·파손" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="str_flr"
+                        android:text="③바닥보호공 파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양     호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="없음·일부파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="파손·세굴" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="str_jnt"
+                        android:text="④제방 접합부 세굴" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양     호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="옹벽 없으나 양호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="파손·세굴" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="str_hzd"
+                        android:text="⑤본체 높이로 제방월류" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="3"
+                        android:tag="0"
+                        android:text="양호·과거 월류피해 없음" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="3"
+                        android:text="과거 월류피해·보 높음·제방 낮음" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="3. 기능성" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="구분" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="조사항목" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="6"
+                        android:text="현장조사 내용" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="기능성" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="4"
+                        android:tag="fun_stt"
+                        android:text="⑥낙차기능상실" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="5"
+                        android:tag="1"
+                        android:text="비교적 양호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="5"
+                        android:tag="2"
+                        android:text="본체파괴·퇴적·기능상실" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="fun_mch"
+                        android:text="⑦기계장치 파손\n(권양기,기계실)" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="양     호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="작동가능·일부노출" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="작동불가" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="4. 침식·퇴적" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="구분" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="조사항목" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="6"
+                        android:text="현장조사 내용" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="침식퇴적" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="dep_stt"
+                        android:text="⑧상하류 침식퇴적" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="거의 없음" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:text="일부 침식·퇴적" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="침식·퇴적·취수영향" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="5. 기타" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="구분" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="조사항목" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="6"
+                        android:text="현장조사 내용" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="기타" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="etc_env"
+                        android:text="⑨철거민원·\n사회,환경 영향" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="기능 확실" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="기능 상실·영향 없음" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="영향 있음·개선필요" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="etc_fsh"
+                        android:text="⑩어도 유무·파손" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="어도기능 양호" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="어도 없음·역할 미미" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="어도 파손" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="6. 후보지 평가 (현장조사서)" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="구분" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:text="조사항목" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="6"
+                        android:text="현장조사 내용" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="평가" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="eva_sur"
+                        android:text="⑪주변현황" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="산     지" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="농 경 지" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="취 락 지" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="eva_inf"
+                        android:text="⑫피해발생시 영향 범위" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="0"
+                        android:text="작     음" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="1"
+                        android:text="보     통" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="2"
+                        android:tag="2"
+                        android:text="넓     음" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:text="" />
+
+                    <Button
+                        style="@style/App.TableLayout.Label"
+                        android:layout_weight="2"
+                        android:tag="eva_ope"
+                        android:text="⑬주민·관계기관 의견" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="3"
+                        android:tag="0"
+                        android:text="없     음" />
+
+                    <TextView
+                        style="@style/App.TableLayout.TextView.Select"
+                        android:layout_weight="3"
+                        android:tag="1"
+                        android:text="있     음" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        style="@style/App.TableLayout.EditText"
+                        android:hint="* 의견"
+                        android:text="@{viewModel.featureD.eva_opi}" />
+                </TableRow>
+
+                <LinearLayout
+                    android:id="@+id/spacer_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/table1" />
+            </TableLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
