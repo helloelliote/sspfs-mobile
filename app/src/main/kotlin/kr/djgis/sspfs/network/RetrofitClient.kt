@@ -24,12 +24,26 @@ object RetrofitClient {
         return webService.featureGet(fac_uid = fac_uid)
     }
 
-    suspend fun featurePost(jsonBody: Part, edit: String? = null, multipartBody: List<Part?>): JsonElement {
-        return webService.featurePost(jsonBody = jsonBody, edit = edit, multipartBody = multipartBody)
+    suspend fun featurePost(
+        jsonBody: Part,
+        edit: String? = null,
+        fraction: Double? = null,
+        multipartBody: List<Part?>,
+    ): JsonElement {
+        return webService.featurePost(
+            jsonBody = jsonBody,
+            edit = edit,
+            fraction = fraction,
+            multipartBody = multipartBody
+        )
     }
 
-    suspend fun createFeaturePost(feature: FeatureEditViewModel.Feature): JsonObject {
-        return webService.createFeaturePost(feature = feature)
+    suspend fun createFeaturePoint(feature: FeatureEditViewModel.Feature): JsonObject {
+        return webService.createFeaturePoint(feature = feature)
+    }
+
+    suspend fun createFeatureLine(feature: FeatureEditViewModel.Feature): JsonObject {
+        return webService.createFeatureLine(feature = feature)
     }
 
     suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {

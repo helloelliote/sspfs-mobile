@@ -30,11 +30,17 @@ interface RetrofitWebService {
     suspend fun featurePost(
         @Part jsonBody: MultipartBody.Part,
         @Query("edit") edit: String?,
+        @Query("fraction") fraction: Double?,
         @Part multipartBody: List<MultipartBody.Part?>,
     ): JsonElement
 
-    @POST("api/feature/create")
-    suspend fun createFeaturePost(
+    @POST("api/feature/create/point")
+    suspend fun createFeaturePoint(
+        @Body feature: Feature,
+    ): JsonObject
+
+    @POST("api/feature/create/line")
+    suspend fun createFeatureLine(
         @Body feature: Feature,
     ): JsonObject
 

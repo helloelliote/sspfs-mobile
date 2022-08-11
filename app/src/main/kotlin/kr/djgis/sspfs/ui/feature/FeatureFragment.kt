@@ -4,6 +4,7 @@
 
 package kr.djgis.sspfs.ui.feature
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
@@ -18,13 +19,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.JsonElement
 import com.naver.maps.map.*
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import com.naver.maps.map.overlay.ArrowheadPathOverlay
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.PathOverlay
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
+import kr.djgis.sspfs.Config.EDIT_GEOM_START
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.R
@@ -54,6 +59,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     private var adapter: FragmentPagerAdapter? = null
 
     private var isReversed = false
+    private var lineFraction: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,7 +202,17 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
 
     override fun onMapReady(naverMap: NaverMap) {
         viewModel.overlay.value?.let {
-            it.map = naverMap
+            when (it) {
+                is Marker -> {
+                    it.map = naverMap
+                }
+
+                is ArrowheadPathOverlay -> {
+                    it.map = naverMap
+                }
+
+                else -> {}
+            }
         }
     }
 
@@ -248,6 +264,41 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                 return true
             }
 
+            R.id.action_start_geom -> {
+                val overlay = viewModel.overlay.value
+                if (overlay is ArrowheadPathOverlay) {
+                    val pathOverlay = PathOverlay(overlay.coords).apply {
+                        width = overlay.width
+                        color = overlay.color
+                        outlineColor = overlay.outlineColor
+                        passedColor = Color.RED
+                        map = overlay.map
+                    }
+                    overlay.map = null
+
+                    binding.slider.apply {
+                        visibility = View.VISIBLE
+                        addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                            override fun onStartTrackingTouch(slider: Slider) {
+                                // Responds to when slider's touch event is being started
+                            }
+
+                            override fun onStopTrackingTouch(slider: Slider) {
+
+                                // Responds to when slider's touch event is being stopped
+                            }
+                        })
+
+                        addOnChangeListener { slider, value, fromUser ->
+                            lineFraction = value / 100.0
+                            pathOverlay.progress = value / 100.0
+                            // Responds to when slider's value is changed
+                        }
+                    }
+                }
+                return true
+            }
+
             else -> false
         }
     }
@@ -255,7 +306,12 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
-                onSave(EXM_CHK_SAVE, if (isReversed) EDIT_GEOM_REVERSE else null) {
+                val edit = when {
+                    isReversed -> EDIT_GEOM_REVERSE
+                    lineFraction > 0.0 -> EDIT_GEOM_START
+                    else -> null
+                }
+                onSave(EXM_CHK_SAVE, edit, if (lineFraction > 0.0) lineFraction else null) {
                     val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                     findNavController().navigate(directions)
                 }
@@ -263,9 +319,14 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         }
     }
 
-    private fun onSave(exm_chk: String, edit: String? = null, observer: Observer<JsonElement>) {
+    private fun onSave(
+        exm_chk: String,
+        edit: String? = null,
+        fraction: Double? = null,
+        observer: Observer<JsonElement>,
+    ) {
         binding.viewPagerCover.visibility = View.VISIBLE
-        viewModel.type(args.type).featurePost(exm_chk, edit, this@FeatureFragment)
+        viewModel.type(args.type).featurePost(exm_chk, edit, fraction, this@FeatureFragment)
             .observeOnce(viewLifecycleOwner, observer)
     }
 

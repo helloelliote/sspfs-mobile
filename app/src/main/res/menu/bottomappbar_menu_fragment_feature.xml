@@ -17,4 +17,9 @@
         android:icon="@drawable/ic_round_loop_24"
         android:title=" 시·종점반전"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_start_geom"
+        android:icon="@drawable/ic_round_edit_location_alt_24"
+        android:title=" 시점변경"
+        app:showAsAction="ifRoom|withText" />
 </menu>

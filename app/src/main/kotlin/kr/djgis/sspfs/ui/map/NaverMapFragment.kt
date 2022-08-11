@@ -110,7 +110,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             viewModel.set(it).overlay(selectOverlay).latLngBounds(bounds)
             naverMap.apply {
                 naverMap.mapType = Satellite
-            }.moveCamera(fitBounds(bounds).animate(Easing, 250).finishCallback {
+            }.moveCamera(scrollTo(bounds.center).animate(Easing, 250).finishCallback {
                 val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
                 findNavController().navigate(directions)
             })
@@ -490,12 +490,16 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_undo -> featureEdit.undo()
             R.id.action_cancel -> featureEdit.cancel()
 
-            else -> {
+            R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_e, R.id.action_f -> {
                 editViewModel.add(menuItem.itemId).observeOnce(viewLifecycleOwner) {
-
+                    featureEdit.cancel()
+                    onFeatureGet()
+                    snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
                 }
                 return true
             }
+
+            else -> return false
         }
     }
 
@@ -517,47 +521,48 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         lifecycleOwner: LifecycleOwner,
     ) : NaverMapFragment() {
 
-        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
+        private val marker: Marker = Marker(MarkerIcons.BLACK).apply {
             iconTintColor = WHITE
             captionText = "시작점"
             captionColor = WHITE
             captionHaloColor = BLACK
         }
-        val path: ArrowheadPathOverlay = ArrowheadPathOverlay().apply {
+        private val path: ArrowheadPathOverlay = ArrowheadPathOverlay().apply {
             headSizeRatio = 3.0f
         }
 
-        val onMapLongClickListener = OnMapLongClickListener { _, coord ->
-            bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
-            val cameraUpdate = scrollTo(coord).animate(Linear).finishCallback {
-                when (editViewModel.size) {
-                    0 -> {
-                        marker.apply {
-                            position = coord
-                            map = naverMap
-                        }
-                        editViewModel.latLngs.add(coord)
+        private val onMapLongClickListener = OnMapLongClickListener { _, coord ->
+            when (editViewModel.size) {
+                0 -> {
+                    marker.apply {
+                        position = coord
+                        map = naverMap
                     }
+                    editViewModel.latLngs.add(coord)
+                }
 
-                    1 -> {
-                        editViewModel.latLngs.add(coord)
-                        path.apply {
-                            coords = editViewModel.coords
-                            map = naverMap
-                        }
-                    }
-
-                    else -> {
-                        editViewModel.latLngs.add(coord)
-                        path.coords = editViewModel.coords
+                1 -> {
+                    editViewModel.latLngs.add(coord)
+                    path.apply {
+                        coords = editViewModel.coords
+                        map = naverMap
                     }
                 }
+
+                else -> {
+                    editViewModel.latLngs.add(coord)
+                    path.coords = editViewModel.coords
+                }
             }
-            naverMap.moveCamera(cameraUpdate)
+            naverMap.moveCamera(scrollTo(coord).animate(Linear).reason(REASON_GESTURE).finishCallback {
+                bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
+            })
         }
 
         init {
+            naverMap.onMapLongClickListener = onMapLongClickListener
             editViewModel.latLngs.observe(lifecycleOwner) {
+                editViewModel.update()
                 when (editViewModel.size) {
                     0 -> {
                         hideMenu(R.id.action_group_point)
@@ -576,9 +581,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                         showMenu(R.id.action_group_line)
                         editViewModel
                     }
-                }.also { it.update() }
+                }
             }
-            naverMap.onMapLongClickListener = onMapLongClickListener
         }
 
         fun undo(step: Int = 1): Boolean {
@@ -608,13 +612,9 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             return true
         }
 
-        private fun showMenu(@IdRes id: Int) {
-            bottomAppBar.menu.setGroupVisible(id, true)
-        }
+        private fun showMenu(@IdRes id: Int) = bottomAppBar.menu.setGroupVisible(id, true)
 
-        private fun hideMenu(@IdRes id: Int) {
-            bottomAppBar.menu.setGroupVisible(id, false)
-        }
+        private fun hideMenu(@IdRes id: Int) = bottomAppBar.menu.setGroupVisible(id, false)
     }
 
     companion object {

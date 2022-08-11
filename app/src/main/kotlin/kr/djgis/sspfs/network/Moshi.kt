@@ -11,6 +11,7 @@ import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.data.kakao.geo.Coord2Address
 import kr.djgis.sspfs.data.kakao.geo.Coord2Regioncode
 import kr.djgis.sspfs.data.kakao.search.Keyword
+import kr.djgis.sspfs.model.FeatureEditViewModel
 
 object Moshi {
 
@@ -49,6 +50,9 @@ object Moshi {
 
     val moshiFeatureFList: JsonAdapter<FeatureFList> =
         moshiBuilder.adapter(FeatureFList::class.java).serializeNulls()
+
+    val moshiFeatureEditList: JsonAdapter<FeatureEditViewModel.FeatureList> =
+        moshiBuilder.adapter(FeatureEditViewModel.FeatureList::class.java).serializeNulls()
 
     val moshiRegionList: JsonAdapter<RegionList> =
         moshiBuilder.adapter(RegionList::class.java).serializeNulls()
