@@ -7,19 +7,15 @@ package kr.djgis.sspfs.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.network.Moshi.moshiCoord2Address
 import kr.djgis.sspfs.network.RetrofitClient
 
 class Coord2AddressViewModel : ViewModel() {
 
     fun coord2Address(x: Double, y: Double, input: String? = null) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.kakaoCoord2Address(x, y, input)
-            val coord2Address = moshiCoord2Address.fromJson(jsonObject.toString())
-            emit(coord2Address!!)
-        }
+        val jsonObject = RetrofitClient.kakaoCoord2Address(x, y, input)
+        val coord2Address = moshiCoord2Address.fromJson(jsonObject.toString())
+        emit(coord2Address!!)
     }
 }
 

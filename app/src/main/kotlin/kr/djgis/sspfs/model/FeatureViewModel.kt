@@ -9,8 +9,6 @@ import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.App
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
@@ -121,56 +119,48 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.featuresGet(xmin, ymin, xmax, ymax)
-            val featureList = moshiFeatureList.fromJson(jsonObject.toString())
-            emit(featureList!!)
-        }
+        val jsonObject = RetrofitClient.featuresGet(xmin, ymin, xmax, ymax)
+        val featureList = moshiFeatureList.fromJson(jsonObject.toString())
+        emit(featureList!!)
     }
 
     fun featureGet(fac_uid: String) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.featureGet(fac_uid)
-            val result = when (type.value!!) {
-                "A" -> moshiFeatureAList.fromJson(jsonObject.toString())!!.features.first()
-                "B" -> moshiFeatureBList.fromJson(jsonObject.toString())!!.features.first()
-                "C" -> moshiFeatureCList.fromJson(jsonObject.toString())!!.features.first()
-                "D" -> moshiFeatureDList.fromJson(jsonObject.toString())!!.features.first()
-                "E" -> moshiFeatureEList.fromJson(jsonObject.toString())!!.features.first()
-                "F" -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
-                else -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
-            }
-            emit(result)
+        val jsonObject = RetrofitClient.featureGet(fac_uid)
+        val result = when (type.value!!) {
+            "A" -> moshiFeatureAList.fromJson(jsonObject.toString())!!.features.first()
+            "B" -> moshiFeatureBList.fromJson(jsonObject.toString())!!.features.first()
+            "C" -> moshiFeatureCList.fromJson(jsonObject.toString())!!.features.first()
+            "D" -> moshiFeatureDList.fromJson(jsonObject.toString())!!.features.first()
+            "E" -> moshiFeatureEList.fromJson(jsonObject.toString())!!.features.first()
+            "F" -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
+            else -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
         }
+        emit(result)
     }
 
-    fun featurePost(status: String, edit: String?, callback: MultipartUploadCallback) = liveData {
-        withContext(Dispatchers.IO) {
-            val multipartBody = mutableListOf<MultipartBody.Part>()
-            val feature = this@FeatureViewModel.of(type.value!!)
-            feature.exm_chk = status
-            feature.img_fac.forEach { attachment ->
-                if (attachment.uri == null) {
-                    return@forEach
-                } else {
-                    val part = createFormData(
-                        "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
-                    )
-                    multipartBody.add(part)
-                }
+    fun featurePost(status: String, edit: String?, fraction: Double?, callback: MultipartUploadCallback) = liveData {
+        val multipartBody = mutableListOf<MultipartBody.Part>()
+        val feature = this@FeatureViewModel.of(type.value!!)
+        feature.exm_chk = status
+        feature.img_fac.forEach { attachment ->
+            if (attachment.uri == null) {
+                return@forEach
+            } else {
+                val part = createFormData(
+                    "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
+                )
+                multipartBody.add(part)
             }
-            val jsonBody = createFormData("json", Gson().toJson(feature))
-            val jsonElement = RetrofitClient.featurePost(jsonBody, edit, multipartBody)
-            emit(jsonElement)
         }
+        val jsonBody = createFormData("json", Gson().toJson(feature))
+        val jsonElement = RetrofitClient.featurePost(jsonBody, edit, fraction, multipartBody)
+        emit(jsonElement)
     }
 
     fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.regionsGet(xmin, ymin, xmax, ymax)
-            val regionList = moshiRegionList.fromJson(jsonObject.toString())
-            emit(regionList!!)
-        }
+        val jsonObject = RetrofitClient.regionsGet(xmin, ymin, xmax, ymax)
+        val regionList = moshiRegionList.fromJson(jsonObject.toString())
+        emit(regionList!!)
     }
 
     /*    suspend fun fromLatLng(feature: Feature): String? {

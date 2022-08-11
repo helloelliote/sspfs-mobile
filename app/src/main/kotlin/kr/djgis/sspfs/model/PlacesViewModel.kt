@@ -7,19 +7,15 @@ package kr.djgis.sspfs.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.network.Moshi.moshiKeyword
 import kr.djgis.sspfs.network.RetrofitClient
 
 class PlacesViewModel : ViewModel() {
 
     fun searchPlaces(query: String, x: Double?, y: Double?) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.kakaoSearchPlaces(query, x, y)
-            val keyword = moshiKeyword.fromJson(jsonObject.toString())
-            emit(keyword!!)
-        }
+        val jsonObject = RetrofitClient.kakaoSearchPlaces(query, x, y)
+        val keyword = moshiKeyword.fromJson(jsonObject.toString())
+        emit(keyword!!)
     }
 }
 

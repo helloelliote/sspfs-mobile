@@ -7,19 +7,15 @@ package kr.djgis.sspfs.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kr.djgis.sspfs.network.Moshi.moshiCoord2Regioncode
 import kr.djgis.sspfs.network.RetrofitClient
 
 class Coord2RegioncodeViewModel : ViewModel() {
 
     fun coord2Regioncode(x: Double, y: Double, input: String? = null, output: String? = null) = liveData {
-        withContext(Dispatchers.IO) {
-            val jsonObject = RetrofitClient.kakaoCoord2Regioncode(x, y, input, output)
-            val coord2Regioncode = moshiCoord2Regioncode.fromJson(jsonObject.toString())
-            emit(coord2Regioncode!!)
-        }
+        val jsonObject = RetrofitClient.kakaoCoord2Regioncode(x, y, input, output)
+        val coord2Regioncode = moshiCoord2Regioncode.fromJson(jsonObject.toString())
+        emit(coord2Regioncode!!)
     }
 }
 
