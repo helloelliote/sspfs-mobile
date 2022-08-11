@@ -520,6 +520,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         toggleFab(true)
     }
 
+    override fun onPause() {
+        chipGroup.visibility = GONE
+        chipGroup.clearCheck()
+        super.onPause()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
