@@ -28,7 +28,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -77,7 +76,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private val viewModel: FeatureViewModel by activityViewModels { FeatureVMFactory }
     private val editViewModel: FeatureEditViewModel by activityViewModels { FeatureEditVMFactory }
 
-    val args: NaverMapFragmentArgs by navArgs()
+    private val args: NaverMapFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and onDestroyView.
     var _binding: FragmentMapBinding? = null
@@ -85,8 +84,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     private lateinit var executor: ExecutorService
     private lateinit var handler: Handler
-    lateinit var sharedPref: SharedPreferences
-    lateinit var locationSource: FusedLocationSource
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
 
     @Suppress("DEPRECATION")
@@ -248,12 +247,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
         districtTheme = DistrictTheme(
             naverMap = naverMap,
-            chipGroup = chipGroup,
             viewModel = viewModel,
             lifecycleOwner = viewLifecycleOwner,
-            resources = resources,
             executor = executor,
             handler = handler,
+            resources = resources,
+            chipGroup = chipGroup,
         )
     }
 
@@ -265,7 +264,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
-        val latLngBounds = naverMap.coveringBounds
+        val latLngBounds = naverMap.contentBounds
         viewModel.featuresGet(
             xmin = latLngBounds.westLongitude,
             ymin = latLngBounds.southLatitude,
@@ -638,17 +637,16 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     @Suppress("PrivatePropertyName")
     class DistrictTheme(
         naverMap: NaverMap,
-        val chipGroup: ChipGroup,
         viewModel: FeatureViewModel,
         lifecycleOwner: LifecycleOwner,
-        resources: Resources,
         executor: ExecutorService,
         handler: Handler,
+        resources: Resources,
+        val chipGroup: ChipGroup,
     ) {
 
-        private val liveData = MutableLiveData<Chip>()
         private val white = resources.getColorStateList(R.color.white_1000, null)
-        private val transparent = resources.getColor(android.R.color.transparent, null)
+        private val transparent = resources.getColorStateList(android.R.color.transparent, null)
         private val red_600 = resources.getColorStateList(R.color.red_600, null)
         private val deep_orange_500 = resources.getColorStateList(R.color.deep_orange_500, null)
         private val yellow_A400 = resources.getColorStateList(R.color.yellow_A400, null)
@@ -657,55 +655,84 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         private val light_green_A400 = resources.getColorStateList(R.color.light_green_A400, null)
         private val amber_A400 = resources.getColorStateList(R.color.amber_A400, null)
         private val purple_400 = resources.getColorStateList(R.color.purple_400, null)
-        private val polygonSet = mutableSetOf<PolygonOverlay>()
+
+        private val red_600_25 = resources.getColorStateList(R.color.red_600_25, null)
+        private val deep_orange_500_25 = resources.getColorStateList(R.color.deep_orange_500_25, null)
+        private val yellow_A400_25 = resources.getColorStateList(R.color.yellow_A400_25, null)
+        private val green_600_25 = resources.getColorStateList(R.color.green_600_25, null)
+        private val light_blue_A400_25 = resources.getColorStateList(R.color.light_blue_A400_25, null)
+        private val light_green_A400_25 = resources.getColorStateList(R.color.light_green_A400_25, null)
+        private val amber_A400_25 = resources.getColorStateList(R.color.amber_A400_25, null)
+        private val purple_400_25 = resources.getColorStateList(R.color.purple_400_25, null)
+
+        private val polygonMap = mutableMapOf<String, Set<PolygonOverlay>>()
 
         init {
-            chipGroup.children.forEach {
-                it as Chip
-                it.setOnCheckedChangeListener { chip, isChecked ->
-                    val colorStateList = when ((chip as Chip).id) {
-                        R.id.chip1 -> purple_400
-                        R.id.chip2 -> amber_A400
-                        R.id.chip3 -> light_green_A400
-                        R.id.chip4 -> light_blue_A400
-                        R.id.chip5 -> green_600
-                        R.id.chip6 -> yellow_A400
-                        R.id.chip7 -> deep_orange_500
-                        R.id.chip8 -> red_600
-                        else -> white
-                    }
-                    it.chipBackgroundColor = if (isChecked) colorStateList else white
+            chipGroup.children.forEach { chip ->
+                chip as Chip
+                val chipColor = when (chip.id) {
+                    R.id.chip1 -> purple_400
+                    R.id.chip2 -> amber_A400
+                    R.id.chip3 -> light_green_A400
+                    R.id.chip4 -> light_blue_A400
+                    R.id.chip5 -> green_600
+                    R.id.chip6 -> yellow_A400
+                    R.id.chip7 -> deep_orange_500
+                    R.id.chip8 -> red_600
+                    else -> white
                 }
-            }
-            chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                if (checkedIds.isNotEmpty()) {
-                    liveData.postValue(chipGroup.findViewById(checkedIds.last()))
+                val polygonColor = when (chip.id) {
+                    R.id.chip1 -> purple_400_25
+                    R.id.chip2 -> amber_A400_25
+                    R.id.chip3 -> light_green_A400_25
+                    R.id.chip4 -> light_blue_A400_25
+                    R.id.chip5 -> green_600_25
+                    R.id.chip6 -> yellow_A400_25
+                    R.id.chip7 -> deep_orange_500_25
+                    R.id.chip8 -> red_600_25
+                    else -> transparent
                 }
-            }
-            liveData.observe(lifecycleOwner) { chip ->
-                val latLngBounds = naverMap.coveringBounds
-                viewModel.themeGet(
-                    xmin = latLngBounds.westLongitude,
-                    ymin = latLngBounds.southLatitude,
-                    xmax = latLngBounds.eastLongitude,
-                    ymax = latLngBounds.northLatitude,
-                    chip.tag as String
-                ).observeOnce(lifecycleOwner) {
-                    executor.execute {
-                        it.themes.stream().forEach { region ->
-                            val latLngs = region.geom.latLngs
-                            latLngs.forEach { latLng ->
-                                polygonSet.add(PolygonOverlay(latLng).apply {
-                                    color = transparent
-                                    outlineWidth = 4
-                                    outlineColor = WHITE
-                                })
+                chip.setOnCheckedChangeListener { _, isChecked ->
+                    val tag: String = chip.tag as String
+                    when (isChecked) {
+                        true -> {
+                            chip.chipBackgroundColor = chipColor
+                            val latLngBounds = naverMap.contentBounds
+                            viewModel.themeGet(
+                                xmin = latLngBounds.westLongitude,
+                                ymin = latLngBounds.southLatitude,
+                                xmax = latLngBounds.eastLongitude,
+                                ymax = latLngBounds.northLatitude,
+                                tag
+                            ).observeOnce(lifecycleOwner) {
+                                executor.execute {
+                                    val mutableSet = mutableSetOf<PolygonOverlay>()
+                                    it.themes.stream().forEach { region ->
+                                        val latLngs = region.geom.latLngs
+                                        latLngs.stream().forEach { latLng ->
+                                            mutableSet.add(PolygonOverlay(latLng).apply {
+                                                color = polygonColor.defaultColor
+                                                outlineColor = chipColor.defaultColor
+                                                outlineWidth = 6
+                                            })
+                                        }
+                                    }
+                                    polygonMap[tag] = mutableSet
+                                    handler.post {
+                                        mutableSet.stream().forEach {
+                                            it.map = naverMap
+                                        }
+                                    }
+                                }
                             }
                         }
-                        handler.post {
-                            polygonSet.stream().forEach {
-                                it.map = naverMap
+
+                        false -> {
+                            chip.chipBackgroundColor = white
+                            polygonMap[tag]?.stream()?.forEach {
+                                it.map = null
                             }
+                            polygonMap.remove(tag)
                         }
                     }
                 }

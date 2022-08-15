@@ -86,6 +86,7 @@
     <color name="red_400">#EF5350</color>
     <color name="red_500">#F44336</color>
     <color name="red_600">#E53935</color>
+    <color name="red_600_25">#33E53935</color>
     <color name="red_700">#D32F2F</color>
     <color name="red_800">#C62828</color>
     <color name="red_900">#B71C1C</color>
@@ -116,6 +117,7 @@
     <color name="purple_200">#CE93D8</color>
     <color name="purple_300">#BA68C8</color>
     <color name="purple_400">#AB47BC</color>
+    <color name="purple_400_25">#33AB47BC</color>
     <color name="purple_500">#9C27B0</color>
     <color name="purple_600">#8E24AA</color>
     <color name="purple_700">#7B1FA2</color>
@@ -188,6 +190,7 @@
     <color name="light_blue_A100">#80D8FF</color>
     <color name="light_blue_A200">#40C4FF</color>
     <color name="light_blue_A400">#00B0FF</color>
+    <color name="light_blue_A400_25">#3300B0FF</color>
     <color name="light_blue_A700">#0091EA</color>
 
     <!-- cyan -->
@@ -230,6 +233,7 @@
     <color name="green_400">#66BB6A</color>
     <color name="green_500">#4CAF50</color>
     <color name="green_600">#43A047</color>
+    <color name="green_600_25">#3343A047</color>
     <color name="green_700">#388E3C</color>
     <color name="green_800">#2E7D32</color>
     <color name="green_900">#1B5E20</color>
@@ -252,6 +256,7 @@
     <color name="light_green_A100">#CCFF90</color>
     <color name="light_green_A200">#B2FF59</color>
     <color name="light_green_A400">#76FF03</color>
+    <color name="light_green_A400_25">#3376FF03</color>
     <color name="light_green_A700">#64DD17</color>
 
     <!-- lime-->
@@ -284,6 +289,7 @@
     <color name="yellow_A100">#FFFF82</color>
     <color name="yellow_A200">#FFFF00</color>
     <color name="yellow_A400">#FFEA00</color>
+    <color name="yellow_A400_25">#33FFEA00</color>
     <color name="yellow_A700">#FFD600</color>
 
     <!--amber-->
@@ -300,6 +306,7 @@
     <color name="amber_A100">#FFE57F</color>
     <color name="amber_A200">#FFD740</color>
     <color name="amber_A400">#FFC400</color>
+    <color name="amber_A400_25">#33FFC400</color>
     <color name="amber_A700">#FFAB00</color>
 
     <!--orange-->
@@ -325,6 +332,7 @@
     <color name="deep_orange_300">#FF8A65</color>
     <color name="deep_orange_400">#FF7043</color>
     <color name="deep_orange_500">#FF5722</color>
+    <color name="deep_orange_500_25">#33FF5722</color>
     <color name="deep_orange_600">#F4511E</color>
     <color name="deep_orange_700">#E64A19</color>
     <color name="deep_orange_800">#D84315</color>
