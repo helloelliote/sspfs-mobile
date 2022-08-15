@@ -236,10 +236,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
             }
 
             R.id.action_reverse_geom -> {
-                viewModel.overlay.value?.let {
+                val overlay = viewModel.overlay.value
+                if (overlay is ArrowheadPathOverlay) {
                     isReversed = !isReversed
-                    (it as ArrowheadPathOverlay).coords = it.coords.reversed()
-                }.also {
+                    overlay.coords = overlay.coords.reversed()
                     snackbar(
                         anchorView = requireActivity().findViewById(R.id.fab_main),
                         message = R.string.feature_action_geom_reversed

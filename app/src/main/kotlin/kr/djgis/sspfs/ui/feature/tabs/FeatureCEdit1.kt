@@ -40,7 +40,7 @@ class FeatureCEdit1 : FeatureTabs() {
         }
     }
 
-    override var text = "낙차공 조사 1"
+    override var text = "취입보 조사 1"
 
     override fun onDestroyView() {
         super.onDestroyView()

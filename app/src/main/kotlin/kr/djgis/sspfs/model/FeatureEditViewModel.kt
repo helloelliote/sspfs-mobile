@@ -59,7 +59,7 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
             R.id.action_a -> createFeaturePoint("A", "B", "소교량")
             R.id.action_b -> createFeatureLine("B", "S", "세천")
             R.id.action_c -> createFeaturePoint("C", "W", "취입보")
-//            R.id.action_d -> featureCreate("D", "W", "낙차공")
+            R.id.action_d -> createFeaturePoint("D", "W", "낙차공")
             R.id.action_e -> createFeatureLine("E", "N", "농로")
             R.id.action_f -> createFeatureLine("F", "M", "마을진입로")
             else -> createFeatureLine("", "", "")

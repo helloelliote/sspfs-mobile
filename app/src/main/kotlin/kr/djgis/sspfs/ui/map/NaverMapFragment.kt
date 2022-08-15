@@ -411,36 +411,42 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         arrowheadPathMap.clear()
     }
 
-    private fun onRegionGet() {
-        clearRegionOverlays()
-        val latLngBounds = naverMap.coveringBounds
-        viewModel.districtGet(
-            xmin = latLngBounds.westLongitude,
-            ymin = latLngBounds.southLatitude,
-            xmax = latLngBounds.eastLongitude,
-            ymax = latLngBounds.northLatitude,
-        ).observeOnce(viewLifecycleOwner) {
-            executor.execute {
-                it.districts.stream().forEach { region ->
-                    val latLngs = region.geom.latLngs
-                    latLngs.forEach { latLng ->
-                        polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
-                            val centerLatlng = region.center.latLngs
-                            centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
-                        })
+    private fun onRegionGet(menuItem: MenuItem) {
+        menuItem.isChecked = !menuItem.isChecked
+        if (menuItem.isChecked) {
+            menuItem.setIcon(R.drawable.ic_round_toggle_on_24)
+            val latLngBounds = naverMap.coveringBounds
+            viewModel.districtGet(
+                xmin = latLngBounds.westLongitude,
+                ymin = latLngBounds.southLatitude,
+                xmax = latLngBounds.eastLongitude,
+                ymax = latLngBounds.northLatitude,
+            ).observeOnce(viewLifecycleOwner) {
+                executor.execute {
+                    it.districts.stream().forEach { region ->
+                        val latLngs = region.geom.latLngs
+                        latLngs.forEach { latLng ->
+                            polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
+                                val centerLatlng = region.center.latLngs
+                                centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
+                            })
+                        }
                     }
-                }
-                handler.post {
-                    polygonMap.values.stream().forEach {
-                        it.map = naverMap
-                    }
-                    centerMap.values.stream().forEach {
-                        it.map = naverMap
+                    handler.post {
+                        polygonMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
+                        centerMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
                     }
                 }
             }
+            snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+        } else {
+            menuItem.setIcon(R.drawable.ic_round_toggle_off_24)
+            clearRegionOverlays()
         }
-        snackbar(fab, R.string.map_region).setAction("확인") {}.show()
     }
 
     private fun createPolygon(coords: List<LatLng>) = PolygonOverlay(coords).apply {
@@ -470,7 +476,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                             return true
                         }*/
             R.id.action_district -> {
-                onRegionGet()
+                onRegionGet(menuItem)
                 return true
             }
 
@@ -500,7 +506,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_undo -> featureEdit.undo()
             R.id.action_cancel -> featureEdit.cancel()
 
-            R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_e, R.id.action_f -> {
+            R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_d, R.id.action_e, R.id.action_f -> {
                 editViewModel.add(menuItem.itemId).observeOnce(viewLifecycleOwner) {
                     featureEdit.cancel()
                     onFeatureGet()
@@ -531,7 +537,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private class FeatureEdit(
-        val naverMap: NaverMap,
+        naverMap: NaverMap,
         val bottomAppBar: BottomAppBar,
         val editViewModel: FeatureEditViewModel,
         lifecycleOwner: LifecycleOwner,
@@ -547,7 +553,6 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             headSizeRatio = 3.5f
             width = 7
         }
-
         private val onMapLongClickListener = OnMapLongClickListener { _, coord ->
             when (editViewModel.size) {
                 0 -> {

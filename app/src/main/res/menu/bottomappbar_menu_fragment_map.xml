@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
-    <group android:checkableBehavior="single">
+    <group>
         <!--        <item-->
         <!--            android:id="@+id/action_legend"-->
         <!--            android:icon="@drawable/ic_outline_not_listed_location_24"-->
@@ -15,7 +15,8 @@
         <!--            app:showAsAction="withText" />-->
         <item
             android:id="@+id/action_district"
-            android:icon="@drawable/ic_baseline_share_location_24"
+            android:checkable="true"
+            android:icon="@drawable/ic_round_toggle_off_24"
             android:title=" 행정구역"
             app:showAsAction="always|withText"
             tools:ignore="HardcodedText" />
