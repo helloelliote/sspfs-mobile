@@ -14,14 +14,12 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.JsonElement
 import com.naver.maps.map.*
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import com.naver.maps.map.overlay.ArrowheadPathOverlay
@@ -37,10 +35,10 @@ import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
+import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
-import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
 import java.util.*
@@ -67,7 +65,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 alertDialog(
-                    title = viewModel.of(args.type).fac_nam,
+                    title = "작업이 저장되지 않습니다",
                     message = resources.getString(R.string.feature_back)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("나가기") { _, _ ->
@@ -227,10 +225,12 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     message = resources.getString(R.string.feature_action_exclude)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("제외") { _, _ ->
-                    onSave(EXM_CHK_EXCLUDE) {
+                    viewModel.type(args.type).featurePost(
+                        EXM_CHK_EXCLUDE, null, null, this@FeatureFragment
+                    ).enqueue(onResponse = {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
-                    }
+                    }, onFailure = {})
                 }.show()
                 return true
             }
@@ -306,28 +306,22 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
+                binding.viewPagerCover.visibility = View.VISIBLE
                 val edit = when {
                     isReversed -> EDIT_GEOM_REVERSE
                     lineFraction > 0.0 -> EDIT_GEOM_START
                     else -> null
                 }
-                onSave(EXM_CHK_SAVE, edit, if (lineFraction > 0.0) lineFraction else null) {
+                val fraction = if (lineFraction > 0.0) lineFraction else null
+                viewModel.type(args.type).featurePost(
+                    EXM_CHK_SAVE, edit, fraction, this@FeatureFragment
+                ).enqueue(onResponse = {
+                    println("HELLO: ${it}")
                     val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                     findNavController().navigate(directions)
-                }
+                }, onFailure = {})
             }
         }
-    }
-
-    private fun onSave(
-        exm_chk: String,
-        edit: String? = null,
-        fraction: Double? = null,
-        observer: Observer<JsonElement>,
-    ) {
-        binding.viewPagerCover.visibility = View.VISIBLE
-        viewModel.type(args.type).featurePost(exm_chk, edit, fraction, this@FeatureFragment)
-            .observeOnce(viewLifecycleOwner, observer)
     }
 
     override fun onInitiate(percentage: Int) {

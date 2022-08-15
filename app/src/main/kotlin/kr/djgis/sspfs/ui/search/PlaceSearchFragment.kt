@@ -15,21 +15,19 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.naver.maps.geometry.LatLng
 import kr.djgis.sspfs.data.kakao.search.Document
 import kr.djgis.sspfs.data.kakao.search.KeywordStore
 import kr.djgis.sspfs.databinding.FragmentPlaceSearchBinding
-import kr.djgis.sspfs.model.PlacesVMFactory
-import kr.djgis.sspfs.model.PlacesViewModel
+import kr.djgis.sspfs.network.Moshi.moshiKeyword
+import kr.djgis.sspfs.network.RetrofitClient.kakaoService
+import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.util.getRecognizeSpeechIntent
-import kr.djgis.sspfs.util.observeOnce
+import kr.djgis.sspfs.util.snackbar
 
 class PlaceSearchFragment : Fragment(), KeywordAdapterListener {
-
-    private val viewModel: PlacesViewModel by activityViewModels { PlacesVMFactory }
 
     // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentPlaceSearchBinding? = null
@@ -68,20 +66,22 @@ class PlaceSearchFragment : Fragment(), KeywordAdapterListener {
         binding.searchQuery.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    viewModel.searchPlaces(
+                    kakaoService.searchKeyword(
                         query = query,
                         x = latLng?.longitude,
                         y = latLng?.latitude,
-                    ).observeOnce(viewLifecycleOwner) {
-                        if (it.meta.total_count == 0) {
+                    ).enqueue(onResponse = { json ->
+                        val keyword = moshiKeyword.fromJson(json.toString())!!
+                        if (keyword.meta.total_count == 0) {
                             resetSearch()
                         } else {
-                            KeywordStore.DOCUMENT.postValue(it.documents.sortedBy { document ->
+                            KeywordStore.DOCUMENT.postValue(keyword.documents.sortedBy { document ->
                                 document.distance.toDouble()
                             }.toMutableList())
                         }
-                    }
-                    // TODO: 실패시 snackbar(null, throwable.message).show()
+                    }, onFailure = {
+                        snackbar(message = it).show()
+                    })
                     return false
                 }
 
@@ -121,8 +121,12 @@ class PlaceSearchFragment : Fragment(), KeywordAdapterListener {
         }
         KeywordStore.addHistory(document)
         val directions =
-            PlaceSearchFragmentDirections.actionToNaverMapFragment(LatLng(document.y.toDouble(),
-                document.x.toDouble()))
+            PlaceSearchFragmentDirections.actionToNaverMapFragment(
+                LatLng(
+                    document.y.toDouble(),
+                    document.x.toDouble()
+                )
+            )
         findNavController().navigate(directions)
     }
 

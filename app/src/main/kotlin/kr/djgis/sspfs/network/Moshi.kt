@@ -8,8 +8,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kr.djgis.sspfs.data.*
-import kr.djgis.sspfs.data.kakao.geo.Coord2Address
-import kr.djgis.sspfs.data.kakao.geo.Coord2Regioncode
 import kr.djgis.sspfs.data.kakao.search.Keyword
 import kr.djgis.sspfs.model.FeatureEditViewModel
 
@@ -22,13 +20,13 @@ object Moshi {
         moshiBuilder.adapter(Keyword::class.java).serializeNulls()
     }
 
-    val moshiCoord2Regioncode: JsonAdapter<Coord2Regioncode> by lazy {
-        moshiBuilder.adapter(Coord2Regioncode::class.java).serializeNulls()
-    }
+    /*    val moshiCoord2Regioncode: JsonAdapter<Coord2Regioncode> by lazy {
+            moshiBuilder.adapter(Coord2Regioncode::class.java).serializeNulls()
+        }
 
-    val moshiCoord2Address: JsonAdapter<Coord2Address> by lazy {
-        moshiBuilder.adapter(Coord2Address::class.java).serializeNulls()
-    }
+        val moshiCoord2Address: JsonAdapter<Coord2Address> by lazy {
+            moshiBuilder.adapter(Coord2Address::class.java).serializeNulls()
+        }*/
 
     val moshiFeatureList: JsonAdapter<FeatureList> =
         moshiBuilder.adapter(FeatureList::class.java).serializeNulls()

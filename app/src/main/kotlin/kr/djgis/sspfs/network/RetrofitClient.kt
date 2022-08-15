@@ -4,67 +4,44 @@
 
 package kr.djgis.sspfs.network
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import kr.djgis.sspfs.model.FeatureEditViewModel
-import okhttp3.MultipartBody.Part
-import kotlin.math.round
+import com.google.gson.GsonBuilder
+import kr.djgis.sspfs.BuildConfig
+import kr.djgis.sspfs.Config
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private val webService: RetrofitWebService = RetrofitClientBuilder.webService
-    private val kakaoService: RetrofitKakaoService = RetrofitClientBuilder.kakaoService
-
-    suspend fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): JsonObject {
-        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
-        return webService.featuresGet(doubles[0], doubles[1], doubles[2], doubles[3])
+    val webService: RetrofitWebService by lazy {
+        Retrofit.Builder()
+            .baseUrl(Config.BASE_URL)
+            .client(okHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
+            .create(RetrofitWebService::class.java)
     }
 
-    suspend fun featureGet(fac_uid: String): JsonObject {
-        return webService.featureGet(fac_uid = fac_uid)
+    val kakaoService: RetrofitKakaoService by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://dapi.kakao.com")
+            .client(okHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
+            .create(RetrofitKakaoService::class.java)
     }
 
-    suspend fun featurePost(
-        jsonBody: Part,
-        edit: String? = null,
-        fraction: Double? = null,
-        multipartBody: List<Part?>,
-    ): JsonElement {
-        return webService.featurePost(
-            jsonBody = jsonBody,
-            edit = edit,
-            fraction = fraction,
-            multipartBody = multipartBody
-        )
-    }
-
-    suspend fun createFeaturePoint(feature: FeatureEditViewModel.Feature): JsonObject {
-        return webService.createFeaturePoint(feature = feature)
-    }
-
-    suspend fun createFeatureLine(feature: FeatureEditViewModel.Feature): JsonObject {
-        return webService.createFeatureLine(feature = feature)
-    }
-
-    suspend fun regionsGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): JsonObject {
-        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
-        return webService.districtGet(doubles[0], doubles[1], doubles[2], doubles[3])
-    }
-
-    suspend fun themeGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double, name: String): JsonObject {
-        val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
-        return webService.themeGet(doubles[0], doubles[1], doubles[2], doubles[3], name)
-    }
-
-    suspend fun kakaoSearchPlaces(query: String, x: Double?, y: Double?): JsonObject {
-        return kakaoService.searchKeyword(query = query, x = x, y = y)
-    }
-
-    suspend fun kakaoCoord2Regioncode(x: Double, y: Double, input: String?, output: String?): JsonObject {
-        return kakaoService.geoCoord2Regioncode(x = x, y = y, input = input, output = output)
-    }
-
-    suspend fun kakaoCoord2Address(x: Double, y: Double, input: String? = null): JsonObject {
-        return kakaoService.geoCoord2Address(x = x, y = y, input = input)
+    private val okHttpClient = {
+        val builder = OkHttpClient.Builder()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+//        builder.addInterceptor(interceptor)
+        builder.apply {
+            connectTimeout(20, TimeUnit.SECONDS)
+            readTimeout(20, TimeUnit.SECONDS)
+            writeTimeout(20, TimeUnit.SECONDS)
+        }
+        builder.build()
     }
 }

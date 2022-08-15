@@ -61,7 +61,15 @@ import kr.djgis.sspfs.model.FeatureEditVMFactory
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.util.observeOnce
+import kr.djgis.sspfs.network.Moshi
+import kr.djgis.sspfs.network.Moshi.moshiDistrictList
+import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
+import kr.djgis.sspfs.network.Moshi.moshiFeatureEditList
+import kr.djgis.sspfs.network.Moshi.moshiFeatureList
+import kr.djgis.sspfs.network.Moshi.moshiThemeList
+import kr.djgis.sspfs.network.RetrofitClient.webService
+import kr.djgis.sspfs.network.enqueue
+import kr.djgis.sspfs.util.round
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
 import java.util.*
@@ -113,15 +121,27 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 width = 5
             }
         }
-        viewModel.type(feature.fac_typ).featureGet(feature.fac_uid).observeOnce(viewLifecycleOwner) {
-            viewModel.set(it).overlay(selectOverlay).latLngBounds(bounds)
-            naverMap.apply {
-                naverMap.mapType = Satellite
-            }.moveCamera(scrollTo(bounds.center).animate(Easing, 250).finishCallback {
+        webService.featureGet(
+            fac_uid = feature.fac_uid
+        ).enqueue(onResponse = {
+            val result = when (feature.fac_typ) {
+                "A" -> moshiFeatureAList.fromJson(it.toString())!!.features.first()
+                "B" -> Moshi.moshiFeatureBList.fromJson(it.toString())!!.features.first()
+                "C" -> Moshi.moshiFeatureCList.fromJson(it.toString())!!.features.first()
+                "D" -> Moshi.moshiFeatureDList.fromJson(it.toString())!!.features.first()
+                "E" -> Moshi.moshiFeatureEList.fromJson(it.toString())!!.features.first()
+                "F" -> Moshi.moshiFeatureFList.fromJson(it.toString())!!.features.first()
+                else -> Moshi.moshiFeatureFList.fromJson(it.toString())!!.features.first()
+            }
+            viewModel.type(feature.fac_typ).set(result).overlay(selectOverlay).latLngBounds(bounds)
+            naverMap.moveCamera(scrollTo(bounds.center).animate(Easing, 250).finishCallback {
                 val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
                 findNavController().navigate(directions)
             })
-        }
+        }, onFailure = {
+            snackbar(anchorView = fab, message = it).show()
+            onFeatureGetResult(true, R.color.red_500)
+        })
         return@OnClickListener true
     }
     private var arrowheadPath: ArrowheadPathOverlay? = null
@@ -246,9 +266,9 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         )
 
         districtTheme = DistrictTheme(
+            fragment = this,
+            fab = fab,
             naverMap = naverMap,
-            viewModel = viewModel,
-            lifecycleOwner = viewLifecycleOwner,
             executor = executor,
             handler = handler,
             resources = resources,
@@ -264,15 +284,13 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
-        val latLngBounds = naverMap.contentBounds
-        viewModel.featuresGet(
-            xmin = latLngBounds.westLongitude,
-            ymin = latLngBounds.southLatitude,
-            xmax = latLngBounds.eastLongitude,
-            ymax = latLngBounds.northLatitude,
-        ).observeOnce(viewLifecycleOwner) {
+        val latLngBounds = naverMap.contentBounds.round()
+        webService.featuresGet(
+            xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3]
+        ).enqueue(onResponse = { json ->
+            val featureList = moshiFeatureList.fromJson(json.toString())!!
             executor.execute {
-                it.features.stream().forEach { feature ->
+                featureList.features.stream().forEach { feature ->
                     val key = feature.fac_uid
                     val latLngs = feature.geom!!.latLngs
                     val color = toColor(feature)
@@ -284,7 +302,6 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                         "LineString" -> {
                             arrowheadPathMap[key] = createArrowheadPath(line = latLngs[0], color, feature).also {
                                 markerMap[key] = createMarker(point = it.coords[1], color, feature)
-//                                markerSet.add(createMarker(point = it.coords[1], color, feature))
                             }
                         }
 
@@ -305,12 +322,15 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                         it.map = naverMap
                     }
                     onFeatureGetResult(true, R.color.teal_A400)
-                    if (it.featureCount == 0) {
+                    if (featureList.featureCount == 0) {
                         snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
                     }
                 }
             }
-        }
+        }, onFailure = {
+            snackbar(anchorView = fab, message = it).show()
+            onFeatureGetResult(true, R.color.red_500)
+        })
     }
 
     private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
@@ -415,15 +435,13 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         menuItem.isChecked = !menuItem.isChecked
         if (menuItem.isChecked) {
             menuItem.setIcon(R.drawable.ic_round_toggle_on_24)
-            val latLngBounds = naverMap.coveringBounds
-            viewModel.districtGet(
-                xmin = latLngBounds.westLongitude,
-                ymin = latLngBounds.southLatitude,
-                xmax = latLngBounds.eastLongitude,
-                ymax = latLngBounds.northLatitude,
-            ).observeOnce(viewLifecycleOwner) {
+            val latLngBounds = naverMap.contentBounds.round()
+            webService.districtGet(
+                xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3],
+            ).enqueue(onResponse = { json ->
+                val districtList = moshiDistrictList.fromJson(json.toString())!!
                 executor.execute {
-                    it.districts.stream().forEach { region ->
+                    districtList.districts.stream().forEach { region ->
                         val latLngs = region.geom.latLngs
                         latLngs.forEach { latLng ->
                             polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
@@ -441,8 +459,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                         }
                     }
                 }
-            }
-            snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+                snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+            }, onFailure = {
+                snackbar(anchorView = fab, message = it).show()
+            })
         } else {
             menuItem.setIcon(R.drawable.ic_round_toggle_off_24)
             clearRegionOverlays()
@@ -471,10 +491,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {/*            R.id.action_legend -> {
-                            NavDrawerFragment().show(childFragmentManager, null)
-                            return true
-                        }*/
+        return when (menuItem.itemId) {
+            /* R.id.action_legend -> {
+                NavDrawerFragment().show(childFragmentManager, null)
+                return true
+            }*/
+
             R.id.action_district -> {
                 onRegionGet(menuItem)
                 return true
@@ -507,11 +529,16 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_cancel -> featureEdit.cancel()
 
             R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_d, R.id.action_e, R.id.action_f -> {
-                editViewModel.add(menuItem.itemId).observeOnce(viewLifecycleOwner) {
+                editViewModel.createFeature(
+                    id = menuItem.itemId
+                ).enqueue(onResponse = { json ->
+//                    val featureList = moshiFeatureEditList.fromJson(json.toString())
                     featureEdit.cancel()
                     onFeatureGet()
                     snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
-                }
+                }, onFailure = {
+                    snackbar(anchorView = fab, message = it).show()
+                })
                 return true
             }
 
@@ -641,9 +668,9 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     @Suppress("PrivatePropertyName")
     class DistrictTheme(
+        fragment: Fragment,
+        fab: FloatingActionButton,
         naverMap: NaverMap,
-        viewModel: FeatureViewModel,
-        lifecycleOwner: LifecycleOwner,
         executor: ExecutorService,
         handler: Handler,
         resources: Resources,
@@ -702,17 +729,18 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     when (isChecked) {
                         true -> {
                             chip.chipBackgroundColor = chipColor
-                            val latLngBounds = naverMap.contentBounds
-                            viewModel.themeGet(
-                                xmin = latLngBounds.westLongitude,
-                                ymin = latLngBounds.southLatitude,
-                                xmax = latLngBounds.eastLongitude,
-                                ymax = latLngBounds.northLatitude,
+                            val latLngBounds = naverMap.contentBounds.round()
+                            webService.themeGet(
+                                xmin = latLngBounds[0],
+                                ymin = latLngBounds[1],
+                                xmax = latLngBounds[2],
+                                ymax = latLngBounds[3],
                                 tag
-                            ).observeOnce(lifecycleOwner) {
+                            ).enqueue(onResponse = { json ->
+                                val themeList = moshiThemeList.fromJson(json.toString())!!
                                 executor.execute {
                                     val mutableSet = mutableSetOf<PolygonOverlay>()
-                                    it.themes.stream().forEach { region ->
+                                    themeList.themes.stream().forEach { region ->
                                         val latLngs = region.geom.latLngs
                                         latLngs.stream().forEach { latLng ->
                                             mutableSet.add(PolygonOverlay(latLng).apply {
@@ -729,7 +757,9 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                                         }
                                     }
                                 }
-                            }
+                            }, onFailure = {
+                                fragment.snackbar(anchorView = fab, message = it).show()
+                            })
                         }
 
                         false -> {
