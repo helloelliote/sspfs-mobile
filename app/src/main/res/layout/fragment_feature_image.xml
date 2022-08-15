@@ -20,13 +20,13 @@
         android:id="@+id/nested_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="10dp"
+        android:paddingHorizontal="5dp"
         android:paddingVertical="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="25dp"
+            android:paddingHorizontal="5dp"
             android:paddingVertical="25dp">
 
             <GridLayout

@@ -22,7 +22,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import kr.djgis.sspfs.Config.BASE_URL
 import kr.djgis.sspfs.R
@@ -67,10 +66,8 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it) {
                 snackbar(
-                    requireActivity().findViewById(R.id.fab_main),
-                    "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
-                ).setAction("확인") {
-                }.show()
+                    requireActivity().findViewById(R.id.fab_main), "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
+                ).setAction("확인") {}.show()
             }
         }
 
@@ -95,8 +92,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         }
 
         binding.run {
-            featureAttachmentAdapter =
-                FeatureAttachmentAdapter(this@FeatureImage)
+            featureAttachmentAdapter = FeatureAttachmentAdapter(this@FeatureImage)
             attachmentRecyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, true)
                 adapter = featureAttachmentAdapter
@@ -133,6 +129,15 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun selectGallery() {
+        Intent(Intent.ACTION_PICK).apply {
+            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        }.also {
+            startActivityForResult(it, REQ_IMG_GALLERY_FULL_SIZE_SHARED_Q_AND_OVER)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun takePicture(attachment: FeatureAttachment) {
         val fullSizePictureIntent = getPictureIntent_Shared_Q_N_Over(attachment)
@@ -143,8 +148,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                 )
             } catch (e: SecurityException) {
                 snackbar(
-                    requireActivity().findViewById(R.id.fab_main),
-                    "카메라 권한이 허용되지 않아 촬영할 수 없습니다."
+                    requireActivity().findViewById(R.id.fab_main), "카메라 권한이 허용되지 않아 촬영할 수 없습니다."
                 ).setAction("확인") {}.show()
             }
         }
@@ -182,73 +186,94 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         return fullSizeCaptureIntent
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER && resultCode == Activity.RESULT_OK) {
-//            val options = BitmapFactory.Options()
-//            options.inJustDecodeBounds = true
-//            try {
-//                var inputStream: InputStream? = FileInputStream(filePath)
-//                BitmapFactory.decodeStream(inputStream, null, options)
-//                inputStream!!.close()
-//                inputStream = null
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//            val height = options.outHeight
-//            val width = options.outWidth
-//            var inSampleSize = 1
-//            if (height > reqHeight!! || width > reqWidth!!) {
-//                val heightRatio = (height.toFloat() / reqHeight!!.toFloat()).roundToInt().toInt()
-//                val widthtRatio = (width.toFloat() / reqWidth!!.toFloat()).roundToInt().toInt()
-//                inSampleSize = if (heightRatio < widthtRatio) heightRatio else widthtRatio
-//            }
-//            val imgOptions = BitmapFactory.Options()
-//            imgOptions.inSampleSize = inSampleSize
-//            val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
-//            val bitmap = data?.extras?.get("data")
-            requireContext().contentResolver.query(photoSharedURI_Q_N_OVER, null, null, null, null)?.use { cursor ->
-                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                cursor.moveToFirst()
-                currentAttachment.apply {
-                    name = null
-                    name = cursor.getString(nameIndex)
-                    uri = photoSharedURI_Q_N_OVER
-                    url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER -> {/* val options = BitmapFactory.Options()
+                    options.inJustDecodeBounds = true
+                    try {
+                        var inputStream: InputStream? = FileInputStream(filePath)
+                        BitmapFactory.decodeStream(inputStream, null, options)
+                        inputStream!!.close()
+                        inputStream = null
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    val height = options.outHeight
+                    val width = options.outWidth
+                    var inSampleSize = 1
+                    if (height > reqHeight!! || width > reqWidth!!) {
+                        val heightRatio = (height.toFloat() / reqHeight!!.toFloat()).roundToInt().toInt()
+                        val widthtRatio = (width.toFloat() / reqWidth!!.toFloat()).roundToInt().toInt()
+                        inSampleSize = if (heightRatio < widthtRatio) heightRatio else widthtRatio
+                    }
+                    val imgOptions = BitmapFactory.Options()
+                    imgOptions.inSampleSize = inSampleSize
+                    val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
+                    val bitmap = data?.extras?.get("data")*/
+                    resolveContent(photoSharedURI_Q_N_OVER)
+                    glideIntoView(photoSharedURI_Q_N_OVER)
                 }
-            }
-            with(currentView) {
-                findViewById<TextInputEditText>(R.id.attachment_name).setText(currentAttachment.name)
-                glide(photoSharedURI_Q_N_OVER, true).into(findViewById(R.id.attachment_image))
-            }.also {
-                featureAttachmentAdapter.notifyDataSetChanged()
+
+                REQ_IMG_GALLERY_FULL_SIZE_SHARED_Q_AND_OVER -> {
+                    intent?.data.let {
+                        resolveContent(it!!)
+                        glideIntoView(it)
+                    }
+                }
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onClick(view: View, attachment: FeatureAttachment) {
-        if (attachment.url != null) return
-        view as MaterialCardView
-        currentView = view
-        currentAttachment = attachment
-        takePicture(currentAttachment)
+    private fun resolveContent(_uri: Uri) {
+        requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            currentAttachment.apply {
+                name = null
+                name = cursor.getString(nameIndex)
+                uri = _uri
+                url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
+    private fun glideIntoView(_uri: Uri) {
+        with(currentView) {
+            findViewById<TextInputEditText>(R.id.attachment_name).setText(currentAttachment.name)
+            glide(_uri, true).into(findViewById(R.id.attachment_image))
+        }.also {
+            featureAttachmentAdapter.notifyDataSetChanged()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onClick(view: View, attachment: FeatureAttachment) {
+        currentAttachment = attachment
+        currentView = view.rootView
+
+        when (view.id) {
+            R.id.attachment_camera -> takePicture(currentAttachment)
+
+            R.id.attachment_gallery -> selectGallery()
+
+            R.id.attachment_remove -> alertDialog(
+                title = "사진을 삭제합니까?", message = resources.getString(R.string.feature_image_remove)
+            ).setNegativeButton("취소") { dialog, which ->
+            }.setPositiveButton("삭제") { dialog, which ->
+                currentFeature.img_fac.remove(attachment).also {
+                    featureAttachmentAdapter.submitList(currentFeature.img_fac)
+                    featureAttachmentAdapter.notifyDataSetChanged()
+                }
+            }.show()
+        }
+    }
+
     override fun onLongClick(view: View, attachment: FeatureAttachment): Boolean {
-        alertDialog(
-            title = "사진을 삭제합니까?",
-            message = resources.getString(R.string.feature_image_remove)
-        ).setNegativeButton("취소") { dialog, which ->
-        }.setPositiveButton("삭제") { dialog, which ->
-            currentFeature.img_fac.remove(attachment).also {
-                featureAttachmentAdapter.submitList(currentFeature.img_fac)
-                featureAttachmentAdapter.notifyDataSetChanged()
-            }
-        }.show()
         return true
     }
 
@@ -271,5 +296,6 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         private const val DIRECTORY_FORMAT = "yyyyMMdd"
         private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
         const val REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER = 600//공용공간 Q이상
+        const val REQ_IMG_GALLERY_FULL_SIZE_SHARED_Q_AND_OVER = 700//공용공간 Q이상
     }
 }
