@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.naver.maps.map.*
@@ -60,6 +61,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
 
     private var isReversed = false
     private var lineFraction: Double = 0.0
+
+    private lateinit var fab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,6 +208,8 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         }
         val bottomAppBar = requireActivity().findViewById<BottomAppBar>(R.id.bottom_app_bar)
         bottomAppBar.menu.setGroupVisible(R.id.action_group_swap, isFeatureCorD)
+
+        fab = requireActivity().findViewById(R.id.fab_main)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -239,7 +244,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     ).enqueue(onResponse = {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
-                    }, onFailure = {})
+                    }, onFailure = {
+                        snackbar(anchorView = fab, message = it).show()
+                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                    })
                 }.show()
                 return true
             }
@@ -250,7 +258,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     isReversed = !isReversed
                     overlay.coords = overlay.coords.reversed()
                     snackbar(
-                        anchorView = requireActivity().findViewById(R.id.fab_main),
+                        anchorView = fab,
                         message = R.string.feature_action_geom_reversed
                     ).show()
                 }
@@ -320,7 +328,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     ).enqueue(onResponse = {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
-                    }, onFailure = {})
+                    }, onFailure = {
+                        snackbar(anchorView = fab, message = it).show()
+                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                    })
                 }.show()
                 return true
             }
@@ -345,7 +356,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     println("HELLO: ${it}")
                     val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                     findNavController().navigate(directions)
-                }, onFailure = {})
+                }, onFailure = {
+                    snackbar(anchorView = fab, message = it).show()
+                    toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                })
             }
         }
     }
