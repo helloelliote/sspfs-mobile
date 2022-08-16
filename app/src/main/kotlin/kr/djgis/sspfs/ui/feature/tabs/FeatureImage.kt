@@ -213,13 +213,13 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                     imgOptions.inSampleSize = inSampleSize
                     val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
                     val bitmap = data?.extras?.get("data")*/
-                    resolveContent(photoSharedURI_Q_N_OVER)
+                    resolveContentForCapture(photoSharedURI_Q_N_OVER)
                     glideIntoView(photoSharedURI_Q_N_OVER)
                 }
 
                 REQ_IMG_GALLERY_FULL_SIZE_SHARED_Q_AND_OVER -> {
                     intent?.data.let {
-                        resolveContent(it!!)
+                        resolveContentForGallery(it!!)
                         glideIntoView(it)
                     }
                 }
@@ -227,7 +227,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         }
     }
 
-    private fun resolveContent(_uri: Uri) {
+    private fun resolveContentForCapture(_uri: Uri) {
         requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
             val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             cursor.moveToFirst()
@@ -236,6 +236,21 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                 name = cursor.getString(nameIndex)
                 uri = _uri
                 url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
+            }
+        }
+    }
+
+    private fun resolveContentForGallery(_uri: Uri) {
+        requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
+            val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
+            val newName =
+                "${currentFeature.fac_uid}_${timeStamp}_${currentAttachment.name?.substringAfterLast("_")}.jpg"
+            cursor.moveToFirst()
+            currentAttachment.apply {
+                name = null
+                name = newName
+                uri = _uri
+                url = URL("${BASE_URL}api/images/$newName").toString()
             }
         }
     }

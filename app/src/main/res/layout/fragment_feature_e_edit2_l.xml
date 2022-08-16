@@ -54,7 +54,7 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:hint="0 m"
+                        android:hint="0m"
                         android:text="@{viewModel.featureE.fac_len}" />
 
                     <Button
@@ -64,7 +64,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView.Small"
                         android:layout_weight="3"
-                        android:hint="자동입력"
+                        android:hint="별도입력"
                         android:text="@{viewModel.featureE.fac_adl}" />
                 </TableRow>
 

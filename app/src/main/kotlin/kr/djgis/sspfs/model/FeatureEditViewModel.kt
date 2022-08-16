@@ -7,63 +7,62 @@ package kr.djgis.sspfs.model
 import android.app.Application
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
+import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLng
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kr.djgis.sspfs.App
 import kr.djgis.sspfs.R
-import kr.djgis.sspfs.network.Moshi.moshiFeatureEditList
-import kr.djgis.sspfs.network.RetrofitClient
+import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.util.ListLiveData
+import retrofit2.Call
 import java.io.Serializable
 
 class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _feature: MutableLiveData<Feature> = MutableLiveData(Feature("", "", "", listOf()))
     val feature: LiveData<Feature> = _feature
-
     val latLngs: ListLiveData<LatLng> = ListLiveData()
 
     val size get() = latLngs.size
 
     val coords get() = latLngs.all
 
-    private fun createFeaturePoint(fac_typ: String, fac_typ_alt: String, fac_typ_nam: String) = liveData {
-        _feature.value?.apply {
-            this.fac_typ = fac_typ
-            this.fac_typ_alt = fac_typ_alt
-            this.fac_typ_nam = fac_typ_nam
-        }
-        val jsonObject = RetrofitClient.createFeaturePoint(feature.value!!)
-        val featureList = moshiFeatureEditList.fromJson(jsonObject.toString())
-        emit(featureList!!)
-    }
+    fun createFeature(@IdRes id: Int): Call<JsonObject> {
+        when (id) {
+            R.id.action_a -> return webService.createFeaturePoint(
+                Feature("A", "B", "소교량", coords)
+            )
 
-    private fun createFeatureLine(fac_typ: String, fac_typ_alt: String, fac_typ_nam: String) = liveData {
-        _feature.value?.apply {
-            this.fac_typ = fac_typ
-            this.fac_typ_alt = fac_typ_alt
-            this.fac_typ_nam = fac_typ_nam
+            R.id.action_b -> return webService.createFeatureLine(
+                Feature("B", "S", "세천", coords)
+            )
+
+            R.id.action_c -> return webService.createFeaturePoint(
+                Feature("C", "W", "취입보", coords)
+            )
+
+            R.id.action_d -> return webService.createFeaturePoint(
+                Feature("D", "W", "낙차공", coords)
+            )
+
+            R.id.action_e -> return webService.createFeatureLine(
+                Feature("E", "N", "농로", coords)
+            )
+
+            R.id.action_f -> return webService.createFeatureLine(
+                Feature("F", "M", "마을진입로", coords)
+            )
+
+            else -> {
+                listOf("", "", "")
+                return webService.createFeatureLine(feature.value!!)
+            }
         }
-        val jsonObject = RetrofitClient.createFeatureLine(feature.value!!)
-        val featureList = moshiFeatureEditList.fromJson(jsonObject.toString())
-        emit(featureList!!)
     }
 
     fun update() {
         _feature.value?.geom = latLngs.all
-    }
-
-    fun add(@IdRes id: Int): LiveData<FeatureList> {
-        return when (id) {
-            R.id.action_a -> createFeaturePoint("A", "B", "소교량")
-            R.id.action_b -> createFeatureLine("B", "S", "세천")
-            R.id.action_c -> createFeaturePoint("C", "W", "취입보")
-            R.id.action_d -> createFeaturePoint("D", "W", "낙차공")
-            R.id.action_e -> createFeatureLine("E", "N", "농로")
-            R.id.action_f -> createFeatureLine("F", "M", "마을진입로")
-            else -> createFeatureLine("", "", "")
-        }
     }
 
     data class FeatureList(

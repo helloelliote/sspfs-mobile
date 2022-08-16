@@ -37,8 +37,9 @@ fun Fragment.snackbar(anchorView: View? = null, @StringRes message: Int): Snackb
 }
 
 fun Fragment.snackbar(anchorView: View? = null, message: String?): Snackbar {
-    return Snackbar.make(this.requireView(), message.toString(), Snackbar.LENGTH_LONG).apply {
+    return Snackbar.make(this.requireView(), message.toString(), Snackbar.LENGTH_INDEFINITE).apply {
         this.anchorView = anchorView
+        this.setAction("확인") {}
     }
 }
 

@@ -4,60 +4,66 @@
 
 package kr.djgis.sspfs.network
 
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import kr.djgis.sspfs.model.FeatureEditViewModel.Feature
+import kr.djgis.sspfs.model.FeatureEditViewModel
 import okhttp3.MultipartBody
+import retrofit2.Call
 import retrofit2.http.*
 
 interface RetrofitWebService {
 
     @GET("api/features")
-    suspend fun featuresGet(
+    fun featuresGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): JsonObject
+    ): Call<JsonObject>
 
     @GET("api/feature")
-    suspend fun featureGet(
+    fun featureGet(
         @Query("fac_uid") fac_uid: String,
-    ): JsonObject
+    ): Call<JsonObject>
 
     @Multipart
     @POST("api/feature")
-    suspend fun featurePost(
+    fun featurePost(
         @Part jsonBody: MultipartBody.Part,
         @Query("edit") edit: String?,
         @Query("fraction") fraction: Double?,
         @Part multipartBody: List<MultipartBody.Part?>,
-    ): JsonElement
+    ): Call<JsonObject>
+
+    @POST("api/feature/switch")
+    fun featureSwitch(
+        @Query("fac_typ") fac_typ: String,
+        @Query("fac_uid") fac_uid: String,
+    ): Call<JsonObject>
 
     @POST("api/feature/create/point")
-    suspend fun createFeaturePoint(
-        @Body feature: Feature,
-    ): JsonObject
+    fun createFeaturePoint(
+        @Body feature: FeatureEditViewModel.Feature,
+    ): Call<JsonObject>
 
     @POST("api/feature/create/line")
-    suspend fun createFeatureLine(
-        @Body feature: Feature,
-    ): JsonObject
+    fun createFeatureLine(
+        @Body feature: FeatureEditViewModel.Feature,
+    ): Call<JsonObject>
 
     @GET("api/region")
-    suspend fun districtGet(
+    fun districtGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): JsonObject
+    ): Call<JsonObject>
 
     @GET("api/theme")
-    suspend fun themeGet(
+    fun themeGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
         @Query("name") name: String,
-    ): JsonObject
+    ): Call<JsonObject>
 }

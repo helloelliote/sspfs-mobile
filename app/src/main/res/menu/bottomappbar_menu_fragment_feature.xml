@@ -12,6 +12,15 @@
         android:icon="@drawable/ic_round_cancel_24"
         android:title=" 조사제외"
         app:showAsAction="ifRoom|withText" />
+    <group android:id="@+id/action_group_swap"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <item
+            android:id="@+id/action_switch_c_d"
+            android:icon="@drawable/ic_round_compare_arrows_24"
+            android:title=" 보·낙차공 전환"
+            app:showAsAction="ifRoom|withText" />
+    </group>
     <item
         android:id="@+id/action_reverse_geom"
         android:icon="@drawable/ic_round_loop_24"

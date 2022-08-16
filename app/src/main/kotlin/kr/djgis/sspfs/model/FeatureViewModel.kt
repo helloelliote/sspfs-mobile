@@ -7,24 +7,17 @@ package kr.djgis.sspfs.model
 import android.app.Application
 import androidx.lifecycle.*
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
 import kr.djgis.sspfs.App
 import kr.djgis.sspfs.data.*
-import kr.djgis.sspfs.network.Moshi.moshiDistrictList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureBList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureCList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureDList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureEList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureFList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureList
-import kr.djgis.sspfs.network.Moshi.moshiThemeList
-import kr.djgis.sspfs.network.RetrofitClient
+import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
+import retrofit2.Call
 
 class FeatureViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -119,27 +112,12 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         _featureF.value = featureF
     }
 
-    fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
-        val jsonObject = RetrofitClient.featuresGet(xmin, ymin, xmax, ymax)
-        val featureList = moshiFeatureList.fromJson(jsonObject.toString())
-        emit(featureList!!)
-    }
-
-    fun featureGet(fac_uid: String) = liveData {
-        val jsonObject = RetrofitClient.featureGet(fac_uid)
-        val result = when (type.value!!) {
-            "A" -> moshiFeatureAList.fromJson(jsonObject.toString())!!.features.first()
-            "B" -> moshiFeatureBList.fromJson(jsonObject.toString())!!.features.first()
-            "C" -> moshiFeatureCList.fromJson(jsonObject.toString())!!.features.first()
-            "D" -> moshiFeatureDList.fromJson(jsonObject.toString())!!.features.first()
-            "E" -> moshiFeatureEList.fromJson(jsonObject.toString())!!.features.first()
-            "F" -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
-            else -> moshiFeatureFList.fromJson(jsonObject.toString())!!.features.first()
-        }
-        emit(result)
-    }
-
-    fun featurePost(status: String, edit: String?, fraction: Double?, callback: MultipartUploadCallback) = liveData {
+    fun featurePost(
+        status: String,
+        edit: String?,
+        fraction: Double?,
+        callback: MultipartUploadCallback,
+    ): Call<JsonObject> {
         val multipartBody = mutableListOf<MultipartBody.Part>()
         val feature = this@FeatureViewModel.of(type.value!!)
         feature.exm_chk = status
@@ -154,20 +132,7 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
         val jsonBody = createFormData("json", Gson().toJson(feature))
-        val jsonElement = RetrofitClient.featurePost(jsonBody, edit, fraction, multipartBody)
-        emit(jsonElement)
-    }
-
-    fun districtGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double) = liveData {
-        val jsonObject = RetrofitClient.regionsGet(xmin, ymin, xmax, ymax)
-        val regionList = moshiDistrictList.fromJson(jsonObject.toString())
-        emit(regionList!!)
-    }
-
-    fun themeGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double, name: String) = liveData {
-        val jsonObject = RetrofitClient.themeGet(xmin, ymin, xmax, ymax, name)
-        val themeList = moshiThemeList.fromJson(jsonObject.toString())
-        emit(themeList!!)
+        return webService.featurePost(jsonBody, edit, fraction, multipartBody)
     }
 
     /*    suspend fun fromLatLng(feature: Feature): String? {
