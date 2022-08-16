@@ -4,7 +4,6 @@
 
 package kr.djgis.sspfs.ui.feature.tabs
 
-import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
@@ -17,7 +16,6 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,16 +60,6 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
 
         reqWidth = resources.getDimensionPixelSize(R.dimen.request_image_width)
         reqHeight = resources.getDimensionPixelSize(R.dimen.request_image_height)
-
-        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) {
-                snackbar(
-                    requireActivity().findViewById(R.id.fab_main), "카메라 권한이 허용되지 않았습니다. 앱 설정에서 직접 허용해주세요."
-                ).setAction("확인") {}.show()
-            }
-        }
-
-        requestPermissionLauncher.launch(CAMERA)
     }
 
     override fun onCreateView(

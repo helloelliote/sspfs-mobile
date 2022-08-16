@@ -4,7 +4,6 @@
 
 package kr.djgis.sspfs.ui.map
 
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -188,7 +187,6 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        registerForActivityResult(RequestPermission()) {}.launch(ACCESS_FINE_LOCATION)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
         executor = Executors.newCachedThreadPool()
