@@ -60,7 +60,8 @@
     <string name="feature_require_fail">필수 정보를 모두 입력해주세요.</string>
     <string name="feature_back">해당 소규모 공공시설 조사내용을 저장하지 않고 조사화면에서 나갑니까?</string>
     <string name="feature_image_remove">※로컬 모바일기기의 갤러리에는 유지됩니다.</string>
-    <string name="feature_action_exclude">해당 소규모 공공시설을 조사대상에서 제외합니까?\n(※별도 복구 가능하며, 복구 전까지 현장조사앱에서 표시되지 않습니다)</string>
+    <string name="feature_action_exclude">해당 소규모 공공시설을 조사대상에서 제외합니까?\n\n(※별도 복구 가능하며, 복구 전까지 현장조사앱에서 표시되지 않습니다)</string>
+    <string name="feature_action_switch_c_d">해당 취입보 또는 낙차공을 전환시킵니까?\n\n※조사내용은 인계되나 현장사진은 인계되지 않으며,\n갤러리 이미지 불러오기 기능을 통해 기존 사진을 재등록해주세요.</string>
     <string name="feature_action_geom_reverse">해당 소규모 공공시설의 시·종점을 반전시킵니까?\n\n반전: 조사내용이나 현장사진은 저장되지 않고, 시설물의 방향만 반전됩니다.\n반전 및 저장: 조사내용 및 현장사진을 저장하고, 시설물의 방향이 반전됩니다.</string>
     <string name="feature_action_geom_reversed">소규모 공공시설의 시·종점이 반전되었습니다</string>
 

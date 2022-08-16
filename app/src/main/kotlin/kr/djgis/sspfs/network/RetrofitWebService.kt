@@ -34,6 +34,12 @@ interface RetrofitWebService {
         @Part multipartBody: List<MultipartBody.Part?>,
     ): Call<JsonObject>
 
+    @POST("api/feature/switch")
+    fun featureSwitch(
+        @Query("fac_typ") fac_typ: String,
+        @Query("fac_uid") fac_uid: String,
+    ): Call<JsonObject>
+
     @POST("api/feature/create/point")
     fun createFeaturePoint(
         @Body feature: FeatureEditViewModel.Feature,

@@ -84,7 +84,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView"
                         android:layout_weight="3"
-                        android:text="별도입력" />
+                        android:text="" />
 
                 </TableRow>
 
@@ -110,7 +110,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView"
                         android:layout_weight="3"
-                        android:text="자동입력" />
+                        android:text="" />
 
                 </TableRow>
 

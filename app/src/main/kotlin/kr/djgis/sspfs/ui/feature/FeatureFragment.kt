@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.naver.maps.map.*
@@ -34,6 +35,7 @@ import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.ui.MainActivity
@@ -196,6 +198,13 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                 }
             }.attach()
         }
+
+        val isFeatureCorD = when (args.type) {
+            "C", "D" -> true
+            else -> false
+        }
+        val bottomAppBar = requireActivity().findViewById<BottomAppBar>(R.id.bottom_app_bar)
+        bottomAppBar.menu.setGroupVisible(R.id.action_group_swap, isFeatureCorD)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -296,6 +305,23 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                         }
                     }
                 }
+                return true
+            }
+
+            R.id.action_switch_c_d -> {
+                alertDialog(
+                    title = viewModel.of(args.type).fac_nam,
+                    message = resources.getString(R.string.feature_action_switch_c_d)
+                ).setNegativeButton("취소") { _, _ ->
+                }.setPositiveButton("전환") { _, _ ->
+                    webService.featureSwitch(
+                        fac_typ = args.type,
+                        fac_uid = viewModel.of(args.type).fac_uid,
+                    ).enqueue(onResponse = {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }, onFailure = {})
+                }.show()
                 return true
             }
 

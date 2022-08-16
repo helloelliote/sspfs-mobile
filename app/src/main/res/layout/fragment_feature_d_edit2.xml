@@ -64,7 +64,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView.Small"
                         android:layout_weight="2"
-                        android:hint="자동입력"
+                        android:hint="별도입력"
                         android:text="@{viewModel.featureD.fac_adm}" />
                 </TableRow>
 
