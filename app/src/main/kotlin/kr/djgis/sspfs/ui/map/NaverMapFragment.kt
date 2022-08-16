@@ -64,7 +64,6 @@ import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.network.Moshi
 import kr.djgis.sspfs.network.Moshi.moshiDistrictList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureEditList
 import kr.djgis.sspfs.network.Moshi.moshiFeatureList
 import kr.djgis.sspfs.network.Moshi.moshiThemeList
 import kr.djgis.sspfs.network.RetrofitClient.webService
@@ -581,31 +580,32 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             width = 7
         }
         private val onMapLongClickListener = OnMapLongClickListener { _, coord ->
-            when (editViewModel.size) {
-                0 -> {
-                    marker.apply {
-                        position = coord
-                        map = naverMap
+            val cameraUpdate = scrollTo(coord).animate(Linear).reason(REASON_GESTURE).finishCallback {
+                when (editViewModel.size) {
+                    0 -> {
+                        bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
+                        marker.apply {
+                            position = coord
+                            map = naverMap
+                        }
+                        editViewModel.latLngs.add(coord)
                     }
-                    editViewModel.latLngs.add(coord)
-                }
 
-                1 -> {
-                    editViewModel.latLngs.add(coord)
-                    path.apply {
-                        coords = editViewModel.coords
-                        map = naverMap
+                    1 -> {
+                        editViewModel.latLngs.add(coord)
+                        path.apply {
+                            coords = editViewModel.coords
+                            map = naverMap
+                        }
                     }
-                }
 
-                else -> {
-                    editViewModel.latLngs.add(coord)
-                    path.coords = editViewModel.coords
+                    else -> {
+                        editViewModel.latLngs.add(coord)
+                        path.coords = editViewModel.coords
+                    }
                 }
             }
-            naverMap.moveCamera(scrollTo(coord).animate(Linear).reason(REASON_GESTURE).finishCallback {
-                bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map_edit)
-            })
+            naverMap.moveCamera(cameraUpdate)
         }
 
         init {

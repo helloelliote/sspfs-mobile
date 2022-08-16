@@ -20,8 +20,8 @@ import java.io.Serializable
 
 class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val feature: MutableLiveData<Feature> = MutableLiveData(Feature("", "", "", listOf()))
-
+    private val _feature: MutableLiveData<Feature> = MutableLiveData(Feature("", "", "", listOf()))
+    val feature: LiveData<Feature> = _feature
     val latLngs: ListLiveData<LatLng> = ListLiveData()
 
     val size get() = latLngs.size
@@ -62,7 +62,7 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun update() {
-        feature.value?.geom = latLngs.all
+        _feature.value?.geom = latLngs.all
     }
 
     data class FeatureList(
