@@ -66,4 +66,9 @@ interface RetrofitWebService {
         @Query("ymax") ymax: Double,
         @Query("name") name: String,
     ): Call<JsonObject>
+
+    @GET("api/mobile/update")
+    fun mobileUpdate(
+        @Query("version") version: String,
+    ): Call<JsonObject>
 }

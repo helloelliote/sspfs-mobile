@@ -8,11 +8,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
     <group>
-        <!--        <item-->
-        <!--            android:id="@+id/action_legend"-->
-        <!--            android:icon="@drawable/ic_outline_not_listed_location_24"-->
-        <!--            android:title=""-->
-        <!--            app:showAsAction="withText" />-->
         <item
             android:id="@+id/action_district"
             android:checkable="true"

@@ -5,16 +5,17 @@
 package kr.djgis.sspfs.ui.map
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color.*
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.*
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -47,6 +48,7 @@ import com.naver.maps.map.overlay.*
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kr.djgis.sspfs.BuildConfig.GIT_VERSION_NAME
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
 import kr.djgis.sspfs.Config.EXTENT_GYEONGJU
@@ -73,6 +75,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.set
+
 
 @DelicateCoroutinesApi
 @Suppress("PropertyName")
@@ -183,6 +186,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private lateinit var featureEdit: FeatureEdit
     private lateinit var districtTheme: DistrictTheme
 
+    private lateinit var fabOnClickListener: View.OnClickListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -242,7 +247,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
 
         fab = requireActivity().findViewById(R.id.fab_main)
-        fab.setOnClickListener {
+        fabOnClickListener = OnClickListener {
             if (this.naverMap.cameraPosition.zoom < 13.0) {
                 snackbar(fab, R.string.map_require_zoom).setAction("확대") {
                     this.naverMap.moveCamera(zoomTo(14.0).animate(Easing).finishCallback {
@@ -251,6 +256,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 }.show()
             } else onFeatureGet()
         }
+        fab.setOnClickListener(fabOnClickListener)
         bottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
         chipGroup = requireActivity().findViewById(R.id.chipGroup)
 
@@ -270,6 +276,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             resources = resources,
             chipGroup = chipGroup,
         )
+
+        mobileUpdate()
     }
 
     private fun onCameraIdle() {
@@ -487,8 +495,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            /* R.id.action_legend -> {
+        return when (menuItem.itemId) {/* R.id.action_legend -> {
                 NavDrawerFragment().show(childFragmentManager, null)
                 return true
             }*/
@@ -540,6 +547,29 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
             else -> return false
         }
+    }
+
+    private fun mobileUpdate() {
+        webService.mobileUpdate(version = GIT_VERSION_NAME).enqueue({
+            when (it["status"].asString) {
+                "OK" -> fab.setOnClickListener(fabOnClickListener)
+
+                "FAIL" -> {
+                    snackbar(anchorView = fab, message = "업데이트 있음: 최신 버전의 앱을 다운받아 설치해주세요").show()
+                    toggleFab(true, R.color.yellow_A700, R.drawable.ic_round_system_update_24)
+                    fab.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://drive.google.com/file/d/1ljWYteI7sGIDHcq74sCM0K7KMJWJTk7n/view?usp=sharing")
+                            )
+                        )
+                    }
+                }
+            }
+        }, {
+            snackbar(anchorView = fab, message = "최신 버전의 앱이 확인되지 않았습니다").show()
+        })
     }
 
     override fun onResume() {
