@@ -238,7 +238,7 @@
 
                     <Button
                         style="@style/App.TableLayout.Label"
-                        android:text="교량유형" />
+                        android:text="취입보유형" />
 
                     <EditText
                         style="@style/App.TableLayout.EditText"
