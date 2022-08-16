@@ -39,7 +39,6 @@ import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.network.enqueue
-import kr.djgis.sspfs.ui.MainActivity
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.snackbar
@@ -168,7 +167,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         }
 
         binding.run {
-            (requireActivity() as MainActivity).setSupportActionBar(toolbar)
 
             val mapFragment = childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment?
                 ?: MapFragment.newInstance(
@@ -210,6 +208,9 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         bottomAppBar.menu.setGroupVisible(R.id.action_group_swap, isFeatureCorD)
 
         fab = requireActivity().findViewById(R.id.fab_main)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -229,6 +230,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.bottomappbar_menu_fragment_feature, menu)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

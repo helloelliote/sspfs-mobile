@@ -15,7 +15,6 @@ import android.util.DisplayMetrics
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -200,8 +199,6 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -211,6 +208,8 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@NaverMapFragment.viewModel
         }
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         onCreateMap()
     }
 
@@ -441,10 +440,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     districtList.districts.stream().forEach { region ->
                         val latLngs = region.geom.latLngs
                         latLngs.forEach { latLng ->
-                            polygonMap[region.bjd_nam] = (createPolygon(coords = latLng).also {
+                            polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
                                 val centerLatlng = region.center.latLngs
                                 centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
-                            })
+                            }
                         }
                     }
                     handler.post {
@@ -474,11 +473,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     private fun clearRegionOverlays() {
         centerMap.values.stream().forEach {
-            if (it is Marker) it.map = null
+            if (it is Overlay) it.map = null
         }
         centerMap.clear()
         polygonMap.values.stream().forEach {
-            if (it is PolygonOverlay) it.map = null
+            if (it is Overlay) it.map = null
         }
         polygonMap.clear()
     }
