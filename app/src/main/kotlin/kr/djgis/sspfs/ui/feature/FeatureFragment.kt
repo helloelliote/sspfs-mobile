@@ -31,13 +31,14 @@ import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
 import kr.djgis.sspfs.Config.EDIT_GEOM_START
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
+import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
+import kr.djgis.sspfs.network.CallbackT
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
-import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
 import kr.djgis.sspfs.util.snackbar
@@ -68,8 +69,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 alertDialog(
-                    title = "작업이 저장되지 않습니다",
-                    message = resources.getString(R.string.feature_back)
+                    title = "작업이 저장되지 않습니다", message = resources.getString(R.string.feature_back)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("나가기") { _, _ ->
                     isEnabled = false
@@ -167,16 +167,11 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
 
         binding.run {
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment?
-                ?: MapFragment.newInstance(
-                    NaverMapOptions()
-                        .locale(Locale.KOREA)
-                        .mapType(Satellite)
-                        .camera(CameraPosition(viewModel.latLngBounds.value!!.center, 18.0))
-                        .minZoom(16.0)
-                        .extent(viewModel.latLngBounds.value)
-                        .tiltGesturesEnabled(false)
-                        .zoomGesturesEnabled(true)
+            val mapFragment =
+                childFragmentManager.findFragmentById(R.id.toolbar) as MapFragment? ?: MapFragment.newInstance(
+                    NaverMapOptions().locale(Locale.KOREA).mapType(Satellite)
+                        .camera(CameraPosition(viewModel.latLngBounds.value!!.center, 18.0)).minZoom(16.0)
+                        .extent(viewModel.latLngBounds.value).tiltGesturesEnabled(false).zoomGesturesEnabled(true)
                 ).also {
                     childFragmentManager.beginTransaction().add(R.id.toolbar, it).commit()
                 }
@@ -241,12 +236,16 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                 }.setPositiveButton("제외") { _, _ ->
                     viewModel.type(args.type).featurePost(
                         EXM_CHK_EXCLUDE, null, null, this@FeatureFragment
-                    ).enqueue(onResponse = {
-                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
-                        findNavController().navigate(directions)
-                    }, onFailure = {
-                        snackbar(anchorView = fab, message = it).show()
-                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                    ).enqueue(object : CallbackT<Result> {
+                        override fun onResponse(response: Result) {
+                            val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                            findNavController().navigate(directions)
+                        }
+
+                        override fun onFailure(throwable: String) {
+                            snackbar(anchorView = fab, message = throwable).show()
+                            toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                        }
                     })
                 }.show()
                 return true
@@ -258,11 +257,9 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     isReversed = !isReversed
                     overlay.coords = overlay.coords.reversed()
                     snackbar(
-                        anchorView = fab,
-                        message = R.string.feature_action_geom_reversed
+                        anchorView = fab, message = R.string.feature_action_geom_reversed
                     ).show()
-                }
-                /*alertDialog(
+                }/*alertDialog(
                     title = viewModel.of(args.type).fac_nam,
                     message = resources.getString(R.string.feature_action_geom_reverse)
                 ).setNeutralButton("취소") { dialog, _ ->
@@ -325,12 +322,16 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     webService.featureSwitch(
                         fac_typ = args.type,
                         fac_uid = viewModel.of(args.type).fac_uid,
-                    ).enqueue(onResponse = {
-                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
-                        findNavController().navigate(directions)
-                    }, onFailure = {
-                        snackbar(anchorView = fab, message = it).show()
-                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                    ).enqueue(object : CallbackT<Result> {
+                        override fun onResponse(response: Result) {
+                            val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                            findNavController().navigate(directions)
+                        }
+
+                        override fun onFailure(throwable: String) {
+                            snackbar(anchorView = fab, message = throwable).show()
+                            toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                        }
                     })
                 }.show()
                 return true
@@ -352,13 +353,16 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                 val fraction = if (lineFraction > 0.0) lineFraction else null
                 viewModel.type(args.type).featurePost(
                     EXM_CHK_SAVE, edit, fraction, this@FeatureFragment
-                ).enqueue(onResponse = {
-                    println("HELLO: ${it}")
-                    val directions = FeatureFragmentDirections.actionToNaverMapFragment()
-                    findNavController().navigate(directions)
-                }, onFailure = {
-                    snackbar(anchorView = fab, message = it).show()
-                    toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                ).enqueue(object : CallbackT<Result> {
+                    override fun onResponse(response: Result) {
+                        val directions = FeatureFragmentDirections.actionToNaverMapFragment()
+                        findNavController().navigate(directions)
+                    }
+
+                    override fun onFailure(throwable: String) {
+                        snackbar(anchorView = fab, message = throwable).show()
+                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+                    }
                 })
             }
         }
@@ -397,8 +401,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
         _binding = null
     }
 
-    private class FragmentPagerAdapter(fragment: Fragment, val tabs: List<Fragment>) :
-        FragmentStateAdapter(fragment) {
+    private class FragmentPagerAdapter(fragment: Fragment, val tabs: List<Fragment>) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = tabs.size
 

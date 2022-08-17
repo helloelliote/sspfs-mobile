@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -44,10 +45,14 @@ import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import com.naver.maps.map.NaverMap.OnMapLongClickListener
-import com.naver.maps.map.overlay.*
+import com.naver.maps.map.overlay.ArrowheadPathOverlay
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.overlay.PolygonOverlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.launch
 import kr.djgis.sspfs.BuildConfig.GIT_VERSION_NAME
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
@@ -61,13 +66,8 @@ import kr.djgis.sspfs.model.FeatureEditVMFactory
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.network.Moshi
-import kr.djgis.sspfs.network.Moshi.moshiDistrictList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureAList
-import kr.djgis.sspfs.network.Moshi.moshiFeatureList
-import kr.djgis.sspfs.network.Moshi.moshiThemeList
+import kr.djgis.sspfs.network.CallbackT
 import kr.djgis.sspfs.network.RetrofitClient.webService
-import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.util.round
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
@@ -75,7 +75,6 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.set
-
 
 @DelicateCoroutinesApi
 @Suppress("PropertyName")
@@ -121,27 +120,28 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 width = 5
             }
         }
-        webService.featureGet(
-            fac_uid = feature.fac_uid
-        ).enqueue(onResponse = {
-            val result = when (feature.fac_typ) {
-                "A" -> moshiFeatureAList.fromJson(it.toString())!!.features.first()
-                "B" -> Moshi.moshiFeatureBList.fromJson(it.toString())!!.features.first()
-                "C" -> Moshi.moshiFeatureCList.fromJson(it.toString())!!.features.first()
-                "D" -> Moshi.moshiFeatureDList.fromJson(it.toString())!!.features.first()
-                "E" -> Moshi.moshiFeatureEList.fromJson(it.toString())!!.features.first()
-                "F" -> Moshi.moshiFeatureFList.fromJson(it.toString())!!.features.first()
-                else -> Moshi.moshiFeatureFList.fromJson(it.toString())!!.features.first()
+        viewModel.viewModelScope.launch {
+            try {
+                val typ = feature.fac_typ
+                val selectFeature = when (typ) {
+                    "A" -> webService.featureGetA(fac_uid = feature.fac_uid).features.first()
+                    "B" -> webService.featureGetB(fac_uid = feature.fac_uid).features.first()
+                    "C" -> webService.featureGetC(fac_uid = feature.fac_uid).features.first()
+                    "D" -> webService.featureGetD(fac_uid = feature.fac_uid).features.first()
+                    "E" -> webService.featureGetE(fac_uid = feature.fac_uid).features.first()
+                    "F" -> webService.featureGetF(fac_uid = feature.fac_uid).features.first()
+                    else -> webService.featureGetA(fac_uid = feature.fac_uid).features.first()
+                }
+                viewModel.type(typ).set(selectFeature).overlay(selectOverlay).latLngBounds(bounds)
+                naverMap.moveCamera(scrollTo(bounds.center).animate(Easing, 250).finishCallback {
+                    val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = typ)
+                    findNavController().navigate(directions)
+                })
+            } catch (e: Exception) {
+                snackbar(anchorView = fab, message = e.message).show()
+                onFeatureGetResult(true, R.color.red_500)
             }
-            viewModel.type(feature.fac_typ).set(result).overlay(selectOverlay).latLngBounds(bounds)
-            naverMap.moveCamera(scrollTo(bounds.center).animate(Easing, 250).finishCallback {
-                val directions = NaverMapFragmentDirections.actionToFeatureFragment(type = feature.fac_typ)
-                findNavController().navigate(directions)
-            })
-        }, onFailure = {
-            snackbar(anchorView = fab, message = it).show()
-            onFeatureGetResult(true, R.color.red_500)
-        })
+        }
         return@OnClickListener true
     }
     private var arrowheadPath: ArrowheadPathOverlay? = null
@@ -186,7 +186,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private lateinit var featureEdit: FeatureEdit
     private lateinit var districtTheme: DistrictTheme
 
-    private lateinit var fabOnClickListener: View.OnClickListener
+    private lateinit var fabOnClickListener: OnClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -277,7 +277,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             chipGroup = chipGroup,
         )
 
-        mobileUpdate()
+//        mobileUpdate()
     }
 
     private fun onCameraIdle() {
@@ -291,49 +291,52 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         val latLngBounds = naverMap.contentBounds.round()
         webService.featuresGet(
             xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3]
-        ).enqueue(onResponse = { json ->
-            val featureList = moshiFeatureList.fromJson(json.toString())!!
-            executor.execute {
-                featureList.features.stream().forEach { feature ->
-                    val key = feature.fac_uid
-                    val latLngs = feature.geom!!.latLngs
-                    val color = toColor(feature)
-                    when (feature.geom!!.type) {
-                        "Point" -> {
-                            markerMap[key] = createMarker(point = latLngs[0][0], color, feature)
-                        }
-
-                        "LineString" -> {
-                            arrowheadPathMap[key] = createArrowheadPath(line = latLngs[0], color, feature).also {
-                                markerMap[key] = createMarker(point = it.coords[1], color, feature)
+        ).enqueue(object : CallbackT<FeatureList> {
+            override fun onResponse(response: FeatureList) {
+                executor.execute {
+                    response.features.stream().forEach { feature ->
+                        val key = feature.fac_uid
+                        val latLngs = feature.geom!!.latLngs
+                        val color = toColor(feature)
+                        when (feature.geom!!.type) {
+                            "Point" -> {
+                                markerMap[key] = createMarker(point = latLngs[0][0], color, feature)
                             }
-                        }
 
-                        "MultiLineString" -> {
-                            latLngs.forEach { latLng ->
-                                arrowheadPathMap[key] = createArrowheadPath(line = latLng, color, feature).also {
-                                    markerMap[key] = createMarker(point = it.coords[0], color, feature)
+                            "LineString" -> {
+                                arrowheadPathMap[key] = createArrowheadPath(line = latLngs[0], color, feature).also {
+                                    markerMap[key] = createMarker(point = it.coords[1], color, feature)
+                                }
+                            }
+
+                            "MultiLineString" -> {
+                                latLngs.forEach { latLng ->
+                                    arrowheadPathMap[key] = createArrowheadPath(line = latLng, color, feature).also {
+                                        markerMap[key] = createMarker(point = it.coords[0], color, feature)
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                handler.post {
-                    arrowheadPathMap.values.stream().forEach {
-                        it.map = naverMap
-                    }
-                    markerMap.values.stream().forEach {
-                        it.map = naverMap
-                    }
-                    onFeatureGetResult(true, R.color.teal_A400)
-                    if (featureList.featureCount == 0) {
-                        snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
+                    handler.post {
+                        arrowheadPathMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
+                        markerMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
+                        onFeatureGetResult(true, R.color.teal_A400)
+                        if (response.featureCount == 0) {
+                            snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
+                        }
                     }
                 }
             }
-        }, onFailure = {
-            snackbar(anchorView = fab, message = it).show()
-            onFeatureGetResult(true, R.color.red_500)
+
+            override fun onFailure(throwable: String) {
+                snackbar(anchorView = fab, message = throwable).show()
+                onFeatureGetResult(true, R.color.red_500)
+            }
         })
     }
 
@@ -442,30 +445,33 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             val latLngBounds = naverMap.contentBounds.round()
             webService.districtGet(
                 xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3],
-            ).enqueue(onResponse = { json ->
-                val districtList = moshiDistrictList.fromJson(json.toString())!!
-                executor.execute {
-                    districtList.districts.stream().forEach { region ->
-                        val latLngs = region.geom.latLngs
-                        latLngs.forEach { latLng ->
-                            polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
-                                val centerLatlng = region.center.latLngs
-                                centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
+            ).enqueue(object : CallbackT<DistrictList> {
+                override fun onResponse(response: DistrictList) {
+                    executor.execute {
+                        response.districts.stream().forEach { region ->
+                            val latLngs = region.geom.latLngs
+                            latLngs.forEach { latLng ->
+                                polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
+                                    val centerLatlng = region.center.latLngs
+                                    centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
+                                }
+                            }
+                        }
+                        handler.post {
+                            polygonMap.values.stream().forEach {
+                                it.map = naverMap
+                            }
+                            centerMap.values.stream().forEach {
+                                it.map = naverMap
                             }
                         }
                     }
-                    handler.post {
-                        polygonMap.values.stream().forEach {
-                            it.map = naverMap
-                        }
-                        centerMap.values.stream().forEach {
-                            it.map = naverMap
-                        }
-                    }
+                    snackbar(fab, R.string.map_region).setAction("확인") {}.show()
                 }
-                snackbar(fab, R.string.map_region).setAction("확인") {}.show()
-            }, onFailure = {
-                snackbar(anchorView = fab, message = it).show()
+
+                override fun onFailure(throwable: String) {
+                    snackbar(anchorView = fab, message = throwable).show()
+                }
             })
         } else {
             menuItem.setIcon(R.drawable.ic_round_toggle_off_24)
@@ -534,13 +540,16 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_d, R.id.action_e, R.id.action_f -> {
                 editViewModel.createFeature(
                     id = menuItem.itemId
-                ).enqueue(onResponse = { json ->
-//                    val featureList = moshiFeatureEditList.fromJson(json.toString())
-                    featureEdit.cancel()
-                    onFeatureGet()
-                    snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
-                }, onFailure = {
-                    snackbar(anchorView = fab, message = it).show()
+                ).enqueue(object : CallbackT<Result> {
+                    override fun onResponse(response: Result) {
+                        featureEdit.cancel()
+                        onFeatureGet()
+                        snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
+                    }
+
+                    override fun onFailure(throwable: String) {
+                        snackbar(anchorView = fab, message = throwable).show()
+                    }
                 })
                 return true
             }
@@ -550,25 +559,29 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private fun mobileUpdate() {
-        webService.mobileUpdate(version = GIT_VERSION_NAME).enqueue({
-            when (it["status"].asString) {
-                "OK" -> fab.setOnClickListener(fabOnClickListener)
+        webService.mobileUpdate(version = GIT_VERSION_NAME).enqueue(object : CallbackT<Version> {
+            override fun onResponse(response: Version) {
+                when (response.status) {
+                    "OK" -> fab.setOnClickListener(fabOnClickListener)
 
-                "FAIL" -> {
-                    snackbar(anchorView = fab, message = "업데이트 있음: 최신 버전의 앱을 다운받아 설치해주세요").show()
-                    toggleFab(true, R.color.yellow_A700, R.drawable.ic_round_system_update_24)
-                    fab.setOnClickListener {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://drive.google.com/file/d/1ljWYteI7sGIDHcq74sCM0K7KMJWJTk7n/view?usp=sharing")
+                    "FAIL" -> {
+                        snackbar(anchorView = fab, message = "업데이트 있음: 최신 버전의 앱을 다운받아 설치해주세요").show()
+                        toggleFab(true, R.color.yellow_A700, R.drawable.ic_round_system_update_24)
+                        fab.setOnClickListener {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://drive.google.com/file/d/1ljWYteI7sGIDHcq74sCM0K7KMJWJTk7n/view?usp=sharing")
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
-        }, {
-            snackbar(anchorView = fab, message = "최신 버전의 앱이 확인되지 않았습니다").show()
+
+            override fun onFailure(throwable: String) {
+                snackbar(anchorView = fab, message = "최신 버전의 앱이 확인되지 않았습니다").show()
+            }
         })
     }
 
@@ -763,29 +776,32 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                                 xmax = latLngBounds[2],
                                 ymax = latLngBounds[3],
                                 tag
-                            ).enqueue(onResponse = { json ->
-                                val themeList = moshiThemeList.fromJson(json.toString())!!
-                                executor.execute {
-                                    val mutableSet = mutableSetOf<PolygonOverlay>()
-                                    themeList.themes.stream().forEach { region ->
-                                        val latLngs = region.geom.latLngs
-                                        latLngs.stream().forEach { latLng ->
-                                            mutableSet.add(PolygonOverlay(latLng).apply {
-                                                color = polygonColor.defaultColor
-                                                outlineColor = chipColor.defaultColor
-                                                outlineWidth = 6
-                                            })
+                            ).enqueue(object : CallbackT<ThemeList> {
+                                override fun onResponse(response: ThemeList) {
+                                    executor.execute {
+                                        val mutableSet = mutableSetOf<PolygonOverlay>()
+                                        response.themes.stream().forEach { region ->
+                                            val latLngs = region.geom.latLngs
+                                            latLngs.stream().forEach { latLng ->
+                                                mutableSet.add(PolygonOverlay(latLng).apply {
+                                                    color = polygonColor.defaultColor
+                                                    outlineColor = chipColor.defaultColor
+                                                    outlineWidth = 6
+                                                })
+                                            }
                                         }
-                                    }
-                                    polygonMap[tag] = mutableSet
-                                    handler.post {
-                                        mutableSet.stream().forEach {
-                                            it.map = naverMap
+                                        polygonMap[tag] = mutableSet
+                                        handler.post {
+                                            mutableSet.stream().forEach {
+                                                it.map = naverMap
+                                            }
                                         }
                                     }
                                 }
-                            }, onFailure = {
-                                fragment.snackbar(anchorView = fab, message = it).show()
+
+                                override fun onFailure(throwable: String) {
+                                    fragment.snackbar(anchorView = fab, message = throwable).show()
+                                }
                             })
                         }
 

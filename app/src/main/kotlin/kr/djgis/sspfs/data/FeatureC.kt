@@ -4,16 +4,14 @@
 
 package kr.djgis.sspfs.data
 
-import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
-class FeatureCList(
-    @Json(name = "rowCount") val featureCount: Int,
-    @Json(name = "rows") val features: MutableSet<FeatureC>,
-) : Serializable
+data class FeatureCList(
+    @field:Json(name = "rowCount") val featureCount: Int,
+    @field:Json(name = "rows") val features: MutableSet<FeatureC>,
+)
 
 @JsonClass(generateAdapter = true)
 class FeatureC(
@@ -38,9 +36,4 @@ class FeatureC(
     override fun toString(): String {
         return "FeatureC(cat_imp=$cat_imp, fac_len=$fac_len, fac_hgt=$fac_hgt, str_bod=$str_bod, str_wal=$str_wal, str_flr=$str_flr, str_jnt=$str_jnt, str_hzd=$str_hzd, fun_stt=$fun_stt, fun_mch=$fun_mch, dep_stt=$dep_stt, etc_env=$etc_env, etc_fsh=$etc_fsh, eva_sur=$eva_sur, eva_inf=$eva_inf, eva_ope=$eva_ope, eva_opi=$eva_opi) ${super.toString()}"
     }
-}
-
-object FeatureCDiffCallback : DiffUtil.ItemCallback<FeatureC>() {
-    override fun areItemsTheSame(oldItem: FeatureC, newItem: FeatureC) = oldItem.fac_uid === newItem.fac_uid
-    override fun areContentsTheSame(oldItem: FeatureC, newItem: FeatureC) = oldItem == newItem
 }

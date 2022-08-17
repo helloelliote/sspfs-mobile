@@ -4,13 +4,13 @@
 
 package kr.djgis.sspfs.network
 
-import com.google.gson.GsonBuilder
 import kr.djgis.sspfs.BuildConfig
 import kr.djgis.sspfs.Config
+import kr.djgis.sspfs.network.MoshiBuilder.moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
@@ -19,7 +19,8 @@ object RetrofitClient {
         Retrofit.Builder()
             .baseUrl(Config.BASE_URL)
             .client(okHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
             .create(RetrofitWebService::class.java)
     }
 
@@ -27,7 +28,8 @@ object RetrofitClient {
         Retrofit.Builder()
             .baseUrl("https://dapi.kakao.com")
             .client(okHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create())).build()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
             .create(RetrofitKakaoService::class.java)
     }
 

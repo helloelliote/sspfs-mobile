@@ -4,16 +4,14 @@
 
 package kr.djgis.sspfs.data
 
-import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
-class FeatureAList(
-    @Json(name = "rowCount") val featureCount: Int,
-    @Json(name = "rows") val features: MutableSet<FeatureA>,
-) : Serializable
+data class FeatureAList(
+    @field:Json(name = "rowCount") val featureCount: Int,
+    @field:Json(name = "rows") val features: MutableSet<FeatureA>,
+)
 
 @JsonClass(generateAdapter = true)
 class FeatureA(
@@ -52,9 +50,4 @@ class FeatureA(
     override fun toString(): String {
         return "FeatureA(cat_typ=$cat_typ, cat_pos=$cat_pos, cat_fun=$cat_fun, cat_imp=$cat_imp, fac_len=$fac_len, fac_wid=$fac_wid, fac_hgt=$fac_hgt, fac_gap=$fac_gap, sec_flr=$sec_flr, sec_wid=$sec_wid, sec_hgt=$sec_hgt, sec_dia=$sec_dia, sec_col=$sec_col, riv_upp=$riv_upp, riv_mid=$riv_mid, riv_low=$riv_low, str_dmg=$str_dmg, str_reb=$str_reb, str_hol=$str_hol, str_old=$str_old, fld_dmg=$fld_dmg, fld_wal=$fld_wal, etc_trf=$etc_trf, etc_trh=$etc_trh, eva_stt=$eva_stt, eva_sur=$eva_sur, eva_pxm=$eva_pxm, eva_inf=$eva_inf, eva_roa=$eva_roa, eva_ope=$eva_ope, eva_opi=$eva_opi) ${super.toString()}"
     }
-}
-
-object FeatureADiffCallback : DiffUtil.ItemCallback<FeatureA>() {
-    override fun areItemsTheSame(oldItem: FeatureA, newItem: FeatureA) = oldItem.fac_uid === newItem.fac_uid
-    override fun areContentsTheSame(oldItem: FeatureA, newItem: FeatureA) = oldItem == newItem
 }

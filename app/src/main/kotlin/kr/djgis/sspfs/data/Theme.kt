@@ -6,15 +6,14 @@ package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class ThemeList(
-    @Json(name = "rowCount") val themeCount: Int,
-    @Json(name = "rows") val themes: MutableSet<Theme>,
+    @field:Json(name = "rowCount") val themeCount: Int,
+    @field:Json(name = "rows") val themes: MutableSet<Theme>,
 )
 
 @JsonClass(generateAdapter = true)
 data class Theme(
     val geom: FeatureGeom,
-) : Serializable
+)

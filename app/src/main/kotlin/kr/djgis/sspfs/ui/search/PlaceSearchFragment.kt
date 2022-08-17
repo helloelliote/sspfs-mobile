@@ -19,11 +19,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.naver.maps.geometry.LatLng
 import kr.djgis.sspfs.data.kakao.search.Document
+import kr.djgis.sspfs.data.kakao.search.Keyword
 import kr.djgis.sspfs.data.kakao.search.KeywordStore
 import kr.djgis.sspfs.databinding.FragmentPlaceSearchBinding
-import kr.djgis.sspfs.network.Moshi.moshiKeyword
+import kr.djgis.sspfs.network.CallbackT
 import kr.djgis.sspfs.network.RetrofitClient.kakaoService
-import kr.djgis.sspfs.network.enqueue
 import kr.djgis.sspfs.util.getRecognizeSpeechIntent
 import kr.djgis.sspfs.util.snackbar
 
@@ -70,17 +70,20 @@ class PlaceSearchFragment : Fragment(), KeywordAdapterListener {
                         query = query,
                         x = latLng?.longitude,
                         y = latLng?.latitude,
-                    ).enqueue(onResponse = { json ->
-                        val keyword = moshiKeyword.fromJson(json.toString())!!
-                        if (keyword.meta.total_count == 0) {
-                            resetSearch()
-                        } else {
-                            KeywordStore.DOCUMENT.postValue(keyword.documents.sortedBy { document ->
-                                document.distance.toDouble()
-                            }.toMutableList())
+                    ).enqueue(object : CallbackT<Keyword> {
+                        override fun onResponse(response: Keyword) {
+                            if (response.meta.total_count == 0) {
+                                resetSearch()
+                            } else {
+                                KeywordStore.DOCUMENT.postValue(response.documents.sortedBy { document ->
+                                    document.distance.toDouble()
+                                }.toMutableList())
+                            }
                         }
-                    }, onFailure = {
-                        snackbar(message = it).show()
+
+                        override fun onFailure(throwable: String) {
+                            snackbar(message = throwable).show()
+                        }
                     })
                     return false
                 }

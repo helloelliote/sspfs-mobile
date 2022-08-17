@@ -7,13 +7,12 @@ package kr.djgis.sspfs.data
 import android.net.Uri
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class FeatureAttachment(
     var url: String?,
     var name: String?,
     val type: String?,
-    @Json(ignore = true)
-    @Transient var uri: Uri? = null,
-) : Serializable
+    @field:Json(ignore = true)
+    var uri: Uri? = null,
+)

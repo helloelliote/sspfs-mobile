@@ -6,14 +6,13 @@ package kr.djgis.sspfs.data.kakao.search
 
 import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 import kotlin.math.round
 
 @JsonClass(generateAdapter = true)
 data class Keyword(
     val documents: MutableList<Document>,
     val meta: Meta,
-) : Serializable
+)
 
 @JsonClass(generateAdapter = true)
 data class Document(

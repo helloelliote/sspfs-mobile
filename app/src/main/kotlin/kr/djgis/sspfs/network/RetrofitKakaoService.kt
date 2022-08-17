@@ -4,7 +4,7 @@
 
 package kr.djgis.sspfs.network
 
-import com.google.gson.JsonObject
+import kr.djgis.sspfs.data.kakao.search.Keyword
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -21,9 +21,10 @@ interface RetrofitKakaoService {
         @Query("query") query: String,
         @Query("x") x: Double?,
         @Query("y") y: Double?,
-    ): Call<JsonObject>
+    ): Call<Keyword>
 
-/*    *//**
+    /*    */
+    /**
      * @link https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-district
      *//*
     @Headers(KAKAO_API_KEY)
@@ -35,7 +36,8 @@ interface RetrofitKakaoService {
         @Query("output_coord") output: String?,
     ): Call<JsonObject>
 
-    *//**
+    */
+    /**
      * @link https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address
      *//*
     @Headers(KAKAO_API_KEY)

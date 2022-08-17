@@ -12,7 +12,7 @@ import java.io.Serializable
 data class Coord2Regioncode(
     val documents: MutableList<DocumentCR>,
     val meta: MetaCR,
-) : Serializable
+)
 
 @JsonClass(generateAdapter = true)
 data class DocumentCR(
@@ -31,8 +31,3 @@ data class DocumentCR(
 data class MetaCR(
     val total_count: Int,
 )
-
-object DocumentCRDiffCallback : DiffUtil.ItemCallback<DocumentCR>() {
-    override fun areItemsTheSame(oldItem: DocumentCR, newItem: DocumentCR) = oldItem.code == newItem.code
-    override fun areContentsTheSame(oldItem: DocumentCR, newItem: DocumentCR) = oldItem == newItem
-}

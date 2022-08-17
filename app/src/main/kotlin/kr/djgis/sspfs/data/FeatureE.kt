@@ -4,16 +4,14 @@
 
 package kr.djgis.sspfs.data
 
-import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
-class FeatureEList(
-    @Json(name = "rowCount") val featureCount: Int,
-    @Json(name = "rows") val features: MutableSet<FeatureE>,
-) : Serializable
+data class FeatureEList(
+    @field:Json(name = "rowCount") val featureCount: Int,
+    @field:Json(name = "rows") val features: MutableSet<FeatureE>,
+)
 
 @JsonClass(generateAdapter = true)
 class FeatureE(
@@ -80,9 +78,4 @@ class FeatureE(
     override fun toString(): String {
         return "FeatureE(cat_funl=$cat_funl, cat_funm=$cat_funm, cat_funu=$cat_funu, cat_impl=$cat_impl, cat_impm=$cat_impm, cat_impu=$cat_impu, fac_len=$fac_len, fac_wid=$fac_wid, str_widl=$str_widl, str_widm=$str_widm, str_widu=$str_widu, str_pavl=$str_pavl, str_pavm=$str_pavm, str_pavu=$str_pavu, str_shpl=$str_shpl, str_shpm=$str_shpm, str_shpu=$str_shpu, str_safl=$str_safl, str_safm=$str_safm, str_safu=$str_safu, str_snkl=$str_snkl, str_snkm=$str_snkm, str_snku=$str_snku, fun_pavl=$fun_pavl, fun_pavm=$fun_pavm, fun_pavu=$fun_pavu, fun_unpl=$fun_unpl, fun_unpm=$fun_unpm, fun_unpu=$fun_unpu, fun_flal=$fun_flal, fun_flam=$fun_flam, fun_flau=$fun_flau, dmg_subl=$dmg_subl, dmg_subm=$dmg_subm, dmg_subu=$dmg_subu, dmg_sewl=$dmg_sewl, dmg_sewm=$dmg_sewm, dmg_sewu=$dmg_sewu, etc_posl=$etc_posl, etc_posm=$etc_posm, etc_posu=$etc_posu, eva_rivl=$eva_rivl, eva_rivm=$eva_rivm, eva_rivu=$eva_rivu, eva_posl=$eva_posl, eva_posm=$eva_posm, eva_posu=$eva_posu, eva_prxl=$eva_prxl, eva_prxm=$eva_prxm, eva_prxu=$eva_prxu, eva_infl=$eva_infl, eva_infm=$eva_infm, eva_infu=$eva_infu, eva_opel=$eva_opel, eva_opem=$eva_opem, eva_opeu=$eva_opeu, eva_opil=$eva_opil, eva_opim=$eva_opim, eva_opiu=$eva_opiu) ${super.toString()}"
     }
-}
-
-object FeatureEDiffCallback : DiffUtil.ItemCallback<FeatureE>() {
-    override fun areItemsTheSame(oldItem: FeatureE, newItem: FeatureE) = oldItem.fac_uid === newItem.fac_uid
-    override fun areContentsTheSame(oldItem: FeatureE, newItem: FeatureE) = oldItem == newItem
 }

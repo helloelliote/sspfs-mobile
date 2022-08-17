@@ -6,12 +6,11 @@ package kr.djgis.sspfs.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class DistrictList(
-    @Json(name = "rowCount") val regionCount: Int,
-    @Json(name = "rows") val districts: MutableSet<District>,
+    @field:Json(name = "rowCount") val regionCount: Int,
+    @field:Json(name = "rows") val districts: MutableSet<District>,
 )
 
 @JsonClass(generateAdapter = true)
@@ -20,4 +19,4 @@ data class District(
     val bjd_nam: String,
     val geom: FeatureGeom,
     val center: FeatureGeom,
-) : Serializable
+)

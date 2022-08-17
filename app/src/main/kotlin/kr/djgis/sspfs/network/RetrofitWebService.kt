@@ -4,7 +4,8 @@
 
 package kr.djgis.sspfs.network
 
-import com.google.gson.JsonObject
+import kr.djgis.sspfs.data.Result
+import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -18,37 +19,37 @@ interface RetrofitWebService {
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): Call<JsonObject>
+    ): Call<FeatureList>
 
     @GET("api/feature")
-    fun featureGet(
+    suspend fun featureGetA(
         @Query("fac_uid") fac_uid: String,
-    ): Call<JsonObject>
+    ): FeatureAList
 
-    @Multipart
-    @POST("api/feature")
-    fun featurePost(
-        @Part jsonBody: MultipartBody.Part,
-        @Query("edit") edit: String?,
-        @Query("fraction") fraction: Double?,
-        @Part multipartBody: List<MultipartBody.Part?>,
-    ): Call<JsonObject>
-
-    @POST("api/feature/switch")
-    fun featureSwitch(
-        @Query("fac_typ") fac_typ: String,
+    @GET("api/feature")
+    suspend fun featureGetB(
         @Query("fac_uid") fac_uid: String,
-    ): Call<JsonObject>
+    ): FeatureBList
 
-    @POST("api/feature/create/point")
-    fun createFeaturePoint(
-        @Body feature: FeatureEditViewModel.Feature,
-    ): Call<JsonObject>
+    @GET("api/feature")
+    suspend fun featureGetC(
+        @Query("fac_uid") fac_uid: String,
+    ): FeatureCList
 
-    @POST("api/feature/create/line")
-    fun createFeatureLine(
-        @Body feature: FeatureEditViewModel.Feature,
-    ): Call<JsonObject>
+    @GET("api/feature")
+    suspend fun featureGetD(
+        @Query("fac_uid") fac_uid: String,
+    ): FeatureDList
+
+    @GET("api/feature")
+    suspend fun featureGetE(
+        @Query("fac_uid") fac_uid: String,
+    ): FeatureEList
+
+    @GET("api/feature")
+    suspend fun featureGetF(
+        @Query("fac_uid") fac_uid: String,
+    ): FeatureFList
 
     @GET("api/region")
     fun districtGet(
@@ -56,7 +57,7 @@ interface RetrofitWebService {
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): Call<JsonObject>
+    ): Call<DistrictList>
 
     @GET("api/theme")
     fun themeGet(
@@ -65,10 +66,35 @@ interface RetrofitWebService {
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
         @Query("name") name: String,
-    ): Call<JsonObject>
+    ): Call<ThemeList>
 
     @GET("api/mobile/update")
     fun mobileUpdate(
         @Query("version") version: String,
-    ): Call<JsonObject>
+    ): Call<Version>
+
+    @Multipart
+    @POST("api/feature")
+    fun featurePost(
+        @Part jsonBody: MultipartBody.Part,
+        @Query("edit") edit: String?,
+        @Query("fraction") fraction: Double?,
+        @Part multipartBody: List<MultipartBody.Part?>,
+    ): Call<Result>
+
+    @POST("api/feature/switch")
+    fun featureSwitch(
+        @Query("fac_typ") fac_typ: String,
+        @Query("fac_uid") fac_uid: String,
+    ): Call<Result>
+
+    @POST("api/feature/create/point")
+    fun createFeaturePoint(
+        @Body feature: FeatureEditViewModel.Feature,
+    ): Call<Result>
+
+    @POST("api/feature/create/line")
+    fun createFeatureLine(
+        @Body feature: FeatureEditViewModel.Feature,
+    ): Call<Result>
 }

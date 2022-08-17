@@ -26,9 +26,9 @@ def getGitHashVersionName = {
             commandLine 'git', 'diff-index', '--shortstat', 'HEAD'
             standardOutput = changeOutput
         }
-        gitVersionName = hashOutput.toString().trim().substring(0, 7);
+        gitVersionName = hashOutput.toString().trim().substring(0, 8)
         if (!changeOutput.toString().trim().empty) {
-            def pattern = Pattern.compile("\\d+");
+            def pattern = Pattern.compile("\\d+")
             def matcher = pattern.matcher(changeOutput.toString().trim())
             if (matcher.find()) {
                 gitVersionName
@@ -36,7 +36,7 @@ def getGitHashVersionName = {
         }
         return gitVersionName
     } catch (ignored) {
-        return "UNKNOWN";
+        return "UNKNOWN"
     }
 }
 
@@ -60,11 +60,14 @@ android {
 
     buildTypes {
         debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "GIT_VERSION_NAME", "\"${getGitHashVersionName()}\""
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "GIT_VERSION_NAME", "\"${getGitHashVersionName()}\""
         }
     }
 
@@ -91,11 +94,11 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.10'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     implementation "androidx.core:core-ktx:1.8.0"
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -114,11 +117,12 @@ dependencies {
 
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6'
 
     // square: moshi & sqldelight
-    implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'
+    implementation 'com.squareup.moshi:moshi:1.13.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'

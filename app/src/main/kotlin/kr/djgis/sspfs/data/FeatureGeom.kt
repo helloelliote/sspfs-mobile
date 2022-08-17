@@ -1,7 +1,9 @@
 package kr.djgis.sspfs.data
 
 import com.naver.maps.geometry.LatLng
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class FeatureGeom(
     val type: String,
     val coordinates: List<Any>,

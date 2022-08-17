@@ -6,13 +6,12 @@ package kr.djgis.sspfs.data.kakao.geo
 
 import androidx.recyclerview.widget.DiffUtil
 import com.squareup.moshi.JsonClass
-import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class Coord2Address(
     val documents: MutableList<DocumentCA>,
     val meta: MetaCA,
-) : Serializable
+)
 
 @JsonClass(generateAdapter = true)
 data class DocumentCA(
@@ -49,9 +48,3 @@ data class AddressCA(
 data class MetaCA(
     val total_count: Int,
 )
-
-object DocumentCADiffCallback : DiffUtil.ItemCallback<DocumentCA>() {
-    override fun areItemsTheSame(oldItem: DocumentCA, newItem: DocumentCA) =
-        oldItem.address.address_name == newItem.address.address_name
-    override fun areContentsTheSame(oldItem: DocumentCA, newItem: DocumentCA) = oldItem == newItem
-}

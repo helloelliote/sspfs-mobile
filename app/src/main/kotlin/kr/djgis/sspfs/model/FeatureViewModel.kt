@@ -7,10 +7,10 @@ package kr.djgis.sspfs.model
 import android.app.Application
 import androidx.lifecycle.*
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
 import kr.djgis.sspfs.App
+import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress
@@ -117,7 +117,7 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         edit: String?,
         fraction: Double?,
         callback: MultipartUploadCallback,
-    ): Call<JsonObject> {
+    ): Call<Result> {
         val multipartBody = mutableListOf<MultipartBody.Part>()
         val feature = this@FeatureViewModel.of(type.value!!)
         feature.exm_chk = status

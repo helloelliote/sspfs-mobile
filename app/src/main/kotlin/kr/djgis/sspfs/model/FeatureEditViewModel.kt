@@ -7,16 +7,15 @@ package kr.djgis.sspfs.model
 import android.app.Application
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
-import com.google.gson.JsonObject
 import com.naver.maps.geometry.LatLng
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kr.djgis.sspfs.App
+import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.util.ListLiveData
 import retrofit2.Call
-import java.io.Serializable
 
 class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -28,7 +27,7 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 
     val coords get() = latLngs.all
 
-    fun createFeature(@IdRes id: Int): Call<JsonObject> {
+    fun createFeature(@IdRes id: Int): Call<Result> {
         when (id) {
             R.id.action_a -> return webService.createFeaturePoint(
                 Feature("A", "B", "소교량", coords)
@@ -65,8 +64,9 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
         _feature.value?.geom = latLngs.all
     }
 
+    @JsonClass(generateAdapter = true)
     data class FeatureList(
-        @Json(name = "rows") val features: MutableSet<Feature>,
+        @field:Json(name = "rows") val features: MutableSet<Feature>,
     )
 
     @JsonClass(generateAdapter = true)
@@ -75,7 +75,7 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
         var fac_typ_alt: String,
         var fac_typ_nam: String,
         var geom: List<LatLng>,
-    ) : Serializable
+    )
 }
 
 object FeatureEditVMFactory : ViewModelProvider.Factory {
