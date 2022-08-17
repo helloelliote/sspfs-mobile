@@ -18,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayoutMediator
@@ -200,13 +199,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
             }.attach()
         }
 
-        val isFeatureCorD = when (args.type) {
-            "C", "D" -> true
-            else -> false
-        }
-        val bottomAppBar = requireActivity().findViewById<BottomAppBar>(R.id.bottom_app_bar)
-        bottomAppBar.menu.setGroupVisible(R.id.action_group_swap, isFeatureCorD)
-
         fab = requireActivity().findViewById(R.id.fab_main)
 
         val menuHost: MenuHost = requireActivity()
@@ -231,6 +223,12 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.bottomappbar_menu_fragment_feature, menu)
+        menu.setGroupVisible(
+            R.id.action_group_swap, when (args.type) {
+                "C", "D" -> true
+                else -> false
+            }
+        )
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
