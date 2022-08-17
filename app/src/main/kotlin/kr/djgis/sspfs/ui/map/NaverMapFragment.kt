@@ -68,6 +68,7 @@ import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
 import kr.djgis.sspfs.network.CallbackT
 import kr.djgis.sspfs.network.RetrofitClient.webService
+import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.round
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
@@ -213,6 +214,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@NaverMapFragment.viewModel
         }
+
+        viewModel.throwable.observe(viewLifecycleOwner) {
+            snackbar(anchorView = fab, message = "[에러] ${it.message}").show()
+            onFeatureGetResult(true, R.color.red_500)
+        }
+
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         onCreateMap()
@@ -289,55 +296,48 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         clearOverlays()
         onFeatureGetResult(false)
         val latLngBounds = naverMap.contentBounds.round()
-        webService.featuresGet(
+        viewModel.featuresGet(
             xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3]
-        ).enqueue(object : CallbackT<FeatureList> {
-            override fun onResponse(response: FeatureList) {
-                executor.execute {
-                    response.features.stream().forEach { feature ->
-                        val key = feature.fac_uid
-                        val latLngs = feature.geom!!.latLngs
-                        val color = toColor(feature)
-                        when (feature.geom!!.type) {
-                            "Point" -> {
-                                markerMap[key] = createMarker(point = latLngs[0][0], color, feature)
-                            }
+        ).observeOnce(viewLifecycleOwner) { featureList ->
+            executor.execute {
+                featureList.features.stream().forEach { feature ->
+                    val key = feature.fac_uid
+                    val latLngs = feature.geom!!.latLngs
+                    val color = toColor(feature)
+                    when (feature.geom!!.type) {
+                        "Point" -> {
+                            markerMap[key] = createMarker(point = latLngs[0][0], color, feature)
+                        }
 
-                            "LineString" -> {
-                                arrowheadPathMap[key] = createArrowheadPath(line = latLngs[0], color, feature).also {
-                                    markerMap[key] = createMarker(point = it.coords[1], color, feature)
+                        "LineString" -> {
+                            arrowheadPathMap[key] = createArrowheadPath(line = latLngs[0], color, feature).also {
+                                markerMap[key] = createMarker(point = it.coords[1], color, feature)
+                            }
+                        }
+
+                        "MultiLineString" -> {
+                            latLngs.forEach { latLng ->
+                                arrowheadPathMap[key] = createArrowheadPath(line = latLng, color, feature).also {
+                                    markerMap[key] = createMarker(point = it.coords[0], color, feature)
                                 }
                             }
-
-                            "MultiLineString" -> {
-                                latLngs.forEach { latLng ->
-                                    arrowheadPathMap[key] = createArrowheadPath(line = latLng, color, feature).also {
-                                        markerMap[key] = createMarker(point = it.coords[0], color, feature)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    handler.post {
-                        arrowheadPathMap.values.stream().forEach {
-                            it.map = naverMap
-                        }
-                        markerMap.values.stream().forEach {
-                            it.map = naverMap
-                        }
-                        onFeatureGetResult(true, R.color.teal_A400)
-                        if (response.featureCount == 0) {
-                            snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
                         }
                     }
                 }
+                handler.post {
+                    arrowheadPathMap.values.stream().forEach {
+                        it.map = naverMap
+                    }
+                    markerMap.values.stream().forEach {
+                        it.map = naverMap
+                    }
+                    onFeatureGetResult(true, R.color.teal_A400)
+                    if (featureList.featureCount == 0) {
+                        snackbar(fab, R.string.map_feature_get_empty).setAction("확인") {}.show()
+                    }
+                }
             }
-
-            override fun onFailure(throwable: String) {
-                snackbar(anchorView = fab, message = throwable).show()
-                onFeatureGetResult(true, R.color.red_500)
-            }
-        })
+        }
     }
 
     private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =

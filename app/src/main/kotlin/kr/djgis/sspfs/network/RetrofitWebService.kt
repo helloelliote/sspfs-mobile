@@ -4,22 +4,22 @@
 
 package kr.djgis.sspfs.network
 
-import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import okhttp3.MultipartBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitWebService {
 
     @GET("api/features")
-    fun featuresGet(
+    suspend fun featuresGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): Call<FeatureList>
+    ): Response<FeatureList>
 
     @GET("api/feature")
     suspend fun featureGetA(

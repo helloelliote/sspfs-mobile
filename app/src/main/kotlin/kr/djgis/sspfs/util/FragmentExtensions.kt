@@ -39,6 +39,7 @@ fun Fragment.snackbar(anchorView: View? = null, @StringRes message: Int): Snackb
 fun Fragment.snackbar(anchorView: View? = null, message: String?): Snackbar {
     return Snackbar.make(this.requireView(), message.toString(), Snackbar.LENGTH_INDEFINITE).apply {
         this.anchorView = anchorView
+        this.setTextMaxLines(5)
         this.setAction("확인") {}
     }
 }

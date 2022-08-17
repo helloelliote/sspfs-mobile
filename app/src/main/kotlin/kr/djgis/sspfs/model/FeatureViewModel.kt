@@ -4,13 +4,11 @@
 
 package kr.djgis.sspfs.model
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
 import kr.djgis.sspfs.App
-import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress
@@ -18,8 +16,9 @@ import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 import retrofit2.Call
+import kotlin.math.round
 
-class FeatureViewModel(app: Application) : AndroidViewModel(app) {
+class FeatureViewModel : BaseViewModel(App()) {
 
     private val _feature = MutableLiveData<Feature>()
     private val _featureA = MutableLiveData<FeatureA>()
@@ -112,6 +111,16 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
         _featureF.value = featureF
     }
 
+    fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): LiveData<FeatureList> {
+        val liveData = MutableLiveData<FeatureList>()
+        viewModelScope.safeLaunch {
+            val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
+            val response = webService.featuresGet(doubles[0], doubles[1], doubles[2], doubles[3])
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
+    }
+
     fun featurePost(
         status: String,
         edit: String?,
@@ -151,6 +160,6 @@ class FeatureViewModel(app: Application) : AndroidViewModel(app) {
 object FeatureVMFactory : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST") return FeatureViewModel(App()) as T
+        @Suppress("UNCHECKED_CAST") return FeatureViewModel() as T
     }
 }
