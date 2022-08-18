@@ -1,12 +1,11 @@
 package kr.djgis.sspfs.model
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-open class BaseViewModel(app: Application) : AndroidViewModel(app) {
+open class BaseViewModel : ViewModel() {
 
     private val _throwable = MutableLiveData<Throwable>()
     val throwable get() = _throwable

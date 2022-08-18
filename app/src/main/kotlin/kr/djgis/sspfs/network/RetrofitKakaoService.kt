@@ -5,7 +5,7 @@
 package kr.djgis.sspfs.network
 
 import kr.djgis.sspfs.data.kakao.search.Keyword
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -17,11 +17,11 @@ interface RetrofitKakaoService {
      */
     @Headers(KAKAO_API_KEY)
     @GET("/v2/local/search/keyword.$FORMAT")
-    fun searchKeyword(
+    suspend fun searchKeyword(
         @Query("query") query: String,
         @Query("x") x: Double?,
         @Query("y") y: Double?,
-    ): Call<Keyword>
+    ): Response<Keyword>
 
     /*    */
     /**

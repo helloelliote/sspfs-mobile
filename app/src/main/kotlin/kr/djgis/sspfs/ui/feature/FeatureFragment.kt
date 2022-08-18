@@ -31,16 +31,14 @@ import kr.djgis.sspfs.Config.EDIT_GEOM_REVERSE
 import kr.djgis.sspfs.Config.EDIT_GEOM_START
 import kr.djgis.sspfs.Config.EXM_CHK_EXCLUDE
 import kr.djgis.sspfs.Config.EXM_CHK_SAVE
-import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.databinding.FragmentFeatureBinding
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.network.CallbackT
-import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.ui.feature.tabs.*
 import kr.djgis.sspfs.util.alertDialog
+import kr.djgis.sspfs.util.observeOnce
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
 import java.util.*
@@ -196,6 +194,11 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
 
         fab = requireActivity().findViewById(R.id.fab_main)
 
+        viewModel.throwable.observe(viewLifecycleOwner) {
+            snackbar(anchorView = fab, message = "[에러] ${it.message}").show()
+            toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
+        }
+
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -234,19 +237,11 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     message = resources.getString(R.string.feature_action_exclude)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("제외") { _, _ ->
-                    viewModel.type(args.type).featurePost(
-                        EXM_CHK_EXCLUDE, null, null, this@FeatureFragment
-                    ).enqueue(object : CallbackT<Result> {
-                        override fun onResponse(response: Result) {
+                    viewModel.type(args.type).featurePost(EXM_CHK_EXCLUDE, null, null, this@FeatureFragment)
+                        .observeOnce(viewLifecycleOwner) {
                             val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                             findNavController().navigate(directions)
                         }
-
-                        override fun onFailure(throwable: String) {
-                            snackbar(anchorView = fab, message = throwable).show()
-                            toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
-                        }
-                    })
                 }.show()
                 return true
             }
@@ -319,20 +314,11 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     message = resources.getString(R.string.feature_action_switch_c_d)
                 ).setNegativeButton("취소") { _, _ ->
                 }.setPositiveButton("전환") { _, _ ->
-                    webService.featureSwitch(
-                        fac_typ = args.type,
-                        fac_uid = viewModel.of(args.type).fac_uid,
-                    ).enqueue(object : CallbackT<Result> {
-                        override fun onResponse(response: Result) {
+                    viewModel.featureSwitch(fac_typ = args.type, fac_uid = viewModel.of(args.type).fac_uid)
+                        .observeOnce(viewLifecycleOwner) {
                             val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                             findNavController().navigate(directions)
                         }
-
-                        override fun onFailure(throwable: String) {
-                            snackbar(anchorView = fab, message = throwable).show()
-                            toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
-                        }
-                    })
                 }.show()
                 return true
             }
@@ -351,19 +337,11 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
                     else -> null
                 }
                 val fraction = if (lineFraction > 0.0) lineFraction else null
-                viewModel.type(args.type).featurePost(
-                    EXM_CHK_SAVE, edit, fraction, this@FeatureFragment
-                ).enqueue(object : CallbackT<Result> {
-                    override fun onResponse(response: Result) {
+                viewModel.type(args.type).featurePost(EXM_CHK_SAVE, edit, fraction, this@FeatureFragment)
+                    .observeOnce(viewLifecycleOwner) {
                         val directions = FeatureFragmentDirections.actionToNaverMapFragment()
                         findNavController().navigate(directions)
                     }
-
-                    override fun onFailure(throwable: String) {
-                        snackbar(anchorView = fab, message = throwable).show()
-                        toggleFab(true, R.color.red_500, R.drawable.ic_round_save_30)
-                    }
-                })
             }
         }
     }

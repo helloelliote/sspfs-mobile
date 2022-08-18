@@ -7,7 +7,6 @@ package kr.djgis.sspfs.network
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -52,49 +51,49 @@ interface RetrofitWebService {
     ): FeatureFList
 
     @GET("api/region")
-    fun districtGet(
+    suspend fun districtGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
-    ): Call<DistrictList>
+    ): Response<DistrictList>
 
     @GET("api/theme")
-    fun themeGet(
+    suspend fun themeGet(
         @Query("xmin") xmin: Double,
         @Query("ymin") ymin: Double,
         @Query("xmax") xmax: Double,
         @Query("ymax") ymax: Double,
         @Query("name") name: String,
-    ): Call<ThemeList>
+    ): Response<ThemeList>
 
     @GET("api/mobile/update")
-    fun mobileUpdate(
+    suspend fun mobileUpdate(
         @Query("version") version: String,
-    ): Call<Version>
+    ): Response<Version>
 
     @Multipart
     @POST("api/feature")
-    fun featurePost(
+    suspend fun featurePost(
         @Part jsonBody: MultipartBody.Part,
         @Query("edit") edit: String?,
         @Query("fraction") fraction: Double?,
         @Part multipartBody: List<MultipartBody.Part?>,
-    ): Call<Result>
+    ): Response<Result>
 
     @POST("api/feature/switch")
-    fun featureSwitch(
+    suspend fun featureSwitch(
         @Query("fac_typ") fac_typ: String,
         @Query("fac_uid") fac_uid: String,
-    ): Call<Result>
+    ): Response<Result>
 
     @POST("api/feature/create/point")
-    fun createFeaturePoint(
+    suspend fun createFeaturePoint(
         @Body feature: FeatureEditViewModel.Feature,
-    ): Call<Result>
+    ): Response<Result>
 
     @POST("api/feature/create/line")
-    fun createFeatureLine(
+    suspend fun createFeatureLine(
         @Body feature: FeatureEditViewModel.Feature,
-    ): Call<Result>
+    ): Response<Result>
 }

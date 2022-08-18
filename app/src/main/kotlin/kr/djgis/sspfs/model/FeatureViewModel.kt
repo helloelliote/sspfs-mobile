@@ -8,17 +8,15 @@ import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
-import kr.djgis.sspfs.App
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress
 import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
+import kr.djgis.sspfs.util.round
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
-import retrofit2.Call
-import kotlin.math.round
 
-class FeatureViewModel : BaseViewModel(App()) {
+class FeatureViewModel : BaseViewModel() {
 
     private val _feature = MutableLiveData<Feature>()
     private val _featureA = MutableLiveData<FeatureA>()
@@ -111,11 +109,40 @@ class FeatureViewModel : BaseViewModel(App()) {
         _featureF.value = featureF
     }
 
-    fun featuresGet(xmin: Double, ymin: Double, xmax: Double, ymax: Double): LiveData<FeatureList> {
+    fun featuresGet(latLngBounds: LatLngBounds): LiveData<FeatureList> {
         val liveData = MutableLiveData<FeatureList>()
         viewModelScope.safeLaunch {
-            val doubles = listOf(xmin, ymin, xmax, ymax).map { round(it * 10e2) / 10e2 }
+            val doubles = latLngBounds.round()
             val response = webService.featuresGet(doubles[0], doubles[1], doubles[2], doubles[3])
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
+    }
+
+    fun districtGet(latLngBounds: LatLngBounds): LiveData<DistrictList> {
+        val liveData = MutableLiveData<DistrictList>()
+        viewModelScope.safeLaunch {
+            val doubles = latLngBounds.round()
+            val response = webService.districtGet(doubles[0], doubles[1], doubles[2], doubles[3])
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
+    }
+
+    fun themeGet(latLngBounds: LatLngBounds, name: String): LiveData<ThemeList> {
+        val liveData = MutableLiveData<ThemeList>()
+        viewModelScope.safeLaunch {
+            val doubles = latLngBounds.round()
+            val response = webService.themeGet(doubles[0], doubles[1], doubles[2], doubles[3], name)
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
+    }
+
+    fun mobileUpdate(version: String): LiveData<Version> {
+        val liveData = MutableLiveData<Version>()
+        viewModelScope.safeLaunch {
+            val response = webService.mobileUpdate(version)
             if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
         }
         return liveData
@@ -126,22 +153,36 @@ class FeatureViewModel : BaseViewModel(App()) {
         edit: String?,
         fraction: Double?,
         callback: MultipartUploadCallback,
-    ): Call<Result> {
-        val multipartBody = mutableListOf<MultipartBody.Part>()
-        val feature = this@FeatureViewModel.of(type.value!!)
-        feature.exm_chk = status
-        feature.img_fac.forEach { attachment ->
-            if (attachment.uri == null) {
-                return@forEach
-            } else {
-                val part = createFormData(
-                    "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
-                )
-                multipartBody.add(part)
+    ): LiveData<Result> {
+        val liveData = MutableLiveData<Result>()
+        viewModelScope.safeLaunch {
+            val multipartBody = mutableListOf<MultipartBody.Part>()
+            val feature = this@FeatureViewModel.of(type.value!!)
+            feature.exm_chk = status
+            feature.img_fac.forEach { attachment ->
+                if (attachment.uri == null) {
+                    return@forEach
+                } else {
+                    val part = createFormData(
+                        "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
+                    )
+                    multipartBody.add(part)
+                }
             }
+            val jsonBody = createFormData("json", Gson().toJson(feature))
+            val response = webService.featurePost(jsonBody, edit, fraction, multipartBody)
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
         }
-        val jsonBody = createFormData("json", Gson().toJson(feature))
-        return webService.featurePost(jsonBody, edit, fraction, multipartBody)
+        return liveData
+    }
+
+    fun featureSwitch(fac_typ: String, fac_uid: String): LiveData<Result> {
+        val liveData = MutableLiveData<Result>()
+        viewModelScope.safeLaunch {
+            val response = webService.featureSwitch(fac_typ, fac_uid)
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
     }
 
     /*    suspend fun fromLatLng(feature: Feature): String? {

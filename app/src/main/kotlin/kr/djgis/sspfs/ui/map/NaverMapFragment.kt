@@ -66,10 +66,8 @@ import kr.djgis.sspfs.model.FeatureEditVMFactory
 import kr.djgis.sspfs.model.FeatureEditViewModel
 import kr.djgis.sspfs.model.FeatureVMFactory
 import kr.djgis.sspfs.model.FeatureViewModel
-import kr.djgis.sspfs.network.CallbackT
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.util.observeOnce
-import kr.djgis.sspfs.util.round
 import kr.djgis.sspfs.util.snackbar
 import kr.djgis.sspfs.util.toggleFab
 import java.util.*
@@ -275,13 +273,13 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         )
 
         districtTheme = DistrictTheme(
-            fragment = this,
-            fab = fab,
             naverMap = naverMap,
             executor = executor,
             handler = handler,
             resources = resources,
             chipGroup = chipGroup,
+            viewModel = viewModel,
+            lifecycleOwner = viewLifecycleOwner,
         )
 
 //        mobileUpdate()
@@ -295,10 +293,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private fun onFeatureGet() {
         clearOverlays()
         onFeatureGetResult(false)
-        val latLngBounds = naverMap.contentBounds.round()
-        viewModel.featuresGet(
-            xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3]
-        ).observeOnce(viewLifecycleOwner) { featureList ->
+        viewModel.featuresGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) { featureList ->
             executor.execute {
                 featureList.features.stream().forEach { feature ->
                     val key = feature.fac_uid
@@ -442,37 +437,28 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         menuItem.isChecked = !menuItem.isChecked
         if (menuItem.isChecked) {
             menuItem.setIcon(R.drawable.ic_round_toggle_on_24)
-            val latLngBounds = naverMap.contentBounds.round()
-            webService.districtGet(
-                xmin = latLngBounds[0], ymin = latLngBounds[1], xmax = latLngBounds[2], ymax = latLngBounds[3],
-            ).enqueue(object : CallbackT<DistrictList> {
-                override fun onResponse(response: DistrictList) {
-                    executor.execute {
-                        response.districts.stream().forEach { region ->
-                            val latLngs = region.geom.latLngs
-                            latLngs.forEach { latLng ->
-                                polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
-                                    val centerLatlng = region.center.latLngs
-                                    centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
-                                }
-                            }
-                        }
-                        handler.post {
-                            polygonMap.values.stream().forEach {
-                                it.map = naverMap
-                            }
-                            centerMap.values.stream().forEach {
-                                it.map = naverMap
+            viewModel.districtGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) {
+                executor.execute {
+                    it.districts.stream().forEach { region ->
+                        val latLngs = region.geom.latLngs
+                        latLngs.forEach { latLng ->
+                            polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
+                                val centerLatlng = region.center.latLngs
+                                centerMap[region.bjd_nam] = createRegionMarker(centerLatlng[0][0], region)
                             }
                         }
                     }
-                    snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+                    handler.post {
+                        polygonMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
+                        centerMap.values.stream().forEach {
+                            it.map = naverMap
+                        }
+                    }
                 }
-
-                override fun onFailure(throwable: String) {
-                    snackbar(anchorView = fab, message = throwable).show()
-                }
-            })
+                snackbar(fab, R.string.map_region).setAction("확인") {}.show()
+            }
         } else {
             menuItem.setIcon(R.drawable.ic_round_toggle_off_24)
             clearRegionOverlays()
@@ -538,19 +524,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_cancel -> featureEdit.cancel()
 
             R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_d, R.id.action_e, R.id.action_f -> {
-                editViewModel.createFeature(
-                    id = menuItem.itemId
-                ).enqueue(object : CallbackT<Result> {
-                    override fun onResponse(response: Result) {
-                        featureEdit.cancel()
-                        onFeatureGet()
-                        snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
-                    }
-
-                    override fun onFailure(throwable: String) {
-                        snackbar(anchorView = fab, message = throwable).show()
-                    }
-                })
+                editViewModel.createFeature(id = menuItem.itemId).observeOnce(viewLifecycleOwner) {
+                    featureEdit.cancel()
+                    onFeatureGet()
+                    snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
+                }
                 return true
             }
 
@@ -559,30 +537,24 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private fun mobileUpdate() {
-        webService.mobileUpdate(version = GIT_VERSION_NAME).enqueue(object : CallbackT<Version> {
-            override fun onResponse(response: Version) {
-                when (response.status) {
-                    "OK" -> fab.setOnClickListener(fabOnClickListener)
+        viewModel.mobileUpdate(version = GIT_VERSION_NAME).observeOnce(viewLifecycleOwner) {
+            when (it.status) {
+                "OK" -> fab.setOnClickListener(fabOnClickListener)
 
-                    "FAIL" -> {
-                        snackbar(anchorView = fab, message = "업데이트 있음: 최신 버전의 앱을 다운받아 설치해주세요").show()
-                        toggleFab(true, R.color.yellow_A700, R.drawable.ic_round_system_update_24)
-                        fab.setOnClickListener {
-                            startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://drive.google.com/file/d/1ljWYteI7sGIDHcq74sCM0K7KMJWJTk7n/view?usp=sharing")
-                                )
+                "FAIL" -> {
+                    snackbar(anchorView = fab, message = "업데이트 있음: 최신 버전의 앱을 다운받아 설치해주세요").show()
+                    toggleFab(true, R.color.yellow_A700, R.drawable.ic_round_system_update_24)
+                    fab.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://drive.google.com/file/d/1ljWYteI7sGIDHcq74sCM0K7KMJWJTk7n/view?usp=sharing")
                             )
-                        }
+                        )
                     }
                 }
             }
-
-            override fun onFailure(throwable: String) {
-                snackbar(anchorView = fab, message = "최신 버전의 앱이 확인되지 않았습니다").show()
-            }
-        })
+        }
     }
 
     override fun onResume() {
@@ -708,13 +680,13 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     @Suppress("PrivatePropertyName")
     class DistrictTheme(
-        fragment: Fragment,
-        fab: FloatingActionButton,
         naverMap: NaverMap,
         executor: ExecutorService,
         handler: Handler,
         resources: Resources,
         val chipGroup: ChipGroup,
+        viewModel: FeatureViewModel,
+        lifecycleOwner: LifecycleOwner,
     ) {
 
         private val white = resources.getColorStateList(R.color.white_1000, null)
@@ -769,40 +741,27 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     when (isChecked) {
                         true -> {
                             chip.chipBackgroundColor = chipColor
-                            val latLngBounds = naverMap.contentBounds.round()
-                            webService.themeGet(
-                                xmin = latLngBounds[0],
-                                ymin = latLngBounds[1],
-                                xmax = latLngBounds[2],
-                                ymax = latLngBounds[3],
-                                tag
-                            ).enqueue(object : CallbackT<ThemeList> {
-                                override fun onResponse(response: ThemeList) {
-                                    executor.execute {
-                                        val mutableSet = mutableSetOf<PolygonOverlay>()
-                                        response.themes.stream().forEach { region ->
-                                            val latLngs = region.geom.latLngs
-                                            latLngs.stream().forEach { latLng ->
-                                                mutableSet.add(PolygonOverlay(latLng).apply {
-                                                    color = polygonColor.defaultColor
-                                                    outlineColor = chipColor.defaultColor
-                                                    outlineWidth = 6
-                                                })
-                                            }
+                            viewModel.themeGet(naverMap.contentBounds, tag).observeOnce(lifecycleOwner) {
+                                executor.execute {
+                                    val mutableSet = mutableSetOf<PolygonOverlay>()
+                                    it.themes.stream().forEach { region ->
+                                        val latLngs = region.geom.latLngs
+                                        latLngs.stream().forEach { latLng ->
+                                            mutableSet.add(PolygonOverlay(latLng).apply {
+                                                color = polygonColor.defaultColor
+                                                outlineColor = chipColor.defaultColor
+                                                outlineWidth = 6
+                                            })
                                         }
-                                        polygonMap[tag] = mutableSet
-                                        handler.post {
-                                            mutableSet.stream().forEach {
-                                                it.map = naverMap
-                                            }
+                                    }
+                                    polygonMap[tag] = mutableSet
+                                    handler.post {
+                                        mutableSet.stream().forEach {
+                                            it.map = naverMap
                                         }
                                     }
                                 }
-
-                                override fun onFailure(throwable: String) {
-                                    fragment.snackbar(anchorView = fab, message = throwable).show()
-                                }
-                            })
+                            }
                         }
 
                         false -> {

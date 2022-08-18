@@ -4,20 +4,17 @@
 
 package kr.djgis.sspfs.model
 
-import android.app.Application
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
 import com.naver.maps.geometry.LatLng
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kr.djgis.sspfs.App
-import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.R
+import kr.djgis.sspfs.data.Result
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.util.ListLiveData
-import retrofit2.Call
 
-class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
+class FeatureEditViewModel : BaseViewModel() {
 
     private val _feature: MutableLiveData<Feature> = MutableLiveData(Feature("", "", "", listOf()))
     val feature: LiveData<Feature> = _feature
@@ -27,37 +24,42 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 
     val coords get() = latLngs.all
 
-    fun createFeature(@IdRes id: Int): Call<Result> {
-        when (id) {
-            R.id.action_a -> return webService.createFeaturePoint(
-                Feature("A", "B", "소교량", coords)
-            )
+    fun createFeature(@IdRes id: Int): LiveData<Result> {
+        val liveData = MutableLiveData<Result>()
+        viewModelScope.safeLaunch {
+            liveData.postValue(
+                when (id) {
+                    R.id.action_a -> webService.createFeaturePoint(
+                        Feature("A", "B", "소교량", coords)
+                    )
 
-            R.id.action_b -> return webService.createFeatureLine(
-                Feature("B", "S", "세천", coords)
-            )
+                    R.id.action_b -> webService.createFeatureLine(
+                        Feature("B", "S", "세천", coords)
+                    )
 
-            R.id.action_c -> return webService.createFeaturePoint(
-                Feature("C", "W", "취입보", coords)
-            )
+                    R.id.action_c -> webService.createFeaturePoint(
+                        Feature("C", "W", "취입보", coords)
+                    )
 
-            R.id.action_d -> return webService.createFeaturePoint(
-                Feature("D", "W", "낙차공", coords)
-            )
+                    R.id.action_d -> webService.createFeaturePoint(
+                        Feature("D", "W", "낙차공", coords)
+                    )
 
-            R.id.action_e -> return webService.createFeatureLine(
-                Feature("E", "N", "농로", coords)
-            )
+                    R.id.action_e -> webService.createFeatureLine(
+                        Feature("E", "N", "농로", coords)
+                    )
 
-            R.id.action_f -> return webService.createFeatureLine(
-                Feature("F", "M", "마을진입로", coords)
-            )
+                    R.id.action_f -> webService.createFeatureLine(
+                        Feature("F", "M", "마을진입로", coords)
+                    )
 
-            else -> {
-                listOf("", "", "")
-                return webService.createFeatureLine(feature.value!!)
-            }
+                    else -> {
+                        webService.createFeatureLine(feature.value!!)
+                    }
+                }.body()
+            )
         }
+        return liveData
     }
 
     fun update() {
@@ -81,6 +83,6 @@ class FeatureEditViewModel(app: Application) : AndroidViewModel(app) {
 object FeatureEditVMFactory : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST") return FeatureEditViewModel(App()) as T
+        @Suppress("UNCHECKED_CAST") return FeatureEditViewModel() as T
     }
 }
