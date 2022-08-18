@@ -60,12 +60,16 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "GIT_VERSION_NAME", "\"${getGitHashVersionName()}\""
         }
         release {
+            debuggable false
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "GIT_VERSION_NAME", "\"${getGitHashVersionName()}\""
         }
