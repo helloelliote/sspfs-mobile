@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import androidx.core.net.toUri
 import kr.djgis.sspfs.App
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,9 +37,10 @@ class RetrofitProgress(
     @Throws(IOException::class)
     override fun writeTo(sink: BufferedSink) {
         val file = File(uriToFilePath(uri))
-        val totalSize = file.length()
+        val newFile = file.resizeImageToRes(1600).preserveExif(file)
+        val totalSize = newFile.length()
         val buffer = ByteArray(2048)
-        App.context.contentResolver.openInputStream(uri).use { inputStream ->
+        App.context.contentResolver.openInputStream(newFile.toUri()).use { inputStream ->
             var uploadSize = 0L
             var readSize: Int
             var number = 0

@@ -153,7 +153,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         val contentValues = ContentValues()
         contentValues.put(
             MediaStore.MediaColumns.DISPLAY_NAME,
-            "${currentFeature.fac_uid}_${timeStamp}_${attachment.name?.substringAfterLast("_")}.jpg"
+            "${currentFeature.fac_uid}_${timeStamp}_${attachment.name?.substringAfterLast("_")}"
         )
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
         //'RELATIVE_PATH', RequiresApi Q
@@ -179,28 +179,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER -> {/* val options = BitmapFactory.Options()
-                    options.inJustDecodeBounds = true
-                    try {
-                        var inputStream: InputStream? = FileInputStream(filePath)
-                        BitmapFactory.decodeStream(inputStream, null, options)
-                        inputStream!!.close()
-                        inputStream = null
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    val height = options.outHeight
-                    val width = options.outWidth
-                    var inSampleSize = 1
-                    if (height > reqHeight!! || width > reqWidth!!) {
-                        val heightRatio = (height.toFloat() / reqHeight!!.toFloat()).roundToInt().toInt()
-                        val widthtRatio = (width.toFloat() / reqWidth!!.toFloat()).roundToInt().toInt()
-                        inSampleSize = if (heightRatio < widthtRatio) heightRatio else widthtRatio
-                    }
-                    val imgOptions = BitmapFactory.Options()
-                    imgOptions.inSampleSize = inSampleSize
-                    val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
-                    val bitmap = data?.extras?.get("data")*/
+                REQ_IMG_CAPTURE_FULL_SIZE_SHARED_Q_AND_OVER -> {
                     attachmentMap[photoSharedURI_Q_N_OVER] = currentAttachment!!
                     currentAttachment = null
                     resolveContentForCapture(photoSharedURI_Q_N_OVER)
@@ -235,7 +214,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
             val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
             val newName =
-                "${currentFeature.fac_uid}_${timeStamp}_${attachmentMap[_uri]!!.name?.substringAfterLast("_")}.jpg"
+                "${currentFeature.fac_uid}_${timeStamp}_${attachmentMap[_uri]!!.name?.substringAfterLast("_")}"
             cursor.moveToFirst()
             attachmentMap[_uri]?.apply {
                 name = null
