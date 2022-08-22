@@ -213,11 +213,6 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             viewModel = this@NaverMapFragment.viewModel
         }
 
-        viewModel.throwable.observe(viewLifecycleOwner) {
-            snackbar(anchorView = fab, message = "[에러] ${it.message}").show()
-            onFeatureGetResult(true, R.color.red_500)
-        }
-
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         onCreateMap()
@@ -281,6 +276,11 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             viewModel = viewModel,
             lifecycleOwner = viewLifecycleOwner,
         )
+
+        viewModel.throwable.observe(viewLifecycleOwner) {
+            snackbar(anchorView = fab, message = "[에러] ${it.message}").show()
+            onFeatureGetResult(true, R.color.red_500)
+        }
 
         mobileUpdate()
     }

@@ -330,6 +330,7 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.fab_main -> {
+                toggleFab(false, R.color.light_green_A200, R.drawable.ic_round_save_30)
                 binding.viewPagerCover.visibility = View.VISIBLE
                 val edit = when {
                     isReversed -> EDIT_GEOM_REVERSE
@@ -347,7 +348,6 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
     }
 
     override fun onInitiate(percentage: Int) {
-        toggleFab(false, R.color.light_green_A200, R.drawable.ic_round_save_30)
         binding.progressCircular.setProgressCompat(percentage, true)
     }
 
@@ -361,12 +361,10 @@ class FeatureFragment : Fragment(), View.OnClickListener, MultipartUploadCallbac
             setProgressCompat(100, true)
             setIndicatorColor(resources.getColor(R.color.deep_orange_A400, null))
         }
-        toggleFab(true)
     }
 
     override fun onFinish(percentage: Int) {
         binding.progressCircular.setProgressCompat(100, true)
-        toggleFab(true)
     }
 
     override fun onResume() {

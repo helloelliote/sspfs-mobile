@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.overlay.Overlay
+import kr.djgis.sspfs.Config
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.network.RetrofitClient.webService
 import kr.djgis.sspfs.network.RetrofitProgress
@@ -15,6 +16,7 @@ import kr.djgis.sspfs.network.RetrofitProgress.MultipartUploadCallback
 import kr.djgis.sspfs.util.round
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
+import java.net.URL
 
 class FeatureViewModel : BaseViewModel() {
 
@@ -163,10 +165,12 @@ class FeatureViewModel : BaseViewModel() {
                 if (attachment.uri == null) {
                     return@forEach
                 } else {
+                    attachment.url = URL("${Config.BASE_URL}api/images/${attachment.name}").toString()
                     val part = createFormData(
                         "files", attachment.name, RetrofitProgress(attachment.uri!!, "image", callback)
                     )
                     multipartBody.add(part)
+                    attachment.uri = null
                 }
             }
             val jsonBody = createFormData("json", Gson().toJson(feature))

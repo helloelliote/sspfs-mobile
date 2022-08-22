@@ -11,6 +11,7 @@ open class BaseViewModel : ViewModel() {
     val throwable get() = _throwable
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
+        t.printStackTrace()
         _throwable.postValue(t)
     }
 

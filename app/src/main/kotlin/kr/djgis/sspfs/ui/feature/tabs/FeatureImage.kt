@@ -20,8 +20,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import kr.djgis.sspfs.Config.BASE_URL
 import kr.djgis.sspfs.R
 import kr.djgis.sspfs.data.*
 import kr.djgis.sspfs.databinding.FragmentFeatureImageBinding
@@ -35,7 +33,6 @@ import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapter
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentAdapterListener
 import kr.djgis.sspfs.ui.feature.attachment.FeatureAttachmentDecoration
 import kr.djgis.sspfs.util.*
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,11 +46,13 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
     private lateinit var currentFeature: Feature
     private lateinit var featureAttachmentAdapter: FeatureAttachmentAdapter
 
-    private lateinit var currentAttachment: FeatureAttachment
-    private lateinit var currentView: View
     private lateinit var photoSharedURI_Q_N_OVER: Uri
+    private var currentAttachment: FeatureAttachment? = null
     private var reqWidth: Int? = null
     private var reqHeight: Int? = null
+
+    private val cardViewMap = mutableMapOf<Int, View>()
+    private val attachmentMap = mutableMapOf<Uri, FeatureAttachment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,6 +173,7 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         return fullSizeCaptureIntent
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
@@ -201,29 +201,32 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
                     imgOptions.inSampleSize = inSampleSize
                     val bitmap = BitmapFactory.decodeFile(filePath.absolutePath, imgOptions)
                     val bitmap = data?.extras?.get("data")*/
+                    attachmentMap[photoSharedURI_Q_N_OVER] = currentAttachment!!
+                    currentAttachment = null
                     resolveContentForCapture(photoSharedURI_Q_N_OVER)
-                    glideIntoView(photoSharedURI_Q_N_OVER)
                 }
 
                 REQ_IMG_GALLERY_FULL_SIZE_SHARED_Q_AND_OVER -> {
                     intent?.data.let {
-                        resolveContentForGallery(it!!)
-                        glideIntoView(it)
+                        attachmentMap[it!!] = currentAttachment!!
+                        currentAttachment = null
+                        resolveContentForGallery(it)
                     }
                 }
             }
         }
+        featureAttachmentAdapter.notifyDataSetChanged()
     }
 
     private fun resolveContentForCapture(_uri: Uri) {
         requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
             val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             cursor.moveToFirst()
-            currentAttachment.apply {
+            attachmentMap[_uri]?.apply {
                 name = null
                 name = cursor.getString(nameIndex)
                 uri = _uri
-                url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
+//                url = URL("${BASE_URL}api/images/${cursor.getString(nameIndex)}").toString()
             }
         }
     }
@@ -232,47 +235,44 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
         requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
             val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
             val newName =
-                "${currentFeature.fac_uid}_${timeStamp}_${currentAttachment.name?.substringAfterLast("_")}.jpg"
+                "${currentFeature.fac_uid}_${timeStamp}_${attachmentMap[_uri]!!.name?.substringAfterLast("_")}.jpg"
             cursor.moveToFirst()
-            currentAttachment.apply {
+            attachmentMap[_uri]?.apply {
                 name = null
                 name = newName
                 uri = _uri
-                url = URL("${BASE_URL}api/images/$newName").toString()
+//                url = URL("${BASE_URL}api/images/$newName").toString()
             }
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun glideIntoView(_uri: Uri) {
-        with(currentView) {
-            findViewById<TextInputEditText>(R.id.attachment_name).setText(currentAttachment.name)
-            glide(_uri, true).into(findViewById(R.id.attachment_image))
-        }.also {
-            featureAttachmentAdapter.notifyDataSetChanged()
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onClick(view: View, attachment: FeatureAttachment) {
-        currentAttachment = attachment
-        currentView = view.rootView
-
         when (view.id) {
-            R.id.attachment_camera -> takePicture(currentAttachment)
+            R.id.attachment_camera -> {
+                currentAttachment = attachment
+                cardViewMap[view.hashCode()] = view.rootView
+                takePicture(attachment)
+            }
 
-            R.id.attachment_gallery -> selectGallery()
+            R.id.attachment_gallery -> {
+                currentAttachment = attachment
+                cardViewMap[view.hashCode()] = view.rootView
+                selectGallery()
+            }
 
-            R.id.attachment_remove -> alertDialog(
-                title = "사진을 삭제합니까?", message = resources.getString(R.string.feature_image_remove)
-            ).setNegativeButton("취소") { dialog, which ->
-            }.setPositiveButton("삭제") { dialog, which ->
-                currentFeature.img_fac.remove(attachment).also {
-                    featureAttachmentAdapter.submitList(currentFeature.img_fac)
-                    featureAttachmentAdapter.notifyDataSetChanged()
-                }
-            }.show()
+            R.id.attachment_remove -> {
+                alertDialog(
+                    title = "사진을 삭제합니까?", message = resources.getString(R.string.feature_image_remove)
+                ).setNegativeButton("취소") { dialog, which ->
+                }.setPositiveButton("삭제") { dialog, which ->
+                    currentFeature.img_fac.remove(attachment).also {
+                        featureAttachmentAdapter.submitList(currentFeature.img_fac)
+                        featureAttachmentAdapter.notifyDataSetChanged()
+                    }
+                }.show()
+            }
         }
     }
 
