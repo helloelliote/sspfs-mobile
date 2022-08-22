@@ -165,7 +165,7 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView.Select"
-                        android:tag="3"
+                        android:tag="2"
                         android:text="세굴로 기초 노출" />
                 </TableRow>
 
