@@ -282,7 +282,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             lifecycleOwner = viewLifecycleOwner,
         )
 
-//        mobileUpdate()
+        mobileUpdate()
     }
 
     private fun onCameraIdle() {
