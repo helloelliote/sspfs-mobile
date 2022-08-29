@@ -524,10 +524,17 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             R.id.action_cancel -> featureEdit.cancel()
 
             R.id.action_a, R.id.action_b, R.id.action_c, R.id.action_d, R.id.action_e, R.id.action_f -> {
+                onFeatureGetResult(false, R.color.yellow_A700, R.drawable.ic_round_pause_circle_24)
+                featureEdit.cancel(false)
+                featureEdit.pause()
                 editViewModel.createFeature(id = menuItem.itemId).observeOnce(viewLifecycleOwner) {
-                    featureEdit.cancel()
-                    onFeatureGet()
-                    snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        onFeatureGet()
+                        editViewModel.latLngs.clear(true)
+                        featureEdit.resume()
+                        snackbar(fab, "신규 소규모 공공시설이 추가되었습니다").setAction("확인") {}.show()
+                        onFeatureGetResult(true, R.color.teal_A400, R.drawable.ic_round_content_paste_search_30)
+                    }, 3000)
                 }
                 return true
             }
@@ -575,7 +582,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private class FeatureEdit(
-        naverMap: NaverMap,
+        val naverMap: NaverMap,
         val bottomAppBar: BottomAppBar,
         val editViewModel: FeatureEditViewModel,
         lifecycleOwner: LifecycleOwner,
@@ -662,13 +669,21 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             return true
         }
 
-        fun cancel(): Boolean {
+        fun pause() {
+            naverMap.onMapLongClickListener = null
+        }
+
+        fun resume() {
+            naverMap.onMapLongClickListener = onMapLongClickListener
+        }
+
+        fun cancel(clearLatLng: Boolean = true): Boolean {
             marker.map = null
             path.apply {
                 map = null
                 coords.clear()
             }
-            editViewModel.latLngs.clear(true)
+            if (clearLatLng) editViewModel.latLngs.clear(true)
             bottomAppBar.replaceMenu(R.menu.bottomappbar_menu_fragment_map)
             return true
         }

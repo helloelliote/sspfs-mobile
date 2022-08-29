@@ -8,6 +8,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Result(
-    val rowCount: String,
+    val command: String,
     val rows: List<Any>,
 )
