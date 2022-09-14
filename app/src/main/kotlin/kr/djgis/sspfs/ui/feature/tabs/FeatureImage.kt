@@ -213,8 +213,9 @@ class FeatureImage(val type: String) : FeatureTabs(), FeatureAttachmentAdapterLi
     private fun resolveContentForGallery(_uri: Uri) {
         requireContext().contentResolver.query(_uri, null, null, null, null)?.use { cursor ->
             val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREAN).format(System.currentTimeMillis())
-            val newName =
+            var newName =
                 "${currentFeature.fac_uid}_${timeStamp}_${attachmentMap[_uri]!!.name?.substringAfterLast("_")}"
+            if (!newName.contains(".jpg")) newName += ".jpg"
             cursor.moveToFirst()
             attachmentMap[_uri]?.apply {
                 name = null
