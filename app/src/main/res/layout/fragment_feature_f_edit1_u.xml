@@ -185,17 +185,17 @@
                     <TextView
                         style="@style/App.TableLayout.TextView.Select"
                         android:tag="1"
-                        android:text="농가간연결" />
+                        android:text="주택간연결" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView.Select"
                         android:tag="2"
-                        android:text="농가농경지연결" />
+                        android:text="마을간연결" />
 
                     <TextView
                         style="@style/App.TableLayout.TextView.Select"
                         android:tag="3"
-                        android:text="농경지간연결" />
+                        android:text="부지간연결" />
                 </TableRow>
 
                 <TableRow

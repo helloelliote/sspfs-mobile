@@ -83,8 +83,7 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="3"
-                        android:hint="" />
+                        android:layout_weight="3" />
 
                 </TableRow>
 
@@ -100,7 +99,6 @@
                     <EditText
                         style="@style/App.TableLayout.EditText"
                         android:layout_weight="3"
-
                         android:text="@={viewModel.featureD.pos_nam}" />
 
                     <Button
@@ -110,8 +108,7 @@
 
                     <TextView
                         style="@style/App.TableLayout.TextView"
-                        android:layout_weight="3"
-                        android:hint="" />
+                        android:layout_weight="3" />
 
                 </TableRow>
 
@@ -138,7 +135,7 @@
                     <TextView
                         style="@style/App.TableLayout.TextView"
                         android:layout_weight="3"
-                        android:hint=""
+
                         android:text="@={viewModel.featureD.exm_nam}" />
 
                 </TableRow>
