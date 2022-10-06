@@ -131,6 +131,16 @@ class FeatureViewModel : BaseViewModel() {
         return liveData
     }
 
+    fun poiCenterGet(latLngBounds: LatLngBounds): LiveData<POIList> {
+        val liveData = MutableLiveData<POIList>()
+        viewModelScope.safeLaunch {
+            val doubles = latLngBounds.round()
+            val response = webService.poiCenterGet(doubles[0], doubles[1], doubles[2], doubles[3])
+            if (response.isSuccessful) liveData.postValue(response.body()) else throw Throwable("[${response.code()}] ${response.message()}")
+        }
+        return liveData
+    }
+
     fun themeGet(latLngBounds: LatLngBounds, name: String): LiveData<ThemeList> {
         val liveData = MutableLiveData<ThemeList>()
         viewModelScope.safeLaunch {

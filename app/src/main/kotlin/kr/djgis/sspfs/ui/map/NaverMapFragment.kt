@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color.*
+import android.graphics.PointF
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -45,10 +46,8 @@ import com.naver.maps.map.NaverMap.LAYER_GROUP_CADASTRAL
 import com.naver.maps.map.NaverMap.MapType.Basic
 import com.naver.maps.map.NaverMap.MapType.Satellite
 import com.naver.maps.map.NaverMap.OnMapLongClickListener
-import com.naver.maps.map.overlay.ArrowheadPathOverlay
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
-import com.naver.maps.map.overlay.PolygonOverlay
+import com.naver.maps.map.overlay.*
+import com.naver.maps.map.overlay.OverlayImage.fromResource
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -177,6 +176,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
         return@OnClickListener true
     }
+    private val poiCenterSet = mutableSetOf<Marker>()
 
     private lateinit var fab: FloatingActionButton
     private lateinit var bottomAppBar: BottomAppBar
@@ -333,6 +333,22 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                 }
             }
         }
+        viewModel.poiCenterGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) {
+            executor.execute {
+                it.pois.stream().forEach { poi ->
+                    val latLngs = poi.geom.latLngs
+                    latLngs.forEach { latLng ->
+                        val color = toColor(poi)
+                        poiCenterSet.add(createPOI(point = latLng[0], tintColor = color))
+                    }
+                }
+                handler.post {
+                    poiCenterSet.stream().forEach {
+                        it.map = naverMap
+                    }
+                }
+            }
+        }
     }
 
     private fun createMarker(point: LatLng, @ColorInt tintColor: Int, feature: Feature) =
@@ -369,6 +385,14 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     captionHaloColor = if (tintColor == RED || tintColor == BLUE) WHITE else BLACK
                 }
             }
+        }
+
+    private fun createPOI(point: LatLng, @ColorInt tintColor: Int) =
+        Marker(point, fromResource(R.drawable.ic_twotone_circle_18)).apply {
+            anchor = PointF(0.5f, 0.5f)
+            iconTintColor = tintColor
+            isHideCollidedSymbols = true
+            minZoom = 17.0
         }
 
     private fun createRegionMarker(point: LatLng, district: District) = Marker(point).apply {
@@ -431,6 +455,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             if (it is Overlay) it.map = null
         }
         arrowheadPathMap.clear()
+        poiCenterSet.stream().forEach {
+            if (it is Overlay) it.map = null
+        }
+        poiCenterSet.clear()
     }
 
     private fun onRegionGet(menuItem: MenuItem) {

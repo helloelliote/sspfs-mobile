@@ -58,6 +58,14 @@ interface RetrofitWebService {
         @Query("ymax") ymax: Double,
     ): Response<DistrictList>
 
+    @GET("api/poi/center")
+    suspend fun poiCenterGet(
+        @Query("xmin") xmin: Double,
+        @Query("ymin") ymin: Double,
+        @Query("xmax") xmax: Double,
+        @Query("ymax") ymax: Double,
+    ): Response<POIList>
+
     @GET("api/theme")
     suspend fun themeGet(
         @Query("xmin") xmin: Double,

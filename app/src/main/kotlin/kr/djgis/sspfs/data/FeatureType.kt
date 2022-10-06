@@ -38,6 +38,8 @@ enum class FeatureType(
 
         fun toColor(feature: Feature) = values().find { it.name == feature.fac_typ.trim() }!!.color
 
+        fun toColor(poi: POI) = values().find { it.name == poi.fac_typ.trim() }!!.color
+
         fun keys(): List<String> = values().map { it.name }
         fun types(): List<String> = values().map { it.type }
     }
