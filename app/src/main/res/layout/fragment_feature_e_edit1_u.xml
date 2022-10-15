@@ -286,7 +286,7 @@
                         android:layout_weight="2"
                         android:hint="0m"
                         android:inputType="numberDecimal"
-                        android:text="@={viewModel.featureE.str_widl}" />
+                        android:text="@={viewModel.featureE.str_widu}" />
 
                     <Button
                         style="@style/App.TableLayout.Label"
