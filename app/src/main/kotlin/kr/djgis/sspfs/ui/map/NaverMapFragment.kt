@@ -743,6 +743,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         private val light_green_A400 = resources.getColorStateList(R.color.light_green_A400, null)
         private val amber_A400 = resources.getColorStateList(R.color.amber_A400, null)
         private val purple_400 = resources.getColorStateList(R.color.purple_400, null)
+        private val blue_A400 = resources.getColorStateList(R.color.blue_A400, null)
 
         private val red_600_25 = resources.getColorStateList(R.color.red_600_25, null)
         private val deep_orange_500_25 = resources.getColorStateList(R.color.deep_orange_500_25, null)
@@ -752,6 +753,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         private val light_green_A400_25 = resources.getColorStateList(R.color.light_green_A400_25, null)
         private val amber_A400_25 = resources.getColorStateList(R.color.amber_A400_25, null)
         private val purple_400_25 = resources.getColorStateList(R.color.purple_400_25, null)
+        private val blue_A400_25 = resources.getColorStateList(R.color.blue_A400_25, null)
 
         private val polygonMap = mutableMapOf<String, Set<PolygonOverlay>>()
 
@@ -767,6 +769,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     R.id.chip6 -> yellow_A400
                     R.id.chip7 -> deep_orange_500
                     R.id.chip8 -> red_600
+                    R.id.chip9 -> blue_A400
                     else -> white
                 }
                 val polygonColor = when (chip.id) {
@@ -778,6 +781,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     R.id.chip6 -> yellow_A400_25
                     R.id.chip7 -> deep_orange_500_25
                     R.id.chip8 -> red_600_25
+                    R.id.chip9 -> blue_A400_25
                     else -> transparent
                 }
                 chip.setOnCheckedChangeListener { _, isChecked ->

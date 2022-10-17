@@ -42,6 +42,12 @@
                 app:singleSelection="false">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip9"
+                    style="@style/App.Chip"
+                    android:tag="lake"
+                    android:text="하천현황" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/chip8"
                     style="@style/App.Chip"
                     android:tag="traffic"
