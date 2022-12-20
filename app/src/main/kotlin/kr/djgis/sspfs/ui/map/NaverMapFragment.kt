@@ -164,7 +164,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     private val centerMap = mutableMapOf<String, Marker>()
     private val centerOnClickListener = Overlay.OnClickListener { overlay ->
         overlay as Marker
-        polygonMap.values.stream().forEach {
+        polygonMap.values.forEach {
             it.zIndex = 0
             it.outlineColor = WHITE
         }
@@ -282,7 +282,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             onFeatureGetResult(true, R.color.red_500)
         }
 
-        mobileUpdate()
+//        mobileUpdate()
     }
 
     private fun onCameraIdle() {
@@ -295,7 +295,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         onFeatureGetResult(false)
         viewModel.featuresGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) { featureList ->
             executor.execute {
-                featureList.features.stream().forEach { feature ->
+                featureList.features.forEach { feature ->
                     val key = feature.fac_uid
                     val latLngs = feature.geom!!.latLngs
                     val color = toColor(feature)
@@ -320,10 +320,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     }
                 }
                 handler.post {
-                    arrowheadPathMap.values.stream().forEach {
+                    arrowheadPathMap.values.forEach {
                         it.map = naverMap
                     }
-                    markerMap.values.stream().forEach {
+                    markerMap.values.forEach {
                         it.map = naverMap
                     }
                     onFeatureGetResult(true, R.color.teal_A400)
@@ -335,7 +335,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
         }
         viewModel.poiCenterGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) {
             executor.execute {
-                it.pois.stream().forEach { poi ->
+                it.pois.forEach { poi ->
                     val latLngs = poi.geom.latLngs
                     latLngs.forEach { latLng ->
                         val color = toColor(poi)
@@ -343,7 +343,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                     }
                 }
                 handler.post {
-                    poiCenterSet.stream().forEach {
+                    poiCenterSet.forEach {
                         it.map = naverMap
                     }
                 }
@@ -447,16 +447,16 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
 
     private fun clearOverlays() {
         arrowheadPath?.map = null
-        markerMap.values.stream().forEach {
-            if (it is Overlay) it.map = null
+        markerMap.values.forEach {
+            it.map = null
         }
         markerMap.clear()
-        arrowheadPathMap.values.stream().forEach {
-            if (it is Overlay) it.map = null
+        arrowheadPathMap.values.forEach {
+            it.map = null
         }
         arrowheadPathMap.clear()
-        poiCenterSet.stream().forEach {
-            if (it is Overlay) it.map = null
+        poiCenterSet.forEach {
+            it.map = null
         }
         poiCenterSet.clear()
     }
@@ -467,7 +467,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
             menuItem.setIcon(R.drawable.ic_round_toggle_on_24)
             viewModel.districtGet(naverMap.contentBounds).observeOnce(viewLifecycleOwner) {
                 executor.execute {
-                    it.districts.stream().forEach { region ->
+                    it.districts.forEach { region ->
                         val latLngs = region.geom.latLngs
                         latLngs.forEach { latLng ->
                             polygonMap[region.bjd_nam] = createPolygon(coords = latLng).also {
@@ -477,10 +477,10 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                         }
                     }
                     handler.post {
-                        polygonMap.values.stream().forEach {
+                        polygonMap.values.forEach {
                             it.map = naverMap
                         }
-                        centerMap.values.stream().forEach {
+                        centerMap.values.forEach {
                             it.map = naverMap
                         }
                     }
@@ -500,12 +500,12 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
     }
 
     private fun clearRegionOverlays() {
-        centerMap.values.stream().forEach {
-            if (it is Overlay) it.map = null
+        centerMap.values.forEach {
+            it.map = null
         }
         centerMap.clear()
-        polygonMap.values.stream().forEach {
-            if (it is Overlay) it.map = null
+        polygonMap.values.forEach {
+            it.map = null
         }
         polygonMap.clear()
     }
@@ -792,9 +792,9 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                             viewModel.themeGet(naverMap.contentBounds, tag).observeOnce(lifecycleOwner) {
                                 executor.execute {
                                     val mutableSet = mutableSetOf<PolygonOverlay>()
-                                    it.themes.stream().forEach { region ->
+                                    it.themes.forEach { region ->
                                         val latLngs = region.geom.latLngs
-                                        latLngs.stream().forEach { latLng ->
+                                        latLngs.forEach { latLng ->
                                             mutableSet.add(PolygonOverlay(latLng).apply {
                                                 color = polygonColor.defaultColor
                                                 outlineColor = chipColor.defaultColor
@@ -804,7 +804,7 @@ open class NaverMapFragment : Fragment(), OnMapReadyCallback, MenuProvider {
                                     }
                                     polygonMap[tag] = mutableSet
                                     handler.post {
-                                        mutableSet.stream().forEach {
+                                        mutableSet.forEach {
                                             it.map = naverMap
                                         }
                                     }
