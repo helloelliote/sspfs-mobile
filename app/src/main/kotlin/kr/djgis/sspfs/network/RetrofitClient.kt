@@ -39,11 +39,11 @@ object RetrofitClient {
         interceptor.level =
             if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 //        builder.addInterceptor(interceptor)
-        builder.apply {
-            connectTimeout(300, TimeUnit.SECONDS)
-            readTimeout(300, TimeUnit.SECONDS)
-            writeTimeout(300, TimeUnit.SECONDS)
-        }
+//        builder.apply {
+//            connectTimeout(300, TimeUnit.SECONDS)
+//            readTimeout(300, TimeUnit.SECONDS)
+//            writeTimeout(300, TimeUnit.SECONDS)
+//        }
         builder.build()
     }
 }
